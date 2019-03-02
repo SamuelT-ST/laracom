@@ -68,6 +68,9 @@
                                 </select>
                             </div><hr>
                         @endif
+
+                        <h4>{{$product->getAvailability()}}</h4>
+
                         <div class="form-group">
                             <input type="text"
                                    class="form-control"

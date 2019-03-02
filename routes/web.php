@@ -12,7 +12,25 @@
 */
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+
+
+Route::get('/test', function (){
+    DB::enableQueryLog();
+
+
+    $result = \App\Shop\Products\Product::find(2)->products;
+
+    dd($result);
+
+//    dd($result);
+
+    dd(DB::getQueryLog());
+
+
+});
+
 
 /**
  * Admin routes
@@ -68,6 +86,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
  * Frontend routes
  */
 Auth::routes();
+
 Route::namespace('Auth')->group(function () {
     Route::get('cart/login', 'CartLoginController@showLoginForm')->name('cart.login');
     Route::post('cart/login', 'CartLoginController@login')->name('cart.login');

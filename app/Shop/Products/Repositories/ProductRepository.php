@@ -134,6 +134,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     }
 
     /**
+     * Detach assigned products
+     */
+    public function detachAssignedProducts()
+    {
+        $this->model->products()->detach();
+    }
+
+    /**
      * Return the categories which the product is associated with
      *
      * @return Collection
@@ -151,6 +159,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function syncCategories(array $params)
     {
         $this->model->categories()->sync($params);
+    }
+
+    /**
+     * @param array $params
+     */
+    public function syncAssignedProducts(array $params)
+    {
+        $this->model->products()->sync($params);
     }
 
     /**

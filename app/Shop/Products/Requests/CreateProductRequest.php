@@ -18,6 +18,8 @@ class CreateProductRequest extends BaseFormRequest
             'name' => ['required', 'unique:products'],
             'quantity' => ['required', 'numeric'],
             'price' => ['required'],
+            'is_group_product' => ['nullable', 'boolean'],
+            'assigned_products' => ['nullable', 'array'],
             'cover' => ['required', 'file', 'image:png,jpeg,jpg,gif']
         ];
     }
