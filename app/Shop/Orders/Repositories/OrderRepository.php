@@ -128,8 +128,16 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             'product_price' => $product->price,
             'product_attribute_id' => isset($data['product_attribute_id']) ? $data['product_attribute_id']: null,
         ]);
-        $product->quantity = ($product->quantity - $quantity);
-        $product->save();
+
+        if($product->is_group_product){
+            foreach ($product->products as $item){
+                $item->quantity = $item->quantity - $quantity;
+                $item->save();
+            }
+        } else {
+            $product->quantity = ($product->quantity - $quantity);
+            $product->save();
+        }
     }
 
     /**
