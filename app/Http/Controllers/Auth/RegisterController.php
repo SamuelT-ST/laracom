@@ -6,7 +6,7 @@ use App\Shop\Customers\Customer;
 use App\Http\Controllers\Controller;
 use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
 use App\Shop\Customers\Requests\CreateCustomerRequest;
-use App\Shop\Customers\Requests\RegisterCustomerRequest;
+use App\Shop\Customers\Requests\RegisterGroupRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -58,10 +58,10 @@ class RegisterController extends Controller
     }
 
     /**
-     * @param RegisterCustomerRequest $request
+     * @param RegisterGroupRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function register(RegisterCustomerRequest $request)
+    public function register(RegisterGroupRequest $request)
     {
         $customer = $this->create($request->except('_method', '_token'));
         Auth::login($customer);

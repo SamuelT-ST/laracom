@@ -16,7 +16,6 @@ class CreateCustomerGroupsTable extends Migration
         Schema::create('customer_groups', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->foreign('id')->references('customer_group_id')->on('customers');
             $table->timestamps();
         });
     }

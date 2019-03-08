@@ -15,6 +15,7 @@ class AddCustomerGroupIdToCustomersTable extends Migration
     {
         Schema::table('customers', function (Blueprint $table) {
             $table->integer('customer_group_id')->nullable()->default(null);
+            $table->foreign('customer_group_id')->references('id')->on('customer_groups');
         });
     }
 
