@@ -25,13 +25,10 @@ mix
         ],
         'public/css/admin.min.css'
     )
-    .scripts(
+    .js(
         [
-            'resources/assets/js/jquery-2.2.3.min.js',
-            'node_modules/bootstrap/dist/js/bootstrap.js',
-            'node_modules/select2/dist/js/select2.js',
-            'node_modules/datatables/media/js/jquery.dataTables.js',
-            'resources/assets/admin-lte/js/app.js'
+            'resources/assets/js/admin.js',
+            'resources/assets/admin-lte/js/app.js',
         ],
         'public/js/admin.min.js'
     )
@@ -50,7 +47,8 @@ mix
             'node_modules/bootstrap/dist/js/bootstrap.js',
             'node_modules/select2/dist/js/select2.js',
             'resources/assets/js/owl.carousel.min.js',
-            'resources/assets/js/Drift.min.js'
+            'resources/assets/js/Drift.min.js',
+            'resources/assets/js/admin.js'
         ],
         'public/js/front.min.js'
     )
@@ -61,28 +59,5 @@ mix
     .copy('resources/assets/js/scripts.js', 'public/js/scripts.js')
     .copy('resources/assets/js/custom.js', 'public/js/custom.js');
 
-/*
-|-----------------------------------------------------------------------
-| BrowserSync
-|-----------------------------------------------------------------------
-|
-| BrowserSync refreshes the Browser if file changes (js, sass, blade.php) are
-| detected.
-| Proxy specifies the location from where the app is served.
-| For more information: https://browsersync.io/docs
-*/
-mix.browserSync({
-  proxy: 'http://localhost:8000',
-  host: 'localhost',
-  open: true,
-  watchOptions: {
-    usePolling: false
-  },
-  files: [
-    'app/**/*.php',
-    'resources/views/**/*.php',
-    'public/js/**/*.js',
-    'public/css/**/*.css',
-    'resources/docs/**/*.md'
-  ]
-});
+    // mix.js('resources/assets/js/admin.js', 'public/js/admin1.js');
+

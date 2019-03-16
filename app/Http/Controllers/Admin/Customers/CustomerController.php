@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Customers;
 
+use App\Shop\CustomerGroups\CustomerGroup;
 use App\Shop\Customers\Customer;
 use App\Shop\Customers\Repositories\CustomerRepository;
 use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
@@ -9,6 +10,7 @@ use App\Shop\Customers\Requests\CreateCustomerRequest;
 use App\Shop\Customers\Requests\UpdateCustomerRequest;
 use App\Shop\Customers\Transformations\CustomerTransformable;
 use App\Http\Controllers\Controller;
+use Svg\Tag\Group;
 
 class CustomerController extends Controller
 {
@@ -58,7 +60,9 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('admin.customers.create');
+        $groups = CustomerGroup::all();
+
+        return view('admin.customers.create')->with(compact('groups'));
     }
 
     /**
@@ -70,6 +74,10 @@ class CustomerController extends Controller
     public function store(CreateCustomerRequest $request)
     {
         $this->customerRepo->createCustomer($request->except('_token', '_method'));
+
+        if ($request->ajax()){
+            return response()->json(["info"=>"success"]);
+        }
 
         return redirect()->route('admin.customers.index');
     }
@@ -98,7 +106,7 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.customers.edit', ['customer' => $this->customerRepo->findCustomerById($id)]);
+        return view('admin.customers.edit', ['customer' => $this->customerRepo->findCustomerById($id), 'groups'=>CustomerGroup::all()]);
     }
 
     /**
@@ -120,6 +128,10 @@ class CustomerController extends Controller
         }
 
         $update->updateCustomer($data);
+
+        if ($request->ajax()){
+            return response()->json(["info"=>"success"]);
+        }
 
         $request->session()->flash('message', 'Update successful');
         return redirect()->route('admin.customers.edit', $id);

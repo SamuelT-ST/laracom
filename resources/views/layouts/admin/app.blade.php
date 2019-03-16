@@ -35,7 +35,7 @@
     </p>
 </noscript>
 <!-- Site wrapper -->
-<div class="wrapper">
+<div class="wrapper" id="app">
     @include('layouts.admin.header', ['user' => $admin])
 
     @include('layouts.admin.sidebar', ['user' => $admin])
@@ -50,10 +50,13 @@
     @include('layouts.admin.footer')
 
     @include('layouts.admin.control-sidebar')
+        <div>
+            <notifications position="bottom right" :duration="2000" />
+        </div>
 </div>
 <!-- ./wrapper -->
-
-<script src="{{ asset('js/admin.min.js') }}"></script>
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+<script src="{{ mix('js/admin.min.js') }}"></script>
 <script src="{{ asset('//cdn.ckeditor.com/4.8.0/standard/ckeditor.js') }}"></script>
 <script src="{{ asset('js/scripts.js?v=0.2') }}"></script>
 @yield('js')

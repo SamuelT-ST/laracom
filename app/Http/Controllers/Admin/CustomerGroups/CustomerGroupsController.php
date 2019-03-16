@@ -81,6 +81,7 @@ class CustomerGroupsController extends Controller
      */
     public function destroy(CustomerGroup $customerGroup)
     {
+        $customerGroup->customers()->sync([]);
         $customerGroup->delete();
         return redirect()->back();
     }
