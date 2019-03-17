@@ -37,7 +37,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
                 Route::get('remove-image-thumb', 'ProductController@removeThumbnail')->name('product.remove.thumb');
             });
             Route::namespace('Customers')->group(function () {
-                Route::resource('customers', 'CustomerController');
+                Route::resource('customers', 'CustomerController')->except('update');
+                Route::post('customers/{customer}', 'CustomerController@update')->name('customers.update');
                 Route::resource('customers.addresses', 'CustomerAddressController');
 
             });
@@ -50,8 +51,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
                 Route::resource('order-statuses', 'OrderStatusController');
                 Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');
             });
-            Route::resource('addresses', 'Addresses\AddressController');
-            Route::resource('customerGroups', 'CustomerGroups\CustomerGroupsController');
+            Route::resource('addresses', 'Addresses\AddressController')->except('update');
+            Route::post('addresses/{address}', 'Addresses\AddressController@update')->name('addresses.update');
+            Route::resource('customerGroups', 'CustomerGroups\CustomerGroupsController')->except('update');
+            Route::post('customerGroups/{customerGroup}', 'CustomerGroups\CustomerGroupsController@update')->name('customerGroups.update');
             Route::resource('countries', 'Countries\CountryController');
             Route::resource('countries.provinces', 'Provinces\ProvinceController');
             Route::resource('countries.provinces.cities', 'Cities\CityController');

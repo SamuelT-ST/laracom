@@ -12,19 +12,19 @@ let mix = require('laravel-mix');
  */
 
 mix
-    .styles(
-        [
-            'node_modules/bootstrap/dist/css/bootstrap.css',
-            'node_modules/font-awesome/css/font-awesome.css',
-            'node_modules/ionicons/dist/css/ionicons.css',
-            'node_modules/select2/dist/css/select2.css',
-            'resources/assets/admin-lte/css/AdminLTE.min.css',
-            'resources/assets/admin-lte/css/skins/skin-purple.min.css',
-            'node_modules/datatables/media/css/jquery.dataTables.css',
-            'resources/assets/css/admin.css'
-        ],
-        'public/css/admin.min.css'
-    )
+    // .styles(
+    //     [
+    //         'node_modules/bootstrap/dist/css/bootstrap.css',
+    //         'node_modules/font-awesome/css/font-awesome.css',
+    //         'node_modules/ionicons/dist/css/ionicons.css',
+    //         'node_modules/select2/dist/css/select2.css',
+    //         'resources/assets/admin-lte/css/AdminLTE.min.css',
+    //         'resources/assets/admin-lte/css/skins/skin-purple.min.css',
+    //         'node_modules/datatables/media/css/jquery.dataTables.css',
+    //         'resources/assets/css/admin.css'
+    //     ],
+    //     'public/css/admin.min.css'
+    // )
     .js(
         [
             'resources/assets/js/admin.js',
@@ -61,3 +61,11 @@ mix
 
     // mix.js('resources/assets/js/admin.js', 'public/js/admin1.js');
 
+
+
+mix.js(['resources/js/admin/admin.js'], 'public/js')
+    .sass('resources/sass/admin/admin.scss', 'public/css');
+
+if (mix.inProduction()) {
+    mix.version();
+}

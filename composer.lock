@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0a8c85677c55ec61df81041b0c5a31e",
+    "content-hash": "3351d12843ffa4db71aa665efc91cb44",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -119,6 +119,146 @@
                 "markdown"
             ],
             "time": "2018-09-25T18:50:14+00:00"
+        },
+        {
+            "name": "brackets/admin-listing",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BRACKETS-by-TRIAD/admin-listing.git",
+                "reference": "50fdd8d07f77408a832b90db2c82b6897e6cd2f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BRACKETS-by-TRIAD/admin-listing/zipball/50fdd8d07f77408a832b90db2c82b6897e6cd2f3",
+                "reference": "50fdd8d07f77408a832b90db2c82b6897e6cd2f3",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.5.*|5.6.*|5.7.*",
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "brackets/translatable": "^1.0",
+                "fzaninotto/faker": "~1.4",
+                "mockery/mockery": "0.9.*",
+                "orchestra/testbench": "~3.5|~3.6|~3.7",
+                "phpunit/phpunit": "~6.3|~7.0"
+            },
+            "type": "project",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Brackets\\AdminListing\\AdminListingServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [],
+                "psr-4": {
+                    "Brackets\\AdminListing\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pavol Perdík",
+                    "email": "pavol.perdik@brackets.sk",
+                    "homepage": "https://www.brackets.sk/en",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Query-building helper for listing of Eloquent models",
+            "keywords": [
+                "admin",
+                "cms",
+                "datatable",
+                "eloquent",
+                "laravel",
+                "listing"
+            ],
+            "time": "2019-01-07T09:24:37+00:00"
+        },
+        {
+            "name": "brackets/admin-ui",
+            "version": "v3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BRACKETS-by-TRIAD/admin-ui.git",
+                "reference": "df5c27514e00d10a9930d376cf13dd8771d31da8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BRACKETS-by-TRIAD/admin-ui/zipball/df5c27514e00d10a9930d376cf13dd8771d31da8",
+                "reference": "df5c27514e00d10a9930d376cf13dd8771d31da8",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.5.*|5.6.*|5.7.*",
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "orchestra/testbench-browser-kit": "3.5.1|3.6.*|3.7.*",
+                "phpunit/phpunit": "~6.3|~7.0"
+            },
+            "type": "project",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Brackets\\AdminUI\\AdminUIServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [],
+                "psr-4": {
+                    "Brackets\\AdminUI\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pavol Perdík",
+                    "email": "pavol.perdik@brackets.sk",
+                    "homepage": "https://www.brackets.sk/en",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Matej Minár",
+                    "email": "matej.minar@brackets.sk",
+                    "homepage": "https://www.brackets.sk/en",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Dušan Subally",
+                    "email": "dusan.subally@triad.sk",
+                    "homepage": "https://www.brackets.sk/en",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Administration user interface template",
+            "keywords": [
+                "admin",
+                "admin-ui",
+                "administration",
+                "cms",
+                "laravel",
+                "template"
+            ],
+            "time": "2019-02-12T08:23:50+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

@@ -1,23 +1,45 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
-        @include('layouts.errors-and-messages')
-        <customer-form
-                :groups = "{{ $groups }}"
-                :action="'{{ route('admin.customers.store') }}'"
-                :method="'post'"
-                inline-template>
+@section('title', trans('admin.post.actions.create'))
+
+@section('body')
 
 
-            @include('admin.customers.components.form-elements')
+    <div class="container-xl">
+
+        <div class="card">
+
+            <customer-form
+                    :groups = "{{ $groups }}"
+                    :action="'{{ route('admin.customers.store') }}'"
+                    inline-template>
+
+                <form class="form-horizontal form-create" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card-header">
+                        <i class="fa fa-plus"></i> {{ trans('admin.post.actions.create') }}
+                    </div>
+
+                    <div class="card-body">
+
+                        @include('admin.customers.components.form-elements')
 
 
-        </customer-form>
+                    </div>
 
-            <!-- /.box -->
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" :disabled="submiting">
+                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                            {{ trans('brackets/admin-ui::admin.btn.save') }}
+                        </button>
+                    </div>
 
-    </section>
-    <!-- /.content -->
+                </form>
+
+            </customer-form>
+
+        </div>
+
+    </div>
+
 @endsection

@@ -1,29 +1,44 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
-        @include('layouts.errors-and-messages')
-        <div class="box">
-            <form action="{{ route('admin.customerGroups.store') }}" method="post" class="form">
-                <div class="box-body">
-                    {{ csrf_field() }}
-                    <div class="form-group">
-                        <label for="name">Title <span class="text-danger">*</span></label>
-                        <input type="text" name="title" id="name" placeholder="Name" class="form-control" value="{{ old('title') }}">
+@section('title', trans('admin.post.actions.create'))
+
+@section('body')
+
+
+    <div class="container-xl">
+
+        <div class="card">
+
+            <customer-group-form
+                    :action="'{{ route('admin.customerGroups.store') }}'"
+                    inline-template>
+
+                <form class="form-horizontal form-create" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card-header">
+                        <i class="fa fa-plus"></i> {{ trans('admin.customerGroups.actions.create') }}
                     </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a href="{{ route('admin.customerGroups.index') }}" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-primary">Create</button>
+
+                    <div class="card-body">
+
+                        @include('admin.groups.components.form-elements')
+
+
                     </div>
-                </div>
-            </form>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" :disabled="submiting">
+                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                            {{ trans('brackets/admin-ui::admin.btn.save') }}
+                        </button>
+                    </div>
+
+                </form>
+
+            </customer-group-form>
+
         </div>
-        <!-- /.box -->
 
-    </section>
-    <!-- /.content -->
+    </div>
+
 @endsection

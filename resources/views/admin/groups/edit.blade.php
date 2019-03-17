@@ -1,30 +1,44 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
-        @include('layouts.errors-and-messages')
-        <div class="box">
-            <form action="{{ route('admin.customerGroups.update', $group) }}" method="post" class="form">
-                <input type="hidden" name="_method" value="put">
-                <div class="box-body">
-                    {{ csrf_field() }}
-                    <div class="form-group">
-                        <label for="name">Title <span class="text-danger">*</span></label>
-                        <input type="text" name="title" id="name" placeholder="Name" class="form-control" value="{{ $group->title }}">
+@section('title', trans('admin.customerGroups.actions.edit', ['name' => $group->title]))
+
+@section('body')
+
+    <div class="container-xl">
+
+        <div class="card">
+
+            <customer-group-form
+                    :action="'{{ route('admin.customerGroups.update', $group->id) }}'"
+                    :data="{{ $group->toJson() }}"
+                    inline-template>
+
+
+                <form class="form-horizontal form-edit" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card-header">
+                        <i class="fa fa-pencil"></i> {{ trans('admin.post.actions.edit', ['name' => $group->title]) }}
                     </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a href="{{ route('admin.customerGroups.index') }}" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-primary">Update</button>
+
+                    <div class="card-body">
+                        @include('admin.groups.components.form-elements')
                     </div>
-                </div>
-            </form>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" :disabled="submiting">
+                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                            {{ trans('brackets/admin-ui::admin.btn.save') }}
+                        </button>
+                    </div>
+
+                </form>
+
+
+            </customer-group-form>
+
         </div>
-        <!-- /.box -->
 
-    </section>
-    <!-- /.content -->
+    </div>
+
 @endsection
+

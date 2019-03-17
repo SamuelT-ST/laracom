@@ -11,6 +11,13 @@ class CustomerGroup extends Model
         'title'
     ];
 
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/customerGroups/'.$this->getKey());
+    }
+
     public function customers(){
         return $this->belongsToMany(Customer::class);
     }

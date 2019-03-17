@@ -52,6 +52,12 @@ class Customer extends Authenticatable
     ];
 
     protected $with = ['groups'];
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/customers/'.$this->getKey());
+    }
 
 
     /**
