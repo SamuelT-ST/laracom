@@ -68,6 +68,18 @@
                                 </select>
                             </div><hr>
                         @endif
+
+                        @if($product->is_group_product)
+                            <h3>This product contains:</h3>
+                            @foreach($product->products as $item)
+                                <a href="/{{$item->slug}}">{{$item->name}}</a> <br>
+                            @endforeach
+                            <br>
+                        @endif
+
+
+                        <h4>{{$product->getAvailability()}}</h4>
+
                         <div class="form-group">
                             <input type="text"
                                    class="form-control"

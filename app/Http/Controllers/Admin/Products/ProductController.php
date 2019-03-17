@@ -120,6 +120,7 @@ class ProductController extends Controller
         $categories = $this->categoryRepo->listCategories('name', 'asc');
 
         return view('admin.products.create', [
+            'products' => $this->productRepo->all(),
             'categories' => $categories,
             'brands' => $this->brandRepo->listBrands(['*'], 'name', 'asc'),
             'default_weight' => env('SHOP_WEIGHT'),
@@ -157,6 +158,13 @@ class ProductController extends Controller
         } else {
             $productRepo->detachCategories();
         }
+
+        if ($request->has('is_group_product') && $request->has('assigned_products')) {
+            $productRepo->syncAssignedProducts($request->input('assigned_products'));
+        } else {
+            $productRepo->detachAssignedProducts();
+        }
+
 
         return redirect()->route('admin.products.edit', $product->id)->with('message', 'Create successful');
     }
@@ -202,6 +210,8 @@ class ProductController extends Controller
         $categories = $this->categoryRepo->listCategories('name', 'asc')->toTree();
 	
         return view('admin.products.edit', [
+            'products' => $this->productRepo->all(),
+            'assignedProducts' =>$product->products,
             'product' => $product,
             'images' => $product->images()->get(['src']),
             'categories' => $categories,
@@ -237,6 +247,7 @@ class ProductController extends Controller
         }
 
         $data = $request->except(
+            'assigned_products',
             'categories',
             '_token',
             '_method',
@@ -262,6 +273,12 @@ class ProductController extends Controller
             $productRepo->syncCategories($request->input('categories'));
         } else {
             $productRepo->detachCategories();
+        }
+
+        if ($request->has('is_group_product') && $request->has('assigned_products')) {
+            $productRepo->syncAssignedProducts($request->input('assigned_products'));
+        } else {
+            $productRepo->detachAssignedProducts();
         }
 
         $productRepo->updateProduct($data);

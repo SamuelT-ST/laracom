@@ -18,6 +18,23 @@
                             <label for="name">Name <span class="text-danger">*</span></label>
                             <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ old('name') }}">
                         </div>
+
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label><input id="is_group_product" type="checkbox" name="is_group_product" value="1">Is group product</label>
+                            </div>
+                        </div>
+
+                        <div id="products_list" style="display: none; margin-bottom: 10px">
+
+                            <select class="select2 col-md-12" style="width: 100%;" name="assigned_products[]" multiple="multiple">
+                                @foreach($products as $product)
+                                    <option value="{{$product->id}}">{{$product->name}}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+
                         <div class="form-group">
                             <label for="description">Description </label>
                             <textarea class="form-control" name="description" id="description" rows="5" placeholder="Description">{{ old('description') }}</textarea>
@@ -59,6 +76,7 @@
                     <div class="col-md-4">
                         <h2>Categories</h2>
                         @include('admin.shared.categories', ['categories' => $categories, 'selectedIds' => []])
+
                     </div>
                 </div>
                 <!-- /.box-body -->
@@ -74,4 +92,8 @@
 
     </section>
     <!-- /.content -->
+@endsection
+
+@section('js')
+    <script src="{{asset('js/product.js')}}"></script>
 @endsection

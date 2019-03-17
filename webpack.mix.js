@@ -59,7 +59,8 @@ mix
     .copyDirectory('resources/assets/admin-lte/img', 'public/img')
     .copyDirectory('resources/assets/images', 'public/images')
     .copy('resources/assets/js/scripts.js', 'public/js/scripts.js')
-    .copy('resources/assets/js/custom.js', 'public/js/custom.js');
+    .copy('resources/assets/js/custom.js', 'public/js/custom.js')
+    .scripts('resources/assets/js/admin/product.js', 'public/js/product.js');
 
 /*
 |-----------------------------------------------------------------------

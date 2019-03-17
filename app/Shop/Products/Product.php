@@ -65,6 +65,7 @@ class Product extends Model implements Buyable
         'height',
         'distance_unit',
         'slug',
+        'is_group_product'
     ];
 
     /**
@@ -77,6 +78,10 @@ class Product extends Model implements Buyable
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function products(){
+        return $this->belongsToMany(Product::class, 'product_product', 'main_product_id', 'assigned_product_id', 'id', 'id');
     }
 
     /**
@@ -99,6 +104,31 @@ class Product extends Model implements Buyable
     public function getBuyableDescription($options = null)
     {
         return $this->name;
+    }
+
+    /**
+     * @return array|string|null
+     */
+    public function getAvailability()
+    {
+        if ($this->is_group_product){
+            return $this->products()->min('quantity') > 0 ? __('In stock') : __('Out of stock');
+        } else {
+            return $this->quantity > 0 ? __('In stock') : __('Out of stock');
+        }
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function getQuantityAttribute($value)
+    {
+        if ($this->is_group_product){
+            return $this->products()->min('quantity');
+        } else {
+            return $value;
+        }
     }
 
     /**

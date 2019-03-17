@@ -30,6 +30,23 @@
                                                 <label for="name">Name <span class="text-danger">*</span></label>
                                                 <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{!! $product->name !!}">
                                             </div>
+
+                                            <div class="form-group">
+                                                <div class="checkbox">
+                                                    <label><input id="is_group_product" type="checkbox" @if($product->is_group_product) checked @endif name="is_group_product" value="1">Is group product</label>
+                                                </div>
+                                            </div>
+
+                                            <div id="products_list" style="display: none; margin-bottom: 10px">
+
+                                                <select class="select2 col-md-12" style="width: 100%;" name="assigned_products[]" multiple="multiple">
+                                                    @foreach($products as $product)
+                                                        <option @if($assignedProducts->contains($product)) selected @endif value="{{$product->id}}">{{$product->name}}</option>
+                                                    @endforeach
+                                                </select>
+
+                                            </div>
+
                                             <div class="form-group">
                                                 <label for="description">Description </label>
                                                 <textarea class="form-control ckeditor" name="description" id="description" rows="5" placeholder="Description">{!! $product->description  !!}</textarea>
@@ -180,6 +197,7 @@
     </style>
 @endsection
 @section('js')
+    <script src="{{asset('js/product.js')}}"></script>
     <script type="text/javascript">
         function backToInfoTab() {
             $('#tablist > li:first-child').addClass('active');
