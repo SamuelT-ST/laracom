@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin\Couriers;
 
+use App\Shop\Couriers\Courier;
 use App\Shop\Couriers\Repositories\CourierRepository;
 use App\Shop\Couriers\Repositories\Interfaces\CourierRepositoryInterface;
 use App\Shop\Couriers\Requests\CreateCourierRequest;
+use App\Shop\Couriers\Requests\IndexCourier;
 use App\Shop\Couriers\Requests\UpdateCourierRequest;
 use App\Http\Controllers\Controller;
+use Brackets\AdminListing\Facades\AdminListing;
+use Illuminate\Http\Request;
 
 class CourierController extends Controller
 {
@@ -27,11 +31,27 @@ class CourierController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexCourier $request)
     {
-        return view('admin.couriers.list', ['couriers' => $this->courierRepo->listCouriers('name', 'asc')]);
+        // create and AdminListing instance for a specific model and
+        $data = AdminListing::create(Courier::class)->processRequestAndGet(
+        // pass the request with params
+            $request,
+
+            // set columns to query
+            ['id', 'name', 'description', 'url', 'is_free', 'cost', 'status'],
+
+            // set columns to searchIn
+            ['name', 'description', 'url', 'cost']
+        );
+
+        if ($request->ajax()) {
+            return ['data' => $data];
+        }
+
+        return view('admin.couriers.list', ['data' => $data]);
     }
 
     /**
@@ -48,11 +68,15 @@ class CourierController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  CreateCourierRequest $request
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function store(CreateCourierRequest $request)
     {
         $this->courierRepo->createCourier($request->all());
+
+        if ($request->ajax()) {
+            return ['redirect' => url('admin/couriers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
 
         $request->session()->flash('message', 'Create successful');
         return redirect()->route('admin.couriers.index');
@@ -74,7 +98,7 @@ class CourierController extends Controller
      *
      * @param  UpdateCourierRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function update(UpdateCourierRequest $request, $id)
     {
@@ -82,6 +106,10 @@ class CourierController extends Controller
 
         $update = new CourierRepository($courier);
         $update->updateCourier($request->all());
+
+        if ($request->ajax()){
+            return ['redirect' => url('admin/couriers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
 
         $request->session()->flash('message', 'Update successful');
         return redirect()->route('admin.couriers.edit', $id);
@@ -93,12 +121,17 @@ class CourierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(Request $request, int $id)
     {
         $courier = $this->courierRepo->findCourierById($id);
 
         $courierRepo = new CourierRepository($courier);
         $courierRepo->delete();
+
+        if ($request->ajax()) {
+            return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
+        }
+
 
         request()->session()->flash('message', 'Delete successful');
         return redirect()->route('admin.couriers.index');

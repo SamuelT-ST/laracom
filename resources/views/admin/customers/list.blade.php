@@ -53,12 +53,13 @@
                             </thead>
                             <tbody>
                             <tr v-for="(item, index) in collection">
-                                <td>@{{ item.name }}</td>
+                                <td><a :href="item.resource_url">@{{ item.name }}</a></td>
                                 <td>@{{ item.email }}</td>
                                 <td>
                                     <div v-for="group in item.groups">
                                         <span class="badge badge-info">@{{ group.title }}</span>
                                     </div>
+                                </td>
                                 <td>
                                     <label class="switch switch-3d switch-success">
                                         <input type="checkbox" class="switch-input" v-model="collection[index].enabled" @change="toggleSwitch(item.resource_url, 'enabled', collection[index])">

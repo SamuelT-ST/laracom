@@ -14,6 +14,9 @@ import Vue from 'vue';
 import './customers/index.js'
 import './customer-groups/index.js'
 import './addresses/index.js'
+import './orders/index.js'
+import './order-statuses/index.js'
+import './couriers/index.js'
 
 import './app-components/bootstrap';
 import './index';

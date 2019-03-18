@@ -67,6 +67,12 @@ class Order extends Model
      * @var array
      */
     protected $hidden = [];
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/orders/'.$this->getKey());
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

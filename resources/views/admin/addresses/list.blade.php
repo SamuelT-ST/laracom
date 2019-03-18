@@ -1,6 +1,6 @@
 @extends('brackets/admin-ui::admin.layout.default')
 
-@section('title', trans('admin.customers.actions.index'))
+@section('title', trans('admin.addresses.actions.index'))
 
 @section('body')
 

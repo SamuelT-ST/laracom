@@ -1,19 +1,17 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
+@section('body')
 
         <!-- Default box -->
-        <div class="box">
-            <div class="box-body">
-                <h2>Customer</h2>
+        <div class="container-xl">
+            <div class="card p-5">
+                <h3>Customer</h3>
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td class="col-md-4">ID</td>
-                        <td class="col-md-4">Name</td>
-                        <td class="col-md-4">Email</td>
+                        <td>ID</td>
+                        <td>Name</td>
+                        <td>Email</td>
                     </tr>
                     </tbody>
                     <tbody>
@@ -25,16 +23,16 @@
                     </tbody>
                 </table>
             </div>
-            <div class="box-body">
-                <h2>Addresses</h2>
+            <div class="card p-5">
+                <h3>Addresses</h3>
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td class="col-md-2">Alias</td>
-                        <td class="col-md-2">Address 1</td>
-                        <td class="col-md-2">Country</td>
-                        <td class="col-md-2">Status</td>
-                        <td class="col-md-4">Actions</td>
+                        <td>Alias</td>
+                        <td>Address 1</td>
+                        <td>Country</td>
+                        <td>Status</td>
+                        <td>Actions</td>
                     </tr>
                     </tbody>
                     <tbody>
@@ -68,6 +66,5 @@
             </div>
         </div>
         <!-- /.box -->
-    </section>
     <!-- /.content -->
 @endsection

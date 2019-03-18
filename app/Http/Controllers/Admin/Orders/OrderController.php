@@ -13,10 +13,12 @@ use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
 use App\Shop\Orders\Order;
 use App\Shop\Orders\Repositories\Interfaces\OrderRepositoryInterface;
 use App\Shop\Orders\Repositories\OrderRepository;
+use App\Shop\Orders\Requests\IndexOrder;
 use App\Shop\OrderStatuses\OrderStatus;
 use App\Shop\OrderStatuses\Repositories\Interfaces\OrderStatusRepositoryInterface;
 use App\Shop\OrderStatuses\Repositories\OrderStatusRepository;
 use App\Http\Controllers\Controller;
+use Brackets\AdminListing\Facades\AdminListing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -68,19 +70,31 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexOrder $request)
     {
-        $list = $this->orderRepo->listOrders('created_at', 'desc');
+        // create and AdminListing instance for a specific model and
+        $data = AdminListing::create(Order::class)->processRequestAndGet(
+        // pass the request with params
+            $request,
 
-        if (request()->has('q')) {
-            $list = $this->orderRepo->searchOrder(request()->input('q') ?? '');
+            // set columns to query
+            ['id', 'total', 'created_at', 'customer_id', 'courier_id', 'order_status_id'],
+
+            // set columns to searchIn
+            ['name', 'email'],
+
+            function ($query){
+                $query->with(['customer', 'courier', 'orderStatus']);
+            }
+        );
+        if ($request->ajax()) {
+            return ['data' => $data];
         }
 
-        $orders = $this->orderRepo->paginateArrayResults($this->transFormOrder($list), 10);
 
-        return view('admin.orders.list', ['orders' => $orders]);
+        return view('admin.orders.list', ['data' => $data]);
     }
 
     /**

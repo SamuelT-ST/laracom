@@ -1,36 +1,48 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
+@section('title', trans('admin.order-statuses.actions.create'))
 
-        @include('layouts.errors-and-messages')
-        <!-- Default box -->
-        <div class="box">
-            <form action="{{ route('admin.order-statuses.store') }}" method="post">
-            <div class="box-body">
-                <h2>Order Status</h2>
-                {{ csrf_field() }}
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input class="form-control" type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Name">
-                </div>
-                <div class="form-group">
-                    <label for="color">Color</label>
-                    <input class="form-control jscolor" type="text" name="color" id="color" value="{{ old('color') }}">
-                </div>
-            </div>
-            <!-- /.box-body -->
-                <div class="box-footer btn-group">
-                    <a href="{{ route('admin.order-statuses.index') }}" class="btn btn-default">Back</a>
-                    <button type="submit" class="btn btn-primary">Create</button>
-                </div>
-            </form>
+@section('body')
+
+
+    <div class="container-xl">
+
+        <div class="card">
+
+            <order-status-form
+                    :action="'{{ route('admin.order-statuses.store') }}'"
+                    inline-template>
+
+                <form class="form-horizontal form-create" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card-header">
+                        <i class="fa fa-plus"></i> {{ trans('admin.order-statuses.actions.create') }}
+                    </div>
+
+                    <div class="card-body">
+
+                        @include('admin.order-statuses.components.form-elements')
+
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" :disabled="submiting">
+                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                            {{ trans('brackets/admin-ui::admin.btn.save') }}
+                        </button>
+                    </div>
+
+                </form>
+
+            </order-status-form>
+
         </div>
-        <!-- /.box -->
-    </section>
-    <!-- /.content -->
+
+    </div>
+
 @endsection
+
 @section('js')
-    <script src="{{ asset('js/jscolor.min.js') }}" type="text/javascript"></script>
+    {{--<script src="{{ asset('js/jscolor.min.js') }}" type="text/javascript"></script>--}}
 @endsection

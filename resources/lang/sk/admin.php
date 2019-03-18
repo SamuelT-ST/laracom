@@ -14,10 +14,26 @@ return [
             'id' => "ID",
             'name' => "Meno",
             'email' => "Email",
-            'status' => "Status",
+            'status' => "Aktívny",
             'groups' => "Zákaznícke skupiny",
             'enabled' => "Enabled",
+            'password' => "Heslo",
+            'password_repeat' => "Zopakuj heslo",
+            'select_groups' => "Vyberte skupiny"
 
+        ],
+    ],
+    'customerGroups' => [
+        'title' => 'Zákaznícke skupiny',
+
+        'actions' => [
+            'index' => 'Zákaznícke skupiny',
+            'create' => 'Nová skupina',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'title' => "Názov skupiny",
         ],
     ],
 ];

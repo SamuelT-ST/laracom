@@ -48,7 +48,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
             });
             Route::namespace('Orders')->group(function () {
                 Route::resource('orders', 'OrderController');
-                Route::resource('order-statuses', 'OrderStatusController');
+                Route::resource('order-statuses', 'OrderStatusController')->except('update');
+                Route::post('order-statuses/{order_status}', 'OrderStatusController@update')->name('order-statuses.update');
                 Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');
             });
             Route::resource('addresses', 'Addresses\AddressController')->except('update');
@@ -58,7 +59,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
             Route::resource('countries', 'Countries\CountryController');
             Route::resource('countries.provinces', 'Provinces\ProvinceController');
             Route::resource('countries.provinces.cities', 'Cities\CityController');
-            Route::resource('couriers', 'Couriers\CourierController');
+            Route::resource('couriers', 'Couriers\CourierController')->except('update');
+            Route::post('couriers/{courier}', 'Couriers\CourierController@update')->name('couriers.update');
             Route::resource('attributes', 'Attributes\AttributeController');
             Route::resource('attributes.values', 'Attributes\AttributeValueController');
             Route::resource('brands', 'Brands\BrandController');
