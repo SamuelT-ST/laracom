@@ -17,7 +17,7 @@
                 <form class="form-horizontal form-edit" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
 
                     <div class="card-header">
-                        <i class="fa fa-pencil"></i> {{ trans('admin.order-status.actions.edit', ['name' => $orderStatus->title]) }}
+                        <i class="fa fa-pencil"></i> {{ trans('admin.order-statuses.actions.edit', ['name' => $orderStatus->title]) }}
                     </div>
 
                     <div class="card-body">

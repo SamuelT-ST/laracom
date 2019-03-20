@@ -43,11 +43,11 @@
                         <table class="table table-hover table-listing">
                             <thead>
                             <tr>
-                                <th is='sortable' :column="'created_at'">{{ trans('admin.customers.columns.date') }}</th>
-                                <th is='sortable' :column="'customer'">{{ trans('admin.customers.columns.customer') }}</th>
-                                <th is='sortable' :column="'courier'">{{ trans('admin.customers.columns.courier') }}</th>
-                                <th is='sortable' :column="'total'">{{ trans('admin.customers.columns.total') }}</th>
-                                <th is='sortable' :column="'status'">{{ trans('admin.customers.columns.status') }}</th>
+                                <th is='sortable' :column="'created_at'">{{ trans('admin.orders.columns.date') }}</th>
+                                <th is='sortable' :column="'customer'">{{ trans('admin.orders.columns.customer') }}</th>
+                                <th is='sortable' :column="'courier'">{{ trans('admin.orders.columns.courier') }}</th>
+                                <th is='sortable' :column="'total'">{{ trans('admin.orders.columns.total') }}</th>
+                                <th is='sortable' :column="'status'">{{ trans('admin.orders.columns.status') }}</th>
 
                                 <th></th>
                             </tr>

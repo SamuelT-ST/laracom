@@ -36,4 +36,56 @@ return [
             'title' => "Názov skupiny",
         ],
     ],
+    'address' => [
+        'title' => 'Adresy',
+
+        'actions' => [
+            'index' => 'Adresy',
+            'create' => 'Nová adresa',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'alias' => "Alias",
+            'address_1' => "Adresa",
+            'address_2' => "Adresa",
+            'zip' => "Zip",
+            'city' => "Mesto",
+            'customer' => "Zákazník",
+            'groups' => "Zákaznícke skupiny",
+            'phone' => "Telefón",
+            'countries' => "Krajina",
+        ],
+    ],
+    'orders' => [
+        'title' => 'Objednávky',
+
+        'actions' => [
+            'index' => 'Objednávky',
+            'create' => 'Nová objednávka',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'date' => "Dátum",
+            'courier' => "Spôsob dodania",
+            'total' => "Cena celkom",
+            'status' => "Stav objednávky",
+            'customer' => "Zákazník",
+        ],
+    ],
+    'order-statuses' => [
+        'title' => 'Stavy objednávok',
+
+        'actions' => [
+            'index' => 'Stavy objednávok',
+            'create' => 'Nová stav',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'name' => "Názov",
+            'color' => "Farba",
+        ],
+    ],
 ];
