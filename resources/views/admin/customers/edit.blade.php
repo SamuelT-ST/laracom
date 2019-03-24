@@ -8,7 +8,6 @@
 
         <div class="card">
 
-            {{dd($customer->toJson())}}
 
             <customer-form
                     :groups = "{{ $groups }}"

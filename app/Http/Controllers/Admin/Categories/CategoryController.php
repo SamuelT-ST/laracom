@@ -77,10 +77,6 @@ class CategoryController extends Controller
      */
     public function create(Category $category = null)
     {
-        if(is_null($category)){
-            $category = Category::first();
-        }
-
         return view('admin.categories.create', [
             'categories' => Category::all(),
             'parentCategory' => $category
@@ -103,8 +99,10 @@ class CategoryController extends Controller
 
         $category = $this->categoryRepo->createCategory($request->except('_token', '_method'));
 
+        $redirectTo = $category->parent ? $category->parent->slug : "";
+
         if ($request->ajax()) {
-            return ['redirect' => url('admin/categories/'. $category->parent->slug), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+            return ['redirect' => url('admin/categories/'. $redirectTo), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
         return redirect()->route('admin.categories.index')->with('message', 'Category created');
@@ -163,8 +161,10 @@ class CategoryController extends Controller
         $update = new CategoryRepository($category);
         $update->updateCategory($request->except('_token', '_method'));
 
+        $redirectTo = $category->parent ? $category->parent->slug : "";
+
         if ($request->ajax()){
-            return ['redirect' => url('admin/categories/'. $category->parent->slug), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+            return ['redirect' => url('admin/categories/'. $redirectTo), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
         $request->session()->flash('message', 'Update successful');

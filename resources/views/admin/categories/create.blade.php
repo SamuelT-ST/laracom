@@ -11,7 +11,7 @@
 
             <category-form
                     :categories = "{{ $categories }}"
-                    :parent = "{{ $parentCategory }}"
+                    :parent = "'{{ $parentCategory }}'"
                     :action="'{{ route('admin.categories.store') }}'"
                     inline-template>
 

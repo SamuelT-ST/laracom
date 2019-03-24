@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Shop\Categories\Category;
 use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 
 class HomeController
@@ -25,9 +26,11 @@ class HomeController
      */
     public function index()
     {
-        $cat1 = $this->categoryRepo->findCategoryById(2);
-        $cat2 = $this->categoryRepo->findCategoryById(3);
+//        $cat1 = Category::first();
+//        $cat2 = Category::first();
 
-        return view('front.index', compact('cat1', 'cat2'));
+//        return view('front.index', compact('cat1', 'cat2'));
+
+        return redirect('/HTML');
     }
 }

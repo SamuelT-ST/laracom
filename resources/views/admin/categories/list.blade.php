@@ -60,10 +60,10 @@
                         <table class="table table-hover table-listing">
                             <thead>
                             <tr>
-                                <th is='sortable' :column="'id'" :callback="function() {loadData(true, modifiedUrl);}">{{ trans('admin.customer.columns.id') }}</th>
-                                <th is='sortable' :column="'name'">{{ trans('admin.customer.columns.name') }}</th>
-                                <th is='sortable' :column="'slug'">{{ trans('admin.customer.columns.slug') }}</th>
-                                <th is='sortable' :column="'description'">{{ trans('admin.customer.columns.description') }}</th>
+                                <th is='sortable' :column="'id'" :callback="function() {loadData(true, modifiedUrl);}">{{ trans('admin.category.columns.id') }}</th>
+                                <th is='sortable' :column="'name'">{{ trans('admin.category.columns.name') }}</th>
+                                <th is='sortable' :column="'slug'">{{ trans('admin.category.columns.slug') }}</th>
+                                <th is='sortable' :column="'description'">{{ trans('admin.category.columns.description') }}</th>
                                 <th></th>
                             </tr>
                             </thead>

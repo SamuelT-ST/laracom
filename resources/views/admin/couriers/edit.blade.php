@@ -1,6 +1,6 @@
 @extends('brackets/admin-ui::admin.layout.default')
 
-@section('title', trans('admin.post.actions.edit', ['name' => $courier->title]))
+@section('title', trans('admin.couriers.actions.edit', ['name' => $courier->title]))
 
 @section('body')
 
@@ -17,7 +17,7 @@
                 <form class="form-horizontal form-edit" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
 
                     <div class="card-header">
-                        <i class="fa fa-pencil"></i> {{ trans('admin.courier.actions.edit', ['name' => $courier->title]) }}
+                        <i class="fa fa-pencil"></i> {{ trans('admin.couriers.actions.edit', ['name' => $courier->title]) }}
                     </div>
 
                     <div class="card-body">

@@ -79,13 +79,88 @@ return [
 
         'actions' => [
             'index' => 'Stavy objednávok',
-            'create' => 'Nová stav',
+            'create' => 'Nový stav',
             'edit' => 'Upraviť :name',
         ],
 
         'columns' => [
             'name' => "Názov",
             'color' => "Farba",
+        ],
+    ],
+    'products' => [
+        'title' => 'Produkty',
+
+        'actions' => [
+            'index' => 'Produkty',
+            'create' => 'Nový produkt',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'name' => "Meno",
+            'email' => "Email",
+            'status' => "Aktívny",
+            'groups' => "Zákaznícke skupiny",
+            'enabled' => "Enabled",
+            'password' => "Heslo",
+            'password_repeat' => "Zopakuj heslo",
+            'select_groups' => "Vyberte skupiny"
+
+        ],
+    ],
+    'attributes' => [
+        'title' => 'Atribúty',
+
+        'actions' => [
+            'index' => 'Atribúty',
+            'create' => 'Nový atribút',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'name' => "Meno"
+        ],
+    ],
+
+    'category' => [
+        'title' => 'Kategórie',
+
+        'actions' => [
+            'index' => 'Kategórie',
+            'create' => 'Nová kategória',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'name' => "Meno",
+            'slug' => "Slug",
+            'description' => "Popis",
+            'parent' => "Rodičovská kategória",
+            'status' => "Aktívna",
+
+        ],
+    ],
+
+    'couriers' => [
+        'title' => 'Spôsoby doručenia',
+
+        'actions' => [
+            'index' => 'Spôsoby doručenia',
+            'create' => 'Nový spôsob doručenia',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'name' => "Meno",
+            'description' => "Popis",
+            'url' => "Url",
+            'is_free' => "Zadarmo",
+            'cost' => "Cena",
+            'status' => "Aktívny"
+
         ],
     ],
 ];

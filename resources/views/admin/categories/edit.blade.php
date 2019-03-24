@@ -10,7 +10,7 @@
 
             <category-form
                     :categories = "{{ $categories }}"
-                    :parent = "{{ $category->parent }}"
+                    :parent = "'{{ $category->parent }}'"
                     :action="'{{ route('admin.categories.update', $category->id) }}'"
                     :data="{{ $category->toJson() }}"
                     inline-template>

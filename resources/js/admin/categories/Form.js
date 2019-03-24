@@ -7,7 +7,8 @@ Vue.component('category-form', {
             type: Array
         },
         'parent': {
-            type: Object,
+            type: [Object, String],
+            required: false
         },
         'action': {
             type: String
@@ -21,7 +22,11 @@ Vue.component('category-form', {
             form: {
                 name:  '' ,
                 description:  '' ,
-                parent:  this.parent ,
+                parent:  this.parent ? JSON.parse(this.parent) : {
+                    name: 'Root',
+                    id: null,
+                    resource_url: '/home'
+                },
                 slug: '',
                 status: true
             },
