@@ -2,37 +2,35 @@
 
 namespace App\Shop\Categories;
 
-use App\Shop\Products\Product;
-use Kalnoy\Nestedset\NodeTrait;
-use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
+use Spatie\MediaLibrary\Media;
+use Brackets\Media\HasMedia\HasMediaCollections;
+use Brackets\Media\HasMedia\HasMediaCollectionsTrait;
+use Brackets\Media\HasMedia\HasMediaThumbsTrait;
+
+class Category extends \Rinvex\Categories\Models\Category implements HasMediaCollections, HasMediaConversions
 {
-    use NodeTrait;
-    
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'slug',
-        'description',
-        'cover',
-        'status',
-        'parent_id'
-    ];
+    protected $appends = ['resource_url'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [];
+    use HasMediaCollectionsTrait;
+    use HasMediaThumbsTrait;
 
-    public function products()
+    public function registerMediaCollections() {
+        $this->addMediaCollection('cover');
+    }
+
+    public function registerMediaConversions(Media $media = null)
     {
-        return $this->belongsToMany(Product::class);
+        $this->autoRegisterThumb200();
+    }
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/categories/'.$this->slug);
+    }
+
+    public function getRouteKeyName() {
+        return 'slug';
     }
 }

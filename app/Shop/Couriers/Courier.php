@@ -27,4 +27,10 @@ class Courier extends Model
      * @var array
      */
     protected $hidden = [];
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/couriers/'.$this->getKey());
+    }
 }

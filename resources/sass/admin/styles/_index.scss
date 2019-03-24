@@ -1,1 +1,25 @@
 // Write (or import) your styles here
+@import "loader";
+
+.cat-link{
+  cursor: pointer;
+  color: #4273FA;
+  text-decoration: none;
+}
+
+.cat-link:hover{
+  color: #0b1526;
+}
+
+ol.breadcrumb {
+  display: inline-flex;
+  border-bottom: 0;
+  cursor: pointer;
+  color: #4273FA;
+}
+
+ol.breadcrumb span{
+  color: black;
+  cursor: auto;
+  font-weight: 700;
+}

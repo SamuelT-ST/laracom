@@ -8,6 +8,8 @@
 
         <div class="card">
 
+            {{dd($customer->toJson())}}
+
             <customer-form
                     :groups = "{{ $groups }}"
                     :action="'{{ route('admin.customers.update', $customer->id) }}'"

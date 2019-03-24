@@ -1,53 +1,50 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
-        @include('layouts.errors-and-messages')
-        <div class="box">
-            <form action="{{ route('admin.categories.store') }}" method="post" class="form" enctype="multipart/form-data">
-                <div class="box-body">
-                    {{ csrf_field() }}
-                    <div class="form-group">
-                        <label for="parent">Parent Category</label>
-                        <select name="parent" id="parent" class="form-control select2">
-                            <option value="">-- Select --</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
+@section('title', trans('admin.categories.actions.create'))
+
+@section('body')
+
+
+    <div class="container-xl">
+
+        <div class="card">
+
+            <category-form
+                    :categories = "{{ $categories }}"
+                    :parent = "{{ $parentCategory }}"
+                    :action="'{{ route('admin.categories.store') }}'"
+                    inline-template>
+
+                <form class="form-horizontal form-create" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card-header">
+                        <i class="fa fa-plus"></i> {{ trans('admin.categories.actions.create') }}
                     </div>
-                    <div class="form-group">
-                        <label for="name">Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ old('name') }}">
+
+                    <div class="card-body">
+
+                        @include('admin.categories.components.form-elements')
+
                     </div>
-                    <div class="form-group">
-                        <label for="description">Description </label>
-                        <textarea class="form-control ckeditor" name="description" id="description" rows="5" placeholder="Description">{{ old('description') }}</textarea>
+
+                    @include('brackets/admin-ui::admin.includes.media-uploader', [
+                            'mediaCollection' => app(App\Shop\Categories\Category::class)->getMediaCollection('cover'),
+                            'label' => 'Obrázok kategórie'
+                        ])
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" :disabled="submiting">
+                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                            {{ trans('brackets/admin-ui::admin.btn.save') }}
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label for="cover">Cover </label>
-                        <input type="file" name="cover" id="cover" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="status">Status </label>
-                        <select name="status" id="status" class="form-control">
-                            <option value="0">Disable</option>
-                            <option value="1">Enable</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a href="{{ route('admin.categories.index') }}" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-                </div>
-            </form>
+
+                </form>
+
+            </category-form>
+
         </div>
-        <!-- /.box -->
 
-    </section>
-    <!-- /.content -->
+    </div>
+
 @endsection

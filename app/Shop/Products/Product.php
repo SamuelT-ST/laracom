@@ -10,10 +10,12 @@ use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Rinvex\Categories\Traits\Categorizable;
 
 class Product extends Model implements Buyable
 {
     use SearchableTrait;
+    use Categorizable;
 
     public const MASS_UNIT = [
         'OUNCES' => 'oz',

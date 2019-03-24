@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Products;
 use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
 use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
 use App\Shop\Brands\Repositories\BrandRepositoryInterface;
+use App\Shop\Categories\Category;
 use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\Products\Exceptions\ProductInvalidArgumentException;
@@ -117,7 +118,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = $this->categoryRepo->listCategories('name', 'asc');
+        $categories = Category::all();
 
         return view('admin.products.create', [
             'categories' => $categories,
@@ -199,13 +200,13 @@ class ProductController extends Controller
             return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1]);
         }
 
-        $categories = $this->categoryRepo->listCategories('name', 'asc')->toTree();
+        $categories = Category::all();
 	
         return view('admin.products.edit', [
             'product' => $product,
             'images' => $product->images()->get(['src']),
             'categories' => $categories,
-            'selectedIds' => $product->categories()->pluck('category_id')->all(),
+            'selectedIds' => [1],
             'attributes' => $this->attributeRepo->listAttributes(),
             'productAttributes' => $productAttributes,
             'qty' => $qty,

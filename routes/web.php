@@ -19,8 +19,23 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/test', function (){
-   dd(\App\Shop\CustomerGroups\CustomerGroup::find(3)->customers);
+
+    dd(Auth::guard('employee')->user());
+
+    dd(Auth::guard('employee')->user()->can('admin'));
+
+    dd(app()->getLocale());
+    app('rinvex.categories.category')->create(['name' => 'Home', 'slug' => 'home']);;
 });
+
+
+Route::middleware('employee')->group(function () {
+    Route::namespace('Admin\Overrides')->group(function () {
+        Route::post('upload',                   'ModifiedFileUploadController@upload')->name('brackets/media::upload');
+        Route::get('view',                      'ModifiedFileViewController@view')->name('brackets/media::view');
+    });
+});
+
 
 Route::namespace('Admin')->group(function () {
     Route::get('admin/login', 'LoginController@showLoginForm')->name('admin.login');
@@ -28,6 +43,7 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/logout', 'LoginController@logout')->name('admin.logout');
 });
 Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.' ], function () {
+
     Route::namespace('Admin')->group(function () {
         Route::group(['middleware' => ['role:admin|superadmin|clerk, guard:employee']], function () {
             Route::get('/', 'DashboardController@index')->name('dashboard');
@@ -43,7 +59,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
 
             });
             Route::namespace('Categories')->group(function () {
-                Route::resource('categories', 'CategoryController');
+                Route::resource('categories', 'CategoryController')->except(['index', 'show', 'update'], 'create');
+                Route::get('categories/create/{category?}', 'CategoryController@create')->name('categories.create');
+                Route::get('categories/{categories?}', 'CategoryController@index')
+                    ->where('categories','^[a-zA-Z0-9-_\/]+$')
+                    ->name('categories.index');
+                Route::post('categories/{category}', 'CategoryController@update')->name('categories.update');
                 Route::get('remove-image-category', 'CategoryController@removeImage')->name('category.remove.image');
             });
             Route::namespace('Orders')->group(function () {
