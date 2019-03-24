@@ -52,9 +52,10 @@ return [
             'zip' => "Zip",
             'city' => "Mesto",
             'customer' => "Zákazník",
-            'groups' => "Zákaznícke skupiny",
+            'groups' => "Zákazník",
             'phone' => "Telefón",
             'countries' => "Krajina",
+            'status' => "Aktiívny",
         ],
     ],
     'orders' => [
