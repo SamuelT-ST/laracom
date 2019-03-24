@@ -1,12 +1,12 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
+@section('body')
     <!-- Main content -->
     <section class="content">
         @include('layouts.errors-and-messages')
-        <div class="box">
+        <div class="card">
             <form action="{{ route('admin.products.update', $product->id) }}" method="post" class="form" enctype="multipart/form-data">
-                <div class="box-body">
+                <div class="card-body">
                     <div class="row">
                         {{ csrf_field() }}
                         <input type="hidden" name="_method" value="put">
@@ -125,7 +125,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="box-footer">
+                                        <div class="card-footer">
                                             <div class="btn-group">
                                                 <a href="{{ route('admin.products.index') }}" class="btn btn-default btn-sm">Back</a>
                                                 <button type="submit" class="btn btn-primary btn-sm">Update</button>

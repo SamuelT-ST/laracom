@@ -6,8 +6,9 @@
 
     <!-- Default box -->
         <div class="card">
-            <div class="card-header with-border">
-                <h3 class="card-title">Title</h3>
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Dashboard a rýchle voľby
+                </div>
 
                 {{--<div class="card-tools pull-right">--}}
                     {{--<button type="button" class="btn btn-card-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">--}}
@@ -15,13 +16,11 @@
                     {{--<button type="button" class="btn btn-card-tool" data-widget="remove" data-toggle="tooltip" title="Remove">--}}
                         {{--<i class="fa fa-times"></i></button>--}}
                 {{--</div>--}}
-            </div>
             <div class="card-body">
-                Start creating your amazing application!
+                Tu sa budú vyskytovať grafy a rýchle voľby.
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-                Footer
             </div>
             <!-- /.card-footer-->
         </div>

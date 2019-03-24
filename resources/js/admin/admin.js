@@ -18,6 +18,7 @@ import './orders/index.js'
 import './order-statuses/index.js'
 import './couriers/index.js'
 import './categories/index.js'
+import './attributes/index.js'
 
 import './app-components/bootstrap';
 import './index';

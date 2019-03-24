@@ -4,14 +4,16 @@
 
         <!-- Default box -->
         <div class="container-xl">
-            <div class="card p-5">
-                <h3>Customer</h3>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Zákazník
+                </div>
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td>ID</td>
-                        <td>Name</td>
-                        <td>Email</td>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
                     </tr>
                     </tbody>
                     <tbody>
@@ -23,16 +25,18 @@
                     </tbody>
                 </table>
             </div>
-            <div class="card p-5">
-                <h3>Addresses</h3>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Adresy
+                </div>
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td>Alias</td>
-                        <td>Address 1</td>
-                        <td>Country</td>
-                        <td>Status</td>
-                        <td>Actions</td>
+                        <th>Alias</th>
+                        <th>Adresa</th>
+                        <th>Krajina</th>
+                        <th>Status</th>
+                        <th>Akcie</th>
                     </tr>
                     </tbody>
                     <tbody>

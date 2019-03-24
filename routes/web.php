@@ -82,7 +82,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
             Route::resource('countries.provinces.cities', 'Cities\CityController');
             Route::resource('couriers', 'Couriers\CourierController')->except('update');
             Route::post('couriers/{courier}', 'Couriers\CourierController@update')->name('couriers.update');
-            Route::resource('attributes', 'Attributes\AttributeController');
+            Route::resource('attributes', 'Attributes\AttributeController')->except('update');
+            Route::post('attributes/{attribute}', 'Attributes\AttributeController@update')->name('attributes.update');
             Route::resource('attributes.values', 'Attributes\AttributeValueController');
             Route::resource('brands', 'Brands\BrandController');
 

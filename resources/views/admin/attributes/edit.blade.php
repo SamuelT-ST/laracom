@@ -1,33 +1,44 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
-        @include('layouts.errors-and-messages')
-        <div class="box">
-            <form action="{{ route('admin.attributes.update', $attribute->id) }}" method="post" class="form">
-                <div class="box-body">
-                    <div class="row">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="_method" value="put">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="name">Attribute name <span class="text-danger">*</span></label>
-                                <input type="text" name="name" id="name" placeholder="Attribute name" class="form-control" value="{!! $attribute->name  !!}">
-                            </div>
-                        </div>
+@section('title', trans('admin.attribute.actions.edit', ['name' => $attribute->name]))
+
+@section('body')
+
+    <div class="container-xl">
+
+        <div class="card">
+
+            <attribute-form
+                    :action="'{{ route('admin.attributes.update', $attribute->id) }}'"
+                    :data="{{ $attribute->toJson() }}"
+                    inline-template>
+
+
+                <form class="form-horizontal form-edit" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card-header">
+                        <i class="fa fa-pencil"></i> {{ trans('admin.attributes.actions.edit', ['name' => $attribute->name]) }}
                     </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a href="{{ route('admin.attributes.index') }}" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-primary">Update</button>
+
+                    <div class="card-body">
+                        @include('admin.attributes.components.form-elements')
                     </div>
-                </div>
-            </form>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" :disabled="submiting">
+                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                            {{ trans('brackets/admin-ui::admin.btn.save') }}
+                        </button>
+                    </div>
+
+                </form>
+
+
+            </attribute-form>
+
         </div>
-        <!-- /.box -->
-    </section>
-    <!-- /.content -->
+
+    </div>
+
 @endsection
+

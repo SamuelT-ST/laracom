@@ -14,7 +14,7 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> {{ trans('admin.customers.actions.index') }}
-                        <a class="btn btn-primary btn-spinner btn-sm pull-right m-b-0" href="{{ route('admin.customers.create') }}" role="button"><i class="fa fa-plus"></i>&nbsp; {{ trans('admin.customers.actions.create') }}</a>
+                        <a class="btn btn-primary btn-spinner btn-sm pull-right m-b-0" href="#" role="button"><i class="fa fa-plus"></i>&nbsp; Nová objednávka</a>
                     </div>
                     <div class="card-body" v-cloak>
                         <form @submit.prevent="">
