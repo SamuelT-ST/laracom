@@ -18,11 +18,11 @@
                         </div>
                         <div class="form-group">
                             <label for="name">Meno <span class="text-danger">*</span></label>
-                            <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ old('name') }}">
+                            <input type="text" name="name" id="name" placeholder="Meno" class="form-control" value="{{ old('name') }}">
                         </div>
                         <div class="form-group">
                             <label for="description">Popis </label>
-                            <textarea class="form-control" name="description" id="description" rows="5" placeholder="Description">{{ old('description') }}</textarea>
+                            <textarea class="form-control" name="description" id="description" rows="5" placeholder="Popis">{{ old('description') }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="cover">Hlavný obrázok </label>
@@ -35,13 +35,13 @@
                         </div>
                         <div class="form-group">
                             <label for="quantity">Množstvo <span class="text-danger">*</span></label>
-                            <input type="text" name="quantity" id="quantity" placeholder="Quantity" class="form-control" value="{{ old('quantity') }}">
+                            <input type="text" name="quantity" id="quantity" placeholder="Množstvo" class="form-control" value="{{ old('quantity') }}">
                         </div>
                         <div class="form-group">
                             <label for="price">Cena <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-addon">EUR</span>
-                                <input type="text" name="price" id="price" placeholder="Price" class="form-control" value="{{ old('price') }}">
+                                <input type="text" name="price" id="price" placeholder="Cena" class="form-control" value="{{ old('price') }}">
                             </div>
                         </div>
                         @if(!$brands->isEmpty())
@@ -66,8 +66,8 @@
                 <!-- /.box-body -->
                 <div class="card-footer">
                     <div class="btn-group">
-                        <a href="{{ route('admin.products.index') }}" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <a href="{{ route('admin.products.index') }}" class="btn btn-default">Späť</a>
+                        <button type="submit" class="btn btn-primary">Vytvoriť</button>
                     </div>
                 </div>
             </form>
