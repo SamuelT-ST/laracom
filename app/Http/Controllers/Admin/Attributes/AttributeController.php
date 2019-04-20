@@ -79,13 +79,17 @@ class AttributeController extends Controller
 
     /**
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Support\Collection|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         try {
             $attribute = $this->attributeRepo->findAttributeById($id);
             $attributeRepo = new AttributeRepository($attribute);
+
+            if ($request->ajax()) {
+                return response()->json($attributeRepo->listAttributeValues());
+            }
 
             return view('admin.attributes.show', [
                 'attribute' => $attribute,

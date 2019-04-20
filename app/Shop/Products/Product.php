@@ -6,16 +6,23 @@ use App\Shop\Brands\Brand;
 use App\Shop\Categories\Category;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\ProductImages\ProductImage;
+use Brackets\Media\HasMedia\HasMediaCollections;
+use Brackets\Media\HasMedia\HasMediaCollectionsTrait;
+use Brackets\Media\HasMedia\HasMediaThumbsTrait;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Rinvex\Categories\Traits\Categorizable;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
+use Spatie\MediaLibrary\Media;
 
-class Product extends Model implements Buyable
+class Product extends Model implements Buyable, HasMediaCollections, HasMediaConversions
 {
     use SearchableTrait;
     use Categorizable;
+    use HasMediaCollectionsTrait;
+    use HasMediaThumbsTrait;
 
     public const MASS_UNIT = [
         'OUNCES' => 'oz',
@@ -76,9 +83,10 @@ class Product extends Model implements Buyable
      */
     protected $hidden = [];
 
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class);
+    protected $appends = ['resource_url'];
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/products/'.$this->id);
     }
 
     /**
@@ -145,5 +153,20 @@ class Product extends Model implements Buyable
     public function brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function registerMediaCollections() {
+        $this->addMediaCollection('cover')
+        ->maxNumberOfFiles(1)
+        ->accepts('image/*');
+
+        $this->addMediaCollection('images')
+             ->accepts('image/*');
+
+    }
+
+    public function registerMediaConversions(Media $media = null)
+    {
+        $this->autoRegisterThumb200();
     }
 }

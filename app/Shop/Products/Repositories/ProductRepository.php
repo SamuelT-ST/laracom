@@ -150,7 +150,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
      */
     public function syncCategories(array $params)
     {
-        $this->model->categories()->sync($params);
+        $this->model->attachCategories($params);
     }
 
     /**

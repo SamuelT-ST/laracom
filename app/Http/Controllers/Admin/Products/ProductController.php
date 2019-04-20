@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Products;
 
+use App\Shop\Attributes\Attribute;
 use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
 use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
 use App\Shop\Brands\Repositories\BrandRepositoryInterface;
@@ -14,10 +15,12 @@ use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Requests\CreateProductRequest;
+use App\Shop\Products\Requests\IndexProduct;
 use App\Shop\Products\Requests\UpdateProductRequest;
 use App\Http\Controllers\Controller;
 use App\Shop\Products\Transformations\ProductTransformable;
 use App\Shop\Tools\UploadableTrait;
+use Brackets\AdminListing\Facades\AdminListing;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -94,21 +97,27 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexProduct $request)
     {
-        $list = $this->productRepo->listProducts('id');
 
-        if (request()->has('q') && request()->input('q') != '') {
-            $list = $this->productRepo->searchProduct(request()->input('q'));
+        // create and AdminListing instance for a specific model and
+        $data = AdminListing::create(Product::class)->processRequestAndGet(
+        // pass the request with params
+            $request,
+
+            // set columns to query
+            ['id', 'sku', 'name', 'quantity', 'price', 'status'],
+
+            // set columns to searchIn
+            ['sku', 'name', 'quantity']
+        );
+
+        if ($request->ajax()) {
+            return ['data' => $data];
         }
 
-        $products = $list->map(function (Product $item) {
-            return $this->transformProduct($item);
-        })->all();
 
-        return view('admin.products.list', [
-            'products' => $this->productRepo->paginateArrayResults($products, 25)
-        ]);
+        return view('admin.products.list', ['data' => $data]);
     }
 
     /**
@@ -118,13 +127,14 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::whereNull('parent_id')->get();
 
         return view('admin.products.create', [
             'categories' => $categories,
             'brands' => $this->brandRepo->listBrands(['*'], 'name', 'asc'),
             'default_weight' => env('SHOP_WEIGHT'),
             'weight_units' => Product::MASS_UNIT,
+            'attributes' => Attribute::all(),
             'product' => new Product
         ]);
     }
@@ -138,28 +148,32 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-        $data = $request->except('_token', '_method');
-        $data['slug'] = str_slug($request->input('name'));
 
-        if ($request->hasFile('cover') && $request->file('cover') instanceof UploadedFile) {
-            $data['cover'] = $this->productRepo->saveCoverImage($request->file('cover'));
-        }
+        $data = $request->except('_token', '_method', 'combinations', 'categories', 'cover', 'images', 'wysiwygMedia');
+
+        $data['slug'] = str_slug($request->input('name'));
 
         $product = $this->productRepo->createProduct($data);
 
-        $productRepo = new ProductRepository($product);
+        if($request->has('combinations')){
+            $combinations = $request->get('combinations');
 
-        if ($request->hasFile('image')) {
-            $productRepo->saveProductImages(collect($request->file('image')));
+            foreach ($combinations as $combination){
+                $this->saveProductCombinations($combination, $product);
+            }
         }
 
         if ($request->has('categories')) {
-            $productRepo->syncCategories($request->input('categories'));
+            $product->syncCategories($request->input('categories'));
         } else {
-            $productRepo->detachCategories();
+            $product->syncCategories([]);
         }
 
-        return redirect()->route('admin.products.edit', $product->id)->with('message', 'Create successful');
+        if ($request->ajax()) {
+            return ['redirect' => url('admin/products/'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
+
+        return redirect()->route('admin.products.index')->with('message', 'Create successful');
     }
 
     /**
@@ -204,7 +218,6 @@ class ProductController extends Controller
 	
         return view('admin.products.edit', [
             'product' => $product,
-            'images' => $product->images()->get(['src']),
             'categories' => $categories,
             'selectedIds' => [1],
             'attributes' => $this->attributeRepo->listAttributes(),
@@ -251,18 +264,12 @@ class ProductController extends Controller
 
         $data['slug'] = str_slug($request->input('name'));
 
-        if ($request->hasFile('cover')) {
-            $data['cover'] = $productRepo->saveCoverImage($request->file('cover'));
-        }
-
-        if ($request->hasFile('image')) {
-            $productRepo->saveProductImages(collect($request->file('image')));
-        }
+        dd($request->input('categories'));
 
         if ($request->has('categories')) {
-            $productRepo->syncCategories($request->input('categories'));
+            $product->syncCategories($request->input('categories'));
         } else {
-            $productRepo->detachCategories();
+            $product->syncCategories();
         }
 
         $productRepo->updateProduct($data);
@@ -324,36 +331,30 @@ class ProductController extends Controller
      * @param Product $product
      * @return boolean
      */
-    private function saveProductCombinations(Request $request, Product $product): bool
+    private function saveProductCombinations($combination, Product $product): void
     {
-        $fields = $request->only(
-            'productAttributeQuantity',
-            'productAttributePrice',
-            'sale_price',
-            'default'
-        );
+        $combination = collect($combination);
 
-        if ($errors = $this->validateFields($fields)) {
-            return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1])
-                ->withErrors($errors);
-        }
+//        if ($errors = $this->validateFields($combination)) {
+//            return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1])
+//                ->withErrors($errors);
+//        }
 
-        $quantity = $fields['productAttributeQuantity'];
-        $price = $fields['productAttributePrice'];
+        $quantity = $combination->get('quantity');
+        $price = $combination->get('price');
 
         $sale_price = null;
-        if (isset($fields['sale_price'])) {
-            $sale_price = $fields['sale_price'];
+        if ($combination->has('sale_price')) {
+            $sale_price = $combination->get('sale_price');
         }
 
-        $attributeValues = $request->input('attributeValue');
         $productRepo = new ProductRepository($product);
 
         $hasDefault = $productRepo->listProductAttributes()->where('default', 1)->count();
 
         $default = 0;
-        if ($request->has('default')) {
-            $default = $fields['default'];
+        if ($combination->has('defaultPrice')) {
+            $default = $combination->get('defaultPrice');
         }
 
         if ($default == 1 && $hasDefault > 0) {
@@ -364,11 +365,16 @@ class ProductController extends Controller
             new ProductAttribute(compact('quantity', 'price', 'sale_price', 'default'))
         );
 
-        // save the combinations
-        return collect($attributeValues)->each(function ($attributeValueId) use ($productRepo, $productAttribute) {
-            $attribute = $this->attributeValueRepository->find($attributeValueId);
-            return $productRepo->saveCombination($productAttribute, $attribute);
-        })->count();
+        $attribute = $this->attributeValueRepository->find($combination['value']['id']);
+
+        $productAttribute->attributesValues()->save($attribute);
+
+
+//        // save the combinations
+//        return collect($attributeValues)->each(function ($attributeValueId) use ($productRepo, $productAttribute) {
+//            $attribute = $this->attributeValueRepository->find($attributeValueId);
+//            return $productRepo->saveCombination($productAttribute, $attribute);
+//        })->count();
     }
 
     /**

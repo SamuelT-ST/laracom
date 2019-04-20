@@ -27,3 +27,17 @@ ol.breadcrumb span{
 .app-footer .pull-right{
   display: none;
 }
+
+.categories-list [type=checkbox]:not(:checked), .categories-list [type=checkbox]:checked {
+  position: initial;
+  left: 0;
+}
+
+.categories-list li{
+  list-style-type: none;
+}
+
+.mini-upload .vue-dropzone.dropzone .dz-preview .dz-image {
+  width: 150px !important;
+  height: 150px !important;
+}
