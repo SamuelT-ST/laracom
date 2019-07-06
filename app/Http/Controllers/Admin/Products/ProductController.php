@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Products;
 
 use App\Shop\Attributes\Attribute;
 use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
+use App\Shop\AttributeValues\AttributeValue;
 use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
 use App\Shop\Brands\Repositories\BrandRepositoryInterface;
 use App\Shop\Categories\Category;
@@ -149,6 +150,8 @@ class ProductController extends Controller
     public function store(CreateProductRequest $request)
     {
 
+        dd($request->toArray());
+
         $data = $request->except('_token', '_method', 'combinations', 'categories', 'cover', 'images', 'wysiwygMedia');
 
         $data['slug'] = str_slug($request->input('name'));
@@ -164,9 +167,10 @@ class ProductController extends Controller
         }
 
         if ($request->has('categories')) {
-            $product->syncCategories($request->input('categories'));
+            $categories = $request->get('categories');
+            $product->categories()->sync($categories);
         } else {
-            $product->syncCategories([]);
+            $product->categories()->sync([]);
         }
 
         if ($request->ajax()) {
@@ -198,30 +202,30 @@ class ProductController extends Controller
      */
     public function edit(int $id)
     {
-        $product = $this->productRepo->findProductById($id);
-        $productAttributes = $product->attributes()->get();
-
+        $product = Product::find($id);
+        $productAttributes = $product->attributes()->with('attributesValues')->get();
         $qty = $productAttributes->map(function ($item) {
             return $item->quantity;
         })->sum();
 
-        if (request()->has('delete') && request()->has('pa')) {
-            $pa = $productAttributes->where('id', request()->input('pa'))->first();
-            $pa->attributesValues()->detach();
-            $pa->delete();
+        $combinations = [];
 
-            request()->session()->flash('message', 'Delete successful');
-            return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1]);
-        }
+        foreach ($productAttributes as $attribute){
+            $combinations[] = $this->transformCombinations($attribute);
+        };
+        $product['combinations'] = $combinations;
 
-        $categories = Category::all();
-	
+        $data = collect($product);
+
+        $data['categories'] = $product->categories()->pluck('id');
+
+        $categories = Category::whereNull('parent_id')->get();
+
         return view('admin.products.edit', [
             'product' => $product,
+            'data' => $data,
             'categories' => $categories,
-            'selectedIds' => [1],
             'attributes' => $this->attributeRepo->listAttributes(),
-            'productAttributes' => $productAttributes,
             'qty' => $qty,
             'brands' => $this->brandRepo->listBrands(['*'], 'name', 'asc'),
             'weight' => $product->weight,
@@ -241,13 +245,41 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, int $id)
     {
+
         $product = $this->productRepo->findProductById($id);
         $productRepo = new ProductRepository($product);
 
-        if ($request->has('attributeValue')) {
-            $this->saveProductCombinations($request, $product);
-            return redirect()->route('admin.products.edit', [$id, 'combination' => 1])
-                ->with('message', 'Attribute combination created successful');
+
+        if($request->has('combinations')){
+            $combinations = $request->get('combinations');
+
+            $attachedAttributesIds = $product->attributes()->pluck('id');
+
+            $updatedAttributesIds = collect($combinations)->map(function($combination){
+                if(isset($combination['id'])){
+                    return $combination['id'];
+                }
+            });
+
+            $toDelete = $attachedAttributesIds->diff($updatedAttributesIds);
+
+            if($toDelete->count() > 0){
+
+                foreach (ProductAttribute::whereIn('id', $toDelete)->get() as $attribute){
+                    $attribute->attributesValues()->detach();
+                }
+
+                ProductAttribute::destroy($toDelete);
+            }
+
+            foreach ($combinations as $combination){
+                if(isset($combination['wasEdited']) && isset($combination['id'])) {
+                    $this->updateProductCombination($combination);
+                }
+                else if(!isset($combination['id'])) {
+                    $this->saveProductCombinations($combination, $product);
+                }
+            }
         }
 
         $data = $request->except(
@@ -259,12 +291,15 @@ class ProductController extends Controller
             'productAttributeQuantity',
             'productAttributePrice',
             'attributeValue',
-            'combination'
+            'combinations',
+            'cover',
+            'images',
+            'wysiwygMedia',
+            'resource_url'
         );
 
         $data['slug'] = str_slug($request->input('name'));
 
-        dd($request->input('categories'));
 
         if ($request->has('categories')) {
             $product->syncCategories($request->input('categories'));
@@ -273,6 +308,10 @@ class ProductController extends Controller
         }
 
         $productRepo->updateProduct($data);
+
+        if ($request->ajax()){
+            return ['redirect' => url('admin/products/'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
 
         return redirect()->route('admin.products.edit', $id)
             ->with('message', 'Update successful');
@@ -286,44 +325,34 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy($id)
+
+    public function destroy(Request $request,Product $product)
     {
-        $product = $this->productRepo->findProductById($id);
+
         $product->categories()->sync([]);
         $productAttr = $product->attributes();
-
         $productAttr->each(function ($pa) {
             DB::table('attribute_value_product_attribute')->where('product_attribute_id', $pa->id)->delete();
         });
-
         $productAttr->where('product_id', $product->id)->delete();
-
         $productRepo = new ProductRepository($product);
         $productRepo->removeProduct();
 
-        return redirect()->route('admin.products.index')->with('message', 'Delete successful');
+
+        if ($request->ajax()) {
+            return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
+        }
+
+        request()->session()->flash('message', 'Delete successful');
+        return redirect()->route('admin.categories.index');
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function removeImage(Request $request)
-    {
-        $this->productRepo->deleteFile($request->only('product', 'image'), 'uploads');
-        return redirect()->back()->with('message', 'Image delete successful');
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function removeThumbnail(Request $request)
-    {
-        $this->productRepo->deleteThumb($request->input('src'));
-        return redirect()->back()->with('message', 'Image delete successful');
+    private function updateProductCombination($combination){
+        $productAttribute = ProductAttribute::find($combination['id']);
+        $productAttribute->fill($combination);
+        $productAttribute->save();
+        $productAttribute->attributesValues()->detach();
+        $productAttribute->attributesValues()->attach($combination['value']['id']);
     }
 
     /**
@@ -333,12 +362,8 @@ class ProductController extends Controller
      */
     private function saveProductCombinations($combination, Product $product): void
     {
-        $combination = collect($combination);
 
-//        if ($errors = $this->validateFields($combination)) {
-//            return redirect()->route('admin.products.edit', [$product->id, 'combination' => 1])
-//                ->withErrors($errors);
-//        }
+        $combination = collect($combination);
 
         $quantity = $combination->get('quantity');
         $price = $combination->get('price');
@@ -391,5 +416,20 @@ class ProductController extends Controller
         if ($validator->fails()) {
             return $validator;
         }
+    }
+
+    private function transformCombinations(ProductAttribute $productAttribute){
+
+        return collect([
+            'id' => $productAttribute->id,
+            'attribute' => $productAttribute->attributesValues()->first()->attribute,
+            'defaultPrice' => $productAttribute->default,
+            'price' => $productAttribute->price,
+            'quantity' => $productAttribute->quantity,
+            'salePrice' => $productAttribute->sale_price,
+            'value' => $productAttribute->attributesValues()->first()
+        ]);
+
+
     }
 }

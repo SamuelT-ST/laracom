@@ -63,6 +63,8 @@ Vue.component('product-form', {
         beforeOpen (event) {
             if(event.params){
                 this.activeData = event.params.form;
+                console.log('ahoj');
+                this.form.combinations[event.params.index].wasEdited = true;
                 this.activeCombinationIndex = event.params.index;
             }
         }

@@ -20,9 +20,10 @@ Vue.component('attribute-modal-form', {
                 price:  '' ,
                 salePrice:  '' ,
                 defaultPrice: false,
-                index: null
+                index: null,
+                wasEdited: false
             },
-            mediaCollections: ['cover']
+            mediaCollections: ['valueCover']
         }
     },
     created: function () {
