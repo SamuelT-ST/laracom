@@ -87,10 +87,10 @@ class ProductController extends Controller
         $this->productAttribute = $productAttribute;
         $this->brandRepo = $brandRepository;
 
-        $this->middleware(['permission:create-product, guard:employee'], ['only' => ['create', 'store']]);
-        $this->middleware(['permission:update-product, guard:employee'], ['only' => ['edit', 'update']]);
-        $this->middleware(['permission:delete-product, guard:employee'], ['only' => ['destroy']]);
-        $this->middleware(['permission:view-product, guard:employee'], ['only' => ['index', 'show']]);
+//        $this->middleware(['permission:create-product, guard:employee'], ['only' => ['create', 'store']]);
+//        $this->middleware(['permission:update-product, guard:employee'], ['only' => ['edit', 'update']]);
+//        $this->middleware(['permission:delete-product, guard:employee'], ['only' => ['destroy']]);
+//        $this->middleware(['permission:view-product, guard:employee'], ['only' => ['index', 'show']]);
     }
 
     /**

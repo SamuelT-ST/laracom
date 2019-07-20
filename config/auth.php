@@ -36,6 +36,11 @@ return [
     */
 
     'guards' => [
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admin_users',
+        ],
+        
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -44,12 +49,6 @@ return [
         'checkout' => [
             'driver' => 'session',
             'provider' => 'users',
-        ],
-
-        'employee' => [
-            'driver' => 'session',
-            'provider' => 'employee',
-
         ],
 
         'api' => [
@@ -76,15 +75,15 @@ return [
     */
 
     'providers' => [
+        'admin_users' => [
+            'driver' => 'eloquent',
+            'model' => Brackets\AdminAuth\Models\AdminUser::class,
+        ],
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Shop\Customers\Customer::class,
-        ],
-
-         'employee' => [
-             'driver' => 'eloquent',
-             'model' => App\Shop\Employees\Employee::class,
-         ],
+        ]
     ],
 
     /*
@@ -103,17 +102,17 @@ return [
     */
 
     'passwords' => [
+        'admin_users' => [
+            'provider' => 'admin_users',
+            'table' => 'admin_password_resets',
+            'expire' => 60,
+        ],
+        
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
-        ],
-
-        'employee' => [
-            'provider' => 'employee',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
+        ]
     ],
 
 ];

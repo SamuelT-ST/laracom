@@ -11,6 +11,7 @@
         "binarytorch/larecipe": "^1.2",
         "brackets/admin-listing": "^2.0",
         "brackets/admin-ui": "^3.0",
+        "brackets/craftable": "^3.0",
         "brackets/media": "^2.0",
         "doctrine/dbal": "^2.5",
         "fideloper/proxy": "~4.0",
@@ -26,7 +27,6 @@
         "paypal/rest-api-sdk-php": "*",
         "predis/predis": "^1.1",
         "rinvex/laravel-categories": "1.*",
-        "santigarcor/laratrust": "5.0.*",
         "shippo/shippo-php": "^1.4"
     },
     "require-dev": {
