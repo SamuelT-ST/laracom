@@ -88,6 +88,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
             Route::resource('attributes.values', 'Attributes\AttributeValueController');
             Route::resource('brands', 'Brands\BrandController');
 
+            Route::get('discounts',                              'Discounts\DiscountsController@index');
+            Route::get('discounts/create',                       'Discounts\DiscountsController@create');
+            Route::post('discounts',                             'Discounts\DiscountsController@store');
+            Route::get('discounts/{discount}/edit',              'Discounts\DiscountsController@edit')->name('admin/discounts/edit');
+            Route::post('discounts/{discount}',                  'Discounts\DiscountsController@update')->name('admin/discounts/update');
+            Route::delete('discounts/{discount}',                'Discounts\DiscountsController@destroy')->name('admin/discounts/destroy');
+
+
         });
         Route::group(['middleware' => ['role:admin|superadmin, guard:employee']], function () {
             Route::resource('employees', 'EmployeeController');
@@ -137,3 +145,5 @@ Route::namespace('Front')->group(function () {
     Route::get("search", 'ProductController@search')->name('search.product');
     Route::get("{product}", 'ProductController@show')->name('front.get.product');
 });
+
+/* Auto-generated admin routes */

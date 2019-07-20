@@ -4,7 +4,8 @@
             <li class="nav-title">Dashboard</li>
             <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard')  }}"><i class="nav-icon icon-home"></i>Home</a></li>
             <li class="nav-title">{{ trans('brackets/admin-ui::admin.sidebar.content') }}</li>
-            {{-- Do not delete me :) I'm used for auto-generation menu items --}}
+            <li class="nav-item"><a class="nav-link" href="{{ url('admin/discounts') }}"><i class="nav-icon icon-book-open"></i> {{ trans('admin.discount.title') }}</a></li>
+           {{-- Do not delete me :) I'm used for auto-generation menu items --}}
 
             <li class="nav-title">Predaj</li>
             <li class="nav-item nav-dropdown">
