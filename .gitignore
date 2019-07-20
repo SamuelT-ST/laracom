@@ -5,8 +5,6 @@
 /public/img
 /public/images
 /public/fonts/vendor
-/public/css/app.css
-/public/js/app.js
 /storage/*.key
 /vendor
 /.idea
@@ -27,3 +25,5 @@ storage/app/public/storage
 \.php_cs\.cache
 public/css
 public/js
+storage
+public/uploads

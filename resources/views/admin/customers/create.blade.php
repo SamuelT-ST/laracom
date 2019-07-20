@@ -1,47 +1,45 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
-        @include('layouts.errors-and-messages')
-        <div class="box">
-            <form action="{{ route('admin.customers.store') }}" method="post" class="form">
-                <div class="box-body">
-                    {{ csrf_field() }}
-                    <div class="form-group">
-                        <label for="name">Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ old('name') }}">
+@section('title', trans('admin.customers.actions.create'))
+
+@section('body')
+
+
+    <div class="container-xl">
+
+        <div class="card">
+
+            <customer-form
+                    :groups = "{{ $groups }}"
+                    :action="'{{ route('admin.customers.store') }}'"
+                    inline-template>
+
+                <form class="form-horizontal form-create" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card-header">
+                        <i class="fa fa-plus"></i> {{ trans('admin.post.actions.create') }}
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-addon">@</span>
-                            <input type="text" name="email" id="email" placeholder="Email" class="form-control" value="{{ old('email') }}">
-                        </div>
+
+                    <div class="card-body">
+
+                        @include('admin.customers.components.form-elements')
+
+
                     </div>
-                    <div class="form-group">
-                        <label for="password">Password <span class="text-danger">*</span></label>
-                        <input type="password" name="password" id="password" placeholder="xxxxx" class="form-control">
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" :disabled="submiting">
+                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                            {{ trans('brackets/admin-ui::admin.btn.save') }}
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label for="status">Status </label>
-                        <select name="status" id="status" class="form-control">
-                            <option value="0">Disable</option>
-                            <option value="1">Enable</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a href="{{ route('admin.products.index') }}" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-                </div>
-            </form>
+
+                </form>
+
+            </customer-form>
+
         </div>
-        <!-- /.box -->
 
-    </section>
-    <!-- /.content -->
+    </div>
+
 @endsection

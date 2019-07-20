@@ -1,18 +1,18 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
+@section('body')
     <!-- Main content -->
     <section class="content">
     @include('layouts.errors-and-messages')
     <!-- Default box -->
-        <div class="box">
-            <div class="box-header">
+        <div class="card">
+            <div class="card-header">
                 <div class="row">
                     <div class="col-md-6">
                         <h2>
                             <a href="{{ route('admin.customers.show', $customer->id) }}">{{$customer->name}}</a> <br />
-                            <small>{{$customer->email}}</small> <br />
-                            <small>reference: <strong>{{$order->reference}}</strong></small>
+                            <h6>{{$customer->email}}</h6>
+                            <h6>reference: <strong>{{$order->reference}}</strong></h6>
                         </h2>
                     </div>
                     <div class="col-md-3 col-md-offset-3">
@@ -21,16 +21,16 @@
                 </div>
             </div>
         </div>
-        <div class="box">
-            <div class="box-body">
+        <div class="card">
+            <div class="card-body">
                 <h4> <i class="fa fa-shopping-bag"></i> Order Information</h4>
                 <table class="table">
                     <thead>
                         <tr>
-                            <td class="col-md-3">Date</td>
-                            <td class="col-md-3">Customer</td>
-                            <td class="col-md-3">Payment</td>
-                            <td class="col-md-3">Status</td>
+                            <td>Date</td>
+                            <td>Customer</td>
+                            <td>Payment</td>
+                            <td>Status</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -92,7 +92,7 @@
                     </tbody>
                 </table>
             </div>
-            <!-- /.box-body -->
+            <!-- /.card-body -->
         </div>
         @if($order)
             @if($order->total != $order->total_paid)
@@ -103,17 +103,17 @@
                 </p>
 
             @endif
-            <div class="box">
+            <div class="card">
                 @if(!$items->isEmpty())
-                    <div class="box-body">
+                    <div class="card-body">
                         <h4> <i class="fa fa-gift"></i> Items</h4>
                         <table class="table">
                             <thead>
-                            <th class="col-md-2">SKU</th>
-                            <th class="col-md-2">Name</th>
-                            <th class="col-md-2">Description</th>
-                            <th class="col-md-2">Quantity</th>
-                            <th class="col-md-2">Price</th>
+                            <th>SKU</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
                             </thead>
                             <tbody>
                             @foreach($items as $item)
@@ -129,15 +129,15 @@
                         </table>
                     </div>
                 @endif
-                <div class="box-body">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             <h4> <i class="fa fa-truck"></i> Courier</h4>
                             <table class="table">
                                 <thead>
-                                    <th class="col-md-3">Name</th>
-                                    <th class="col-md-4">Description</th>
-                                    <th class="col-md-5">Link</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Link</th>
                                 </thead>
                                 <tbody>
                                 <tr>
@@ -180,12 +180,10 @@
                     </div>
                 </div>
             </div>
-            <!-- /.box -->
-            <div class="box-footer">
+            <!-- /.card -->
                 <div class="btn-group">
-                    <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-default">Back</a>
+                    <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-warning">Back</a>
                 </div>
-            </div>
         @endif
 
     </section>

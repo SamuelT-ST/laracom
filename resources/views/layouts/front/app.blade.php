@@ -101,6 +101,7 @@
 </section>
 @yield('content')
 
+
 @include('layouts.front.footer')
 
 <script src="{{ asset('js/front.min.js') }}"></script>

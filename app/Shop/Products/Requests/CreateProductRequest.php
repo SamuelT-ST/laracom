@@ -18,7 +18,14 @@ class CreateProductRequest extends BaseFormRequest
             'name' => ['required', 'unique:products'],
             'quantity' => ['required', 'numeric'],
             'price' => ['required'],
-            'cover' => ['required', 'file', 'image:png,jpeg,jpg,gif']
+            'sale_price' => ['numeric', 'nullable'],
+            'categories' => ['array', 'required'],
+            'description' => ['string', 'required'],
+            'height' => ['numeric', 'nullable'],
+            'length' => ['numeric', 'nullable'],
+            'weight' => ['numeric', 'nullable'],
+            'width' => ['numeric', 'nullable'],
+            'combinations' => ['array', 'nullable'],
         ];
     }
 }

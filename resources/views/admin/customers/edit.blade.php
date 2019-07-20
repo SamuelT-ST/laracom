@@ -1,48 +1,46 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
-        @include('layouts.errors-and-messages')
-        <div class="box">
-            <form action="{{ route('admin.customers.update', $customer->id) }}" method="post" class="form">
-                <div class="box-body">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="_method" value="put">
-                    <div class="form-group">
-                        <label for="name">Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{!! $customer->name ?: old('name')  !!}">
+@section('title', trans('admin.customers.actions.edit', ['name' => $customer->title]))
+
+@section('body')
+
+    <div class="container-xl">
+
+        <div class="card">
+
+
+            <customer-form
+                    :groups = "{{ $groups }}"
+                    :action="'{{ route('admin.customers.update', $customer->id) }}'"
+                    :data="{{ $customer->toJson() }}"
+                    inline-template>
+
+
+                <form class="form-horizontal form-edit" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card-header">
+                        <i class="fa fa-pencil"></i> {{ trans('admin.customers.actions.edit', ['name' => $customer->title]) }}
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-addon">@</span>
-                            <input type="text" name="email" id="email" placeholder="Email" class="form-control" value="{!! $customer->email ?: old('email')  !!}">
-                        </div>
+
+                    <div class="card-body">
+                        @include('admin.customers.components.form-elements')
                     </div>
-                    <div class="form-group">
-                        <label for="password">Password <span class="text-danger">*</span></label>
-                        <input type="password" name="password" id="password" placeholder="xxxxx" class="form-control">
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" :disabled="submiting">
+                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                            {{ trans('brackets/admin-ui::admin.btn.save') }}
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label for="status">Status </label>
-                        <select name="status" id="status" class="form-control">
-                            <option value="0" @if($customer->status == 0) selected="selected" @endif>Disable</option>
-                            <option value="1" @if($customer->status == 1) selected="selected" @endif>Enable</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a href="{{ route('admin.customers.index') }}" class="btn btn-default btn-sm">Back</a>
-                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
-                    </div>
-                </div>
-            </form>
+
+                </form>
+
+
+            </customer-form>
+
         </div>
-        <!-- /.box -->
 
-    </section>
-    <!-- /.content -->
+    </div>
+
 @endsection
+

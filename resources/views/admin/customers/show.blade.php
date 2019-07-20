@@ -1,19 +1,19 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
+@section('body')
 
         <!-- Default box -->
-        <div class="box">
-            <div class="box-body">
-                <h2>Customer</h2>
+        <div class="container-xl">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Zákazník
+                </div>
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td class="col-md-4">ID</td>
-                        <td class="col-md-4">Name</td>
-                        <td class="col-md-4">Email</td>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
                     </tr>
                     </tbody>
                     <tbody>
@@ -25,16 +25,18 @@
                     </tbody>
                 </table>
             </div>
-            <div class="box-body">
-                <h2>Addresses</h2>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Adresy
+                </div>
                 <table class="table">
                     <tbody>
                     <tr>
-                        <td class="col-md-2">Alias</td>
-                        <td class="col-md-2">Address 1</td>
-                        <td class="col-md-2">Country</td>
-                        <td class="col-md-2">Status</td>
-                        <td class="col-md-4">Actions</td>
+                        <th>Alias</th>
+                        <th>Adresa</th>
+                        <th>Krajina</th>
+                        <th>Status</th>
+                        <th>Akcie</th>
                     </tr>
                     </tbody>
                     <tbody>
@@ -68,6 +70,5 @@
             </div>
         </div>
         <!-- /.box -->
-    </section>
     <!-- /.content -->
 @endsection

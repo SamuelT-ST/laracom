@@ -77,6 +77,7 @@
                 <ul class="treeview-menu">
                     <li><a href="{{ route('admin.customers.index') }}"><i class="fa fa-circle-o"></i> List customers</a></li>
                     <li><a href="{{ route('admin.customers.create') }}"><i class="fa fa-plus"></i> Create customer</a></li>
+                    <li><a href="{{ route('admin.customerGroups.index') }}"><i class="fa fa-plus"></i> Customer groups</a></li>
                     <li class="@if(request()->segment(2) == 'addresses') active @endif">
                         <a href="#"><i class="fa fa-map-marker"></i> Addresses
                             <span class="pull-right-container">

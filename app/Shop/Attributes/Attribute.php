@@ -14,6 +14,14 @@ class Attribute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/attributes/'.$this->getKey());
+    }
+
     public function values()
     {
         return $this->hasMany(AttributeValue::class);

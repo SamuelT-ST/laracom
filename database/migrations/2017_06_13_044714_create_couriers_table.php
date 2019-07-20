@@ -18,8 +18,8 @@ class CreateCouriersTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('url')->nullable();
-            $table->integer('is_free');
-            $table->integer('status');
+            $table->boolean('is_free')->default(false);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

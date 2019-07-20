@@ -76,21 +76,10 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
                 $slug = str_slug($params['name']);
             }
 
-            if (isset($params['cover']) && ($params['cover'] instanceof UploadedFile)) {
-                $cover = $this->uploadOne($params['cover'], 'categories');
-            }
+            $merge = $collection->merge(compact('slug'));
 
-            $merge = $collection->merge(compact('slug', 'cover'));
+            return app('rinvex.categories.category')->create($merge->all());
 
-            $category = new Category($merge->all());
-
-            if (isset($params['parent'])) {
-                $parent = $this->findCategoryById($params['parent']);
-                $category->parent()->associate($parent);
-            }
-
-            $category->save();
-            return $category;
         } catch (QueryException $e) {
             throw new CategoryInvalidArgumentException($e->getMessage());
         }
@@ -110,11 +99,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         $collection = collect($params)->except('_token');
         $slug = str_slug($collection->get('name'));
 
-        if (isset($params['cover']) && ($params['cover'] instanceof UploadedFile)) {
-            $cover = $this->uploadOne($params['cover'], 'categories');
-        }
-
-        $merge = $collection->merge(compact('slug', 'cover'));
+        $merge = $collection->merge(compact('slug'));
 
         // set parent attribute default value if not set
         $params['parent'] = $params['parent'] ?? 0;
@@ -126,7 +111,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         if ( (int)$params['parent'] == 0) {
             $category->saveAsRoot();
         } else {
-            $parent = $this->findCategoryById($params['parent']);
+            $parent = $this->findCategoryById($params['parent']['id']);
             $category->parent()->associate($parent);
         }
 

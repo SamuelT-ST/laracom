@@ -1,0 +1,43 @@
+// Write (or import) your styles here
+@import "loader";
+
+.cat-link{
+  cursor: pointer;
+  color: #4273FA;
+  text-decoration: none;
+}
+
+.cat-link:hover{
+  color: #0b1526;
+}
+
+ol.breadcrumb {
+  display: inline-flex;
+  border-bottom: 0;
+  cursor: pointer;
+  color: #4273FA;
+}
+
+ol.breadcrumb span{
+  color: black;
+  cursor: auto;
+  font-weight: 700;
+}
+
+.app-footer .pull-right{
+  display: none;
+}
+
+.categories-list [type=checkbox]:not(:checked), .categories-list [type=checkbox]:checked {
+  position: initial;
+  left: 0;
+}
+
+.categories-list li{
+  list-style-type: none;
+}
+
+.mini-upload .vue-dropzone.dropzone .dz-preview .dz-image {
+  width: 150px !important;
+  height: 150px !important;
+}

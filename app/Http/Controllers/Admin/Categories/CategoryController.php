@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Categories;
 
+use App\Shop\Categories\AdminListing;
 use App\Shop\Categories\Repositories\CategoryRepository;
 use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Shop\Categories\Requests\CreateCategoryRequest;
+use App\Shop\Categories\Requests\IndexCategory;
 use App\Shop\Categories\Requests\UpdateCategoryRequest;
 use App\Http\Controllers\Controller;
+use App\Shop\Customers\Customer;
 use Illuminate\Http\Request;
+use App\Shop\Categories\Category;
 
 class CategoryController extends Controller
 {
@@ -29,15 +33,41 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexCategory $request, $categories = null)
     {
-        $list = $this->categoryRepo->rootCategories('created_at', 'desc');
+        $parentId = null;
+        $parentName = '';
 
-        return view('admin.categories.list', [
-            'categories' => $this->categoryRepo->paginateArrayResults($list->all())
-        ]);
+        if (!is_null($categories)){
+            $categories = explode('/', $categories);
+            $parent = Category::where('slug', array_pop($categories))->first();
+            $parentId = $parent->id;
+            $parentName = $parent->name;
+        }
+
+        $data = AdminListing::create(Category::class)->processRequestAndGet(
+        // pass the request with params
+            $request,
+
+            // set columns to query
+            ['id', 'name', 'slug', 'description'],
+
+            // set columns to searchIn
+            ['name', 'description'],
+            function ($query) use ($parentId){
+                $query->where('parent_id', $parentId);
+            }
+        );
+
+        $breadcrumbs = collect(app('rinvex.categories.category')->ancestorsOf($parentId)->toFlatTree());
+
+        if ($request->ajax()) {
+            return ['data' => $data, 'breadcrumbs' => $breadcrumbs, 'parentName' => $parentName];
+        }
+
+        return view('admin.categories.list', ['data' => $data, 'breadcrumbs' => $breadcrumbs, 'parentName' => $parentName]);
     }
 
     /**
@@ -45,10 +75,11 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Category $category = null)
     {
         return view('admin.categories.create', [
-            'categories' => $this->categoryRepo->listCategories('name', 'asc')
+            'categories' => Category::all(),
+            'parentCategory' => $category
         ]);
     }
 
@@ -60,7 +91,19 @@ class CategoryController extends Controller
      */
     public function store(CreateCategoryRequest $request)
     {
-        $this->categoryRepo->createCategory($request->except('_token', '_method'));
+
+        if($request->has('parent')){
+            $request['parent_id'] = $request['parent']['id'];
+        }
+
+
+        $category = $this->categoryRepo->createCategory($request->except('_token', '_method'));
+
+        $redirectTo = $category->parent ? $category->parent->slug : "";
+
+        if ($request->ajax()) {
+            return ['redirect' => url('admin/categories/'. $redirectTo), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
 
         return redirect()->route('admin.categories.index')->with('message', 'Category created');
     }
@@ -90,11 +133,16 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
+
+        $category = Category::with('parent')->where('slug', $slug)->first();
+
+        $category['parent'] = $category->parent;
+
         return view('admin.categories.edit', [
-            'categories' => $this->categoryRepo->listCategories('name', 'asc', $id),
-            'category' => $this->categoryRepo->findCategoryById($id)
+            'categories' => Category::all(),
+            'category' => $category
         ]);
     }
 
@@ -107,10 +155,17 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, $id)
     {
+
         $category = $this->categoryRepo->findCategoryById($id);
 
         $update = new CategoryRepository($category);
         $update->updateCategory($request->except('_token', '_method'));
+
+        $redirectTo = $category->parent ? $category->parent->slug : "";
+
+        if ($request->ajax()){
+            return ['redirect' => url('admin/categories/'. $redirectTo), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
 
         $request->session()->flash('message', 'Update successful');
         return redirect()->route('admin.categories.edit', $id);
@@ -119,14 +174,18 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Request $request
+     * @param Category $slug
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy(int $id)
+    public function destroy(Request $request,Category $category)
     {
-        $category = $this->categoryRepo->findCategoryById($id);
-        $category->products()->sync([]);
         $category->delete();
+
+        if ($request->ajax()) {
+            return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
+        }
 
         request()->session()->flash('message', 'Delete successful');
         return redirect()->route('admin.categories.index');

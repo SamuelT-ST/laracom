@@ -1,32 +1,20 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
+@section('body')
     <!-- Main content -->
     <section class="content">
     @include('layouts.errors-and-messages')
-    <!-- Default box -->
-    <div class="box">
-        <div class="box-body">
-            <h2>Attributes</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <td>Attribute name</td>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ $attribute->name }}</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- Default card -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fa fa-align-justify"></i> Atribút {{ $attribute->name }}
+        </div>
+        <div class="card-body">
             @if(!$values->isEmpty())
-                <table class="table table-striped" style="margin-left: 35px">
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            <td>Attribute Values</td>
+                            <td>Hodnoty atribútu</td>
                             <td></td>
                         </tr>
                     </thead>
@@ -39,7 +27,7 @@
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
                                         <div class="btn-group">
-                                            <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Remove</button>
+                                            <button onclick="return confirm('Ste si istý?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Odstrániť</button>
                                         </div>
                                     </form>
                                 </td>
@@ -49,15 +37,15 @@
                 </table>
             @endif
         </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
+        <!-- /.card-body -->
+        <div class="card-footer">
             <div class="btn-group">
-                <a href="{{ route('admin.attributes.values.create', $attribute->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add values</a>
-                <a href="{{ route('admin.attributes.index') }}" class="btn btn-default btn-sm">Back</a>
+                <a href="{{ route('admin.attributes.values.create', $attribute->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Pridať hodnoty</a>
+                <a href="{{ route('admin.attributes.index') }}" class="btn btn-warning btn-sm">Späť</a>
             </div>
         </div>
     </div>
-    <!-- /.box -->
+    <!-- /.card -->
     </section>
     <!-- /.content -->
 @endsection

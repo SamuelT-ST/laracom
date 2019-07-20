@@ -5,11 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Shop\Customers\Customer;
 use App\Http\Controllers\Controller;
 use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
-use App\Shop\Customers\Requests\CreateCustomerRequest;
 use App\Shop\Customers\Requests\RegisterCustomerRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
@@ -58,7 +55,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * @param RegisterCustomerRequest $request
+     * @param RegisterGroupRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function register(RegisterCustomerRequest $request)

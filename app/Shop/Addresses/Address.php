@@ -60,6 +60,15 @@ class Address extends Model
         ]
     ];
 
+    protected $with = ['country', 'customer'];
+
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/addresses/'.$this->getKey());
+    }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);

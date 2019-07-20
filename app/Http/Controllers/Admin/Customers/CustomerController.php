@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Admin\Customers;
 
+use App\Shop\CustomerGroups\CustomerGroup;
 use App\Shop\Customers\Customer;
 use App\Shop\Customers\Repositories\CustomerRepository;
 use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
 use App\Shop\Customers\Requests\CreateCustomerRequest;
+use App\Shop\Customers\Requests\IndexCustomer;
 use App\Shop\Customers\Requests\UpdateCustomerRequest;
 use App\Shop\Customers\Transformations\CustomerTransformable;
 use App\Http\Controllers\Controller;
+use Brackets\AdminListing\Facades\AdminListing;
+use Illuminate\Http\Request;
+
 
 class CustomerController extends Controller
 {
@@ -31,24 +36,29 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param IndexCustomer $request
+     * @return array|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexCustomer $request)
     {
-        $list = $this->customerRepo->listCustomers('created_at', 'desc');
+        // create and AdminListing instance for a specific model and
+        $data = AdminListing::create(Customer::class)->processRequestAndGet(
+        // pass the request with params
+            $request,
 
-        if (request()->has('q')) {
-            $list = $this->customerRepo->searchCustomer(request()->input('q'));
+            // set columns to query
+            ['id', 'name', 'email', 'status'],
+
+            // set columns to searchIn
+            ['name', 'email']
+        );
+
+        if ($request->ajax()) {
+            return ['data' => $data];
         }
 
-        $customers = $list->map(function (Customer $customer) {
-            return $this->transformCustomer($customer);
-        })->all();
 
-
-        return view('admin.customers.list', [
-            'customers' => $this->customerRepo->paginateArrayResults($customers)
-        ]);
+        return view('admin.customers.list', ['data' => $data]);
     }
 
     /**
@@ -58,18 +68,24 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('admin.customers.create');
+        $groups = CustomerGroup::all();
+
+        return view('admin.customers.create')->with(compact('groups'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  CreateCustomerRequest $request
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function store(CreateCustomerRequest $request)
     {
         $this->customerRepo->createCustomer($request->except('_token', '_method'));
+
+        if ($request->ajax()) {
+            return ['redirect' => url('admin/customers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
 
         return redirect()->route('admin.customers.index');
     }
@@ -98,7 +114,7 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.customers.edit', ['customer' => $this->customerRepo->findCustomerById($id)]);
+        return view('admin.customers.edit', ['customer' => $this->customerRepo->findCustomerById($id), 'groups'=>CustomerGroup::all()]);
     }
 
     /**
@@ -106,7 +122,7 @@ class CustomerController extends Controller
      *
      * @param  UpdateCustomerRequest $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function update(UpdateCustomerRequest $request, $id)
     {
@@ -121,6 +137,10 @@ class CustomerController extends Controller
 
         $update->updateCustomer($data);
 
+        if ($request->ajax()){
+            return ['redirect' => url('admin/customers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
+
         $request->session()->flash('message', 'Update successful');
         return redirect()->route('admin.customers.edit', $id);
     }
@@ -128,17 +148,22 @@ class CustomerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param  int $id
      *
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $customer = $this->customerRepo->findCustomerById($id);
 
         $customerRepo = new CustomerRepository($customer);
         $customerRepo->deleteCustomer();
+
+        if ($request->ajax()) {
+            return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
+        }
 
         return redirect()->route('admin.customers.index')->with('message', 'Delete successful');
     }

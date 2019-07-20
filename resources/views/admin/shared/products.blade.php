@@ -2,12 +2,12 @@
     <table class="table">
         <thead>
         <tr>
-            <td>ID</td>
-            <td>Name</td>
-            <td>Quantity</td>
-            <td>Price</td>
-            <td>Status</td>
-            <td>Actions</td>
+            <th>ID</th>
+            <th>Meno</th>
+            <th>Množstvo</th>
+            <th>Cena</th>
+            <th>Status</th>
+            <th>Akcie</th>
         </tr>
         </thead>
         <tbody>
@@ -16,7 +16,7 @@
                 <td>{{ $product->id }}</td>
                 <td>
                     @if($admin->hasPermission('view-product'))
-                        <a href="{{ route('admin.products.show', $product->id) }}">{{ $product->name }}</a>
+                        <span>{{ $product->name }}</span>
                     @else
                         {{ $product->name }}
                     @endif
@@ -29,8 +29,8 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="_method" value="delete">
                         <div class="btn-group">
-                            @if($admin->hasPermission('update-product'))<a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>@endif
-                            @if($admin->hasPermission('delete-product'))<button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</button>@endif
+                            {{--@if($admin->hasPermission('update-product'))<a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Upraviť</a>@endif--}}
+                            @if($admin->hasPermission('delete-product'))<button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Zmazať</button>@endif
                         </div>
                     </form>
                 </td>

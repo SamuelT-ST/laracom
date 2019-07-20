@@ -59,10 +59,23 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
 
             $customer->save();
 
+            if(isset($params['groups'])){
+
+                $this->syncCustomerWithGroups($params['groups'], $customer);
+            }
+
             return $customer;
         } catch (QueryException $e) {
             throw new CreateCustomerInvalidArgumentException($e->getMessage(), 500, $e);
         }
+    }
+
+    public function syncCustomerWithGroups(Array $groups, Customer $customer){
+        $groups = collect($groups)->map(function ($group){
+            return $group['id'];
+        });
+
+        $customer->groups()->sync($groups);
     }
 
     /**
@@ -76,6 +89,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
     public function updateCustomer(array $params) : bool
     {
         try {
+            $this->syncCustomerWithGroups($params['groups'], $this->model);
             return $this->model->update($params);
         } catch (QueryException $e) {
             throw new UpdateCustomerInvalidArgumentException($e);
@@ -107,6 +121,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
      */
     public function deleteCustomer() : bool
     {
+        $this->model->addresses()->delete();
         return $this->delete();
     }
 

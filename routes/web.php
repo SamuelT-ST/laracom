@@ -17,44 +17,78 @@ use Illuminate\Support\Facades\Route;
 /**
  * Admin routes
  */
-Route::namespace('Admin')->group(function () {
-    Route::get('admin/login', 'LoginController@showLoginForm')->name('admin.login');
-    Route::post('admin/login', 'LoginController@login')->name('admin.login');
-    Route::get('admin/logout', 'LoginController@logout')->name('admin.logout');
+
+Route::get('/test', function (){
+
+    dd(Auth::guard('employee')->user());
+
+    dd(Auth::guard('employee')->user()->can('admin'));
+
+    dd(app()->getLocale());
+    app('rinvex.categories.category')->create(['name' => 'Home', 'slug' => 'home']);;
 });
-Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.' ], function () {
+
+
+//Route::middleware('employee')->group(function () {
+//    Route::namespace('Admin\Overrides')->group(function () {
+//        Route::post('upload',                   'ModifiedFileUploadController@upload')->name('brackets/media::upload');
+//        Route::get('view',                      'ModifiedFileViewController@view')->name('brackets/media::view');
+//    });
+//});
+
+Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin'], 'as' => 'admin.' ], function () {
+
     Route::namespace('Admin')->group(function () {
-        Route::group(['middleware' => ['role:admin|superadmin|clerk, guard:employee']], function () {
             Route::get('/', 'DashboardController@index')->name('dashboard');
             Route::namespace('Products')->group(function () {
-                Route::resource('products', 'ProductController');
+                Route::resource('products', 'ProductController')->except('update');
+                Route::post('products/{product}', 'ProductController@update')->name('products.update');
                 Route::get('remove-image-product', 'ProductController@removeImage')->name('product.remove.image');
                 Route::get('remove-image-thumb', 'ProductController@removeThumbnail')->name('product.remove.thumb');
             });
             Route::namespace('Customers')->group(function () {
-                Route::resource('customers', 'CustomerController');
+                Route::resource('customers', 'CustomerController')->except('update');
+                Route::post('customers/{customer}', 'CustomerController@update')->name('customers.update');
                 Route::resource('customers.addresses', 'CustomerAddressController');
+
             });
             Route::namespace('Categories')->group(function () {
-                Route::resource('categories', 'CategoryController');
+                Route::resource('categories', 'CategoryController')->except(['index', 'show', 'update'], 'create');
+                Route::get('categories/create/{category?}', 'CategoryController@create')->name('categories.create');
+                Route::get('categories/{categories?}', 'CategoryController@index')
+                    ->where('categories','^[a-zA-Z0-9-_\/]+$')
+                    ->name('categories.index');
+                Route::post('categories/{category}', 'CategoryController@update')->name('categories.update');
                 Route::get('remove-image-category', 'CategoryController@removeImage')->name('category.remove.image');
             });
             Route::namespace('Orders')->group(function () {
                 Route::resource('orders', 'OrderController');
-                Route::resource('order-statuses', 'OrderStatusController');
+                Route::resource('order-statuses', 'OrderStatusController')->except('update');
+                Route::post('order-statuses/{order_status}', 'OrderStatusController@update')->name('order-statuses.update');
                 Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');
             });
-            Route::resource('addresses', 'Addresses\AddressController');
+            Route::resource('addresses', 'Addresses\AddressController')->except('update');
+            Route::post('addresses/{address}', 'Addresses\AddressController@update')->name('addresses.update');
+            Route::resource('customerGroups', 'CustomerGroups\CustomerGroupsController')->except('update');
+            Route::post('customerGroups/{customerGroup}', 'CustomerGroups\CustomerGroupsController@update')->name('customerGroups.update');
             Route::resource('countries', 'Countries\CountryController');
             Route::resource('countries.provinces', 'Provinces\ProvinceController');
             Route::resource('countries.provinces.cities', 'Cities\CityController');
-            Route::resource('couriers', 'Couriers\CourierController');
-            Route::resource('attributes', 'Attributes\AttributeController');
+            Route::resource('couriers', 'Couriers\CourierController')->except('update');
+            Route::post('couriers/{courier}', 'Couriers\CourierController@update')->name('couriers.update');
+            Route::resource('attributes', 'Attributes\AttributeController')->except('update');
+            Route::post('attributes/{attribute}', 'Attributes\AttributeController@update')->name('attributes.update');
             Route::resource('attributes.values', 'Attributes\AttributeValueController');
             Route::resource('brands', 'Brands\BrandController');
 
-        });
-        Route::group(['middleware' => ['role:admin|superadmin, guard:employee']], function () {
+            Route::get('discounts',                              'Discounts\DiscountsController@index');
+            Route::get('discounts/create',                       'Discounts\DiscountsController@create');
+            Route::post('discounts',                             'Discounts\DiscountsController@store');
+            Route::get('discounts/{discount}/edit',              'Discounts\DiscountsController@edit')->name('admin/discounts/edit');
+            Route::post('discounts/{discount}',                  'Discounts\DiscountsController@update')->name('admin/discounts/update');
+            Route::delete('discounts/{discount}',                'Discounts\DiscountsController@destroy')->name('admin/discounts/destroy');
+
+        Route::group(['middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin']], function () {
             Route::resource('employees', 'EmployeeController');
             Route::get('employees/{id}/profile', 'EmployeeController@getProfile')->name('employee.profile');
             Route::put('employees/{id}/profile', 'EmployeeController@updateProfile')->name('employee.profile.update');
@@ -101,4 +135,25 @@ Route::namespace('Front')->group(function () {
     Route::get("category/{slug}", 'CategoryController@getCategory')->name('front.category.slug');
     Route::get("search", 'ProductController@search')->name('search.product');
     Route::get("{product}", 'ProductController@show')->name('front.get.product');
+});
+
+/* Auto-generated admin routes */
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/admin-users',                            'Admin\AdminUsersController@index');
+    Route::get('/admin/admin-users/create',                     'Admin\AdminUsersController@create');
+    Route::post('/admin/admin-users',                           'Admin\AdminUsersController@store');
+    Route::get('/admin/admin-users/{adminUser}/edit',           'Admin\AdminUsersController@edit')->name('admin/admin-users/edit');
+    Route::post('/admin/admin-users/{adminUser}',               'Admin\AdminUsersController@update')->name('admin/admin-users/update');
+    Route::delete('/admin/admin-users/{adminUser}',             'Admin\AdminUsersController@destroy')->name('admin/admin-users/destroy');
+    Route::get('/admin/admin-users/{adminUser}/resend-activation','Admin\AdminUsersController@resendActivationEmail')->name('admin/admin-users/resendActivationEmail');
+});
+
+/* Auto-generated profile routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/profile',                                'Admin\ProfileController@editProfile');
+    Route::post('/admin/profile',                               'Admin\ProfileController@updateProfile');
+    Route::get('/admin/password',                               'Admin\ProfileController@editPassword');
+    Route::post('/admin/password',                              'Admin\ProfileController@updatePassword');
 });

@@ -9,7 +9,7 @@
 @section('content')
     @include('layouts.front.home-slider')
 
-    @if($cat1->products->isNotEmpty())
+    @if(!is_null($cat1) && !is_null($cat1->products))
         <section class="new-product t100 home">
             <div class="container">
                 <div class="section-title b50">
@@ -21,7 +21,7 @@
         </section>
     @endif
     <hr>
-    @if($cat2->products->isNotEmpty())
+    @if(!is_null($cat2) && !is_null($cat2->products))
         <div class="container">
             <div class="section-title b100">
                 <h2>{{ $cat2->name }}</h2>
