@@ -166,8 +166,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\GlobalTemplateServiceProvider::class,
-        App\Providers\RepositoryServiceProvider::class,
-        Laratrust\LaratrustServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class
     ],
 
     /*

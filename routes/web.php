@@ -29,23 +29,16 @@ Route::get('/test', function (){
 });
 
 
-Route::middleware('employee')->group(function () {
-    Route::namespace('Admin\Overrides')->group(function () {
-        Route::post('upload',                   'ModifiedFileUploadController@upload')->name('brackets/media::upload');
-        Route::get('view',                      'ModifiedFileViewController@view')->name('brackets/media::view');
-    });
-});
+//Route::middleware('employee')->group(function () {
+//    Route::namespace('Admin\Overrides')->group(function () {
+//        Route::post('upload',                   'ModifiedFileUploadController@upload')->name('brackets/media::upload');
+//        Route::get('view',                      'ModifiedFileViewController@view')->name('brackets/media::view');
+//    });
+//});
 
-
-Route::namespace('Admin')->group(function () {
-    Route::get('admin/login', 'LoginController@showLoginForm')->name('admin.login');
-    Route::post('admin/login', 'LoginController@login')->name('admin.login');
-    Route::get('admin/logout', 'LoginController@logout')->name('admin.logout');
-});
-Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.' ], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin'], 'as' => 'admin.' ], function () {
 
     Route::namespace('Admin')->group(function () {
-        Route::group(['middleware' => ['role:admin|superadmin|clerk, guard:employee']], function () {
             Route::get('/', 'DashboardController@index')->name('dashboard');
             Route::namespace('Products')->group(function () {
                 Route::resource('products', 'ProductController')->except('update');
@@ -95,9 +88,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['employee'], 'as' => 'admin.
             Route::post('discounts/{discount}',                  'Discounts\DiscountsController@update')->name('admin/discounts/update');
             Route::delete('discounts/{discount}',                'Discounts\DiscountsController@destroy')->name('admin/discounts/destroy');
 
-
-        });
-        Route::group(['middleware' => ['role:admin|superadmin, guard:employee']], function () {
+        Route::group(['middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin']], function () {
             Route::resource('employees', 'EmployeeController');
             Route::get('employees/{id}/profile', 'EmployeeController@getProfile')->name('employee.profile');
             Route::put('employees/{id}/profile', 'EmployeeController@updateProfile')->name('employee.profile.update');
@@ -147,3 +138,22 @@ Route::namespace('Front')->group(function () {
 });
 
 /* Auto-generated admin routes */
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/admin-users',                            'Admin\AdminUsersController@index');
+    Route::get('/admin/admin-users/create',                     'Admin\AdminUsersController@create');
+    Route::post('/admin/admin-users',                           'Admin\AdminUsersController@store');
+    Route::get('/admin/admin-users/{adminUser}/edit',           'Admin\AdminUsersController@edit')->name('admin/admin-users/edit');
+    Route::post('/admin/admin-users/{adminUser}',               'Admin\AdminUsersController@update')->name('admin/admin-users/update');
+    Route::delete('/admin/admin-users/{adminUser}',             'Admin\AdminUsersController@destroy')->name('admin/admin-users/destroy');
+    Route::get('/admin/admin-users/{adminUser}/resend-activation','Admin\AdminUsersController@resendActivationEmail')->name('admin/admin-users/resendActivationEmail');
+});
+
+/* Auto-generated profile routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/profile',                                'Admin\ProfileController@editProfile');
+    Route::post('/admin/profile',                               'Admin\ProfileController@updateProfile');
+    Route::get('/admin/password',                               'Admin\ProfileController@editPassword');
+    Route::post('/admin/password',                              'Admin\ProfileController@updatePassword');
+});
