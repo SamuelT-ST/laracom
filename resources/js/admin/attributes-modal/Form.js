@@ -53,24 +53,24 @@ Vue.component('attribute-modal-form', {
                 });
         },
 
-        checkIfItemDeleted(item){
-            let found = false;
-            if(this.activeDataForm.valueCover){
-                this.activeDataForm.valueCover.forEach(value => {
-                    console.log('value id' + value.id);
-                    console.log('item id' + item.id);
-                    console.log('value action' + value.action);
-
-                    if(item.id === value.id && value.action === 'delete'){
-                        console.log('true');
-                        found = true;
-                    }
-                });
-            }
-
-            return found;
-
-        },
+        // checkIfItemDeleted(item){
+        //     let found = false;
+        //     if(this.activeDataForm.valueCover){
+        //         this.activeDataForm.valueCover.forEach(value => {
+        //             console.log('value id' + value.id);
+        //             console.log('item id' + item.id);
+        //             console.log('value action' + value.action);
+        //
+        //             if(item.id === value.id && value.action === 'delete'){
+        //                 console.log('true');
+        //                 found = true;
+        //             }
+        //         });
+        //     }
+        //
+        //     return found;
+        //
+        // },
 
         transformImages(){
 
@@ -79,7 +79,7 @@ Vue.component('attribute-modal-form', {
 
             if(this.activeDataForm.valueCover){
                 transformed = this.activeDataForm.valueCover.filter(item => {
-                    return !((item.action && item.action === "delete") || this.checkIfItemDeleted(item))
+                    return !((item.action && item.action === "delete") || item.realdelete)
                 }).map(function (item) {
 
                     if(item.name){
@@ -96,9 +96,8 @@ Vue.component('attribute-modal-form', {
             }
 
             if(this.activeDataForm.thumb){
-                console.log('first' +this.checkIfItemDeleted(this.activeDataForm.thumb[0]));
                 transformed2 = this.activeDataForm.thumb.filter(item => {
-                    return !((item.action && item.action === "delete") || this.checkIfItemDeleted(item))
+                    return !((item.action && item.action === "delete") || item.realdelete)
                 })
             }
 

@@ -243,7 +243,6 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
 
-        dd('test');
         $productRepo = new ProductRepository($product);
 
         if($request->has('combinations')){

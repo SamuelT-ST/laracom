@@ -50,6 +50,14 @@ Vue.component('product-form', {
             this.$modal.show('attributes');
         },
         onSaveCombination(data){
+            if(data && data.thumb && data.thumb.length > 0){
+                data.thumb.forEach(item => {
+                    if(item.deleted){
+                        item.realdelete = true;
+                    }
+                })
+            }
+
             if(data.index == null){
                 this.form.combinations.push(data);
             } else {
@@ -64,6 +72,11 @@ Vue.component('product-form', {
             this.form.combinations.splice(index, 1);
         },
         beforeOpen (event) {
+            if(this.activeData && this.activeData.thumb && this.activeData.thumb.length > 0){
+                this.activeData.thumb.forEach(item => {
+                    item.deleted = false;
+                })
+            }
             this.bus.$emit('transform')
             if(event.params){
                 this.activeData = event.params.form;
