@@ -65,6 +65,10 @@ Vue.component('product-form', {
             }
             this.$modal.hide('attributes');
         },
+
+        onCloseModal(){
+            this.$modal.hide('attributes');
+        },
         editCombination(index){
             this.$modal.show('attributes', { form: this.form.combinations[index], index: index })
         },
@@ -77,7 +81,6 @@ Vue.component('product-form', {
                     item.deleted = false;
                 })
             }
-            this.bus.$emit('transform')
             if(event.params){
                 this.activeData = event.params.form;
                 this.form.combinations[event.params.index].wasEdited = true;

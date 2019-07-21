@@ -33,8 +33,6 @@ Vue.component('attribute-modal-form', {
     created: function () {
         if(!_.isEmpty(this.activeDataForm)){
           this.form = this.activeDataForm;
-          console.log('test');
-          console.log(this.activeDataForm);
           this.transformImages();
         }
 

@@ -8,6 +8,7 @@
     <attribute-modal-form
             :attributes = "{{ $attributes }}"
             @save-combination="onSaveCombination"
+            @close-modal="onCloseModal"
             inline-template
             :index = "activeCombinationIndex"
             :active-data-form="activeData"
@@ -87,8 +88,10 @@
         </div>
 
 
-        <div class="card-footer">
-            <div class="btn btn-primary" @click="$emit('save-combination', getPostData())">Vytvoriť</div>
+        <div class="card-footer text-center">
+            <div class="btn btn-primary" @click="$emit('save-combination', getPostData())">Create</div>
+            <div class="btn btn-danger" @click="$emit('close-modal')">Cancel</div>
+
         </div>
 
     </div>
