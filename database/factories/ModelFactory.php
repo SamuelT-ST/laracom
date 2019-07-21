@@ -30,4 +30,42 @@ $factory->define(Brackets\AdminAuth\Models\AdminUser::class, function (Faker\Gen
         'updated_at' => $faker->dateTime,
         
     ];
+});/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\Order::class, function (Faker\Generator $faker) {
+    return [
+        'reference' => $faker->sentence,
+        'courier_id' => $faker->randomNumber(5),
+        'customer_id' => $faker->randomNumber(5),
+        'address_id' => $faker->randomNumber(5),
+        'order_status_id' => $faker->randomNumber(5),
+        'payment' => $faker->sentence,
+        'discounts' => $faker->randomNumber(5),
+        'total_products' => $faker->randomNumber(5),
+        'tax' => $faker->randomNumber(5),
+        'total' => $faker->randomNumber(5),
+        'total_paid' => $faker->randomNumber(5),
+        'invoice' => $faker->sentence,
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        'courier' => $faker->sentence,
+        'label_url' => $faker->sentence,
+        'tracking_number' => $faker->sentence,
+        'total_shipping' => $faker->randomNumber(5),
+        
+        
+    ];
 });
+
+/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\PaymentMethod::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->sentence,
+        'description' => $faker->sentence,
+        'price' => $faker->randomNumber(5),
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
+});
+

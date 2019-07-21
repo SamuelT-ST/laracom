@@ -3,6 +3,7 @@
 namespace App\Shop\Categories;
 
 
+use App\Shop\Products\Product;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Spatie\MediaLibrary\Media;
 use Brackets\Media\HasMedia\HasMediaCollections;
@@ -23,6 +24,10 @@ class Category extends \Rinvex\Categories\Models\Category implements HasMediaCol
     public function registerMediaConversions(Media $media = null)
     {
         $this->autoRegisterThumb200();
+    }
+
+    public function products(){
+        return $this->hasMany(Product::class);
     }
 
 

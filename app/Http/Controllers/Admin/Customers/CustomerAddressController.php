@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Customers;
 
+use App\Shop\Addresses\Address;
 use App\Shop\Addresses\Repositories\Interfaces\AddressRepositoryInterface;
 use App\Shop\Countries\Repositories\Interfaces\CountryRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Shop\Customers\Customer;
 use App\Shop\Provinces\Repositories\Interfaces\ProvinceRepositoryInterface;
+use Illuminate\Http\Request;
 
 class CustomerAddressController extends Controller
 {
@@ -43,10 +46,16 @@ class CustomerAddressController extends Controller
      *
      * @param int $customerId
      * @param int $addressId
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(int $customerId, int $addressId)
+    public function show(int $customerId, int $addressId, Request $request)
     {
+
+        if($request->ajax()){
+            return Address::find($addressId);
+        }
+
         return view('admin.addresses.customers.show', [
             'address' => $this->addressRepo->findAddressById($addressId),
             'customerId' => $customerId
@@ -72,5 +81,9 @@ class CustomerAddressController extends Controller
             'cities' => $this->provinceRepo->listCities($province->id),
             'customerId' => $customerId
         ]);
+    }
+
+    public function getAvailableAddresses(Customer $customer){
+        return $customer->addresses;
     }
 }

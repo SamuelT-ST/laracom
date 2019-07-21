@@ -1,4 +1,6 @@
 import AppForm from '../app-components/Form/AppForm';
+import { BaseUpload } from 'craftable';
+
 
 Vue.component('product-form', {
     mixins: [AppForm],
@@ -15,6 +17,7 @@ Vue.component('product-form', {
     },
     data: function() {
         return {
+            bus: new Vue(),
             form: {
                 has_combinations: false,
                 sku: '',
@@ -61,9 +64,9 @@ Vue.component('product-form', {
             this.form.combinations.splice(index, 1);
         },
         beforeOpen (event) {
+            this.bus.$emit('transform')
             if(event.params){
                 this.activeData = event.params.form;
-                console.log('ahoj');
                 this.form.combinations[event.params.index].wasEdited = true;
                 this.activeCombinationIndex = event.params.index;
             }

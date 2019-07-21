@@ -16,6 +16,7 @@ class ProductAttribute extends Model implements HasMediaCollections, HasMediaCon
     use HasMediaCollectionsTrait;
     use HasMediaThumbsTrait;
 
+//    public $autoProcessMedia = false;
 
     protected $fillable = [
         'quantity',

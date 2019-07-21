@@ -62,13 +62,18 @@
                             <div class="card-body">
                                 <ul v-cloak>
                                     <li v-for="(combination, index) in form.combinations">
-                                        <span>@{{ combination.attribute.name }}: @{{ combination.value.value }} - @{{ combination.price }} -
-                                            <div class="btn btn-primary" @click="editCombination(index)">Upraviť</div>
-                                            <div class="btn btn-warning" @click="deleteCombination(index)">Vymazat</div>
-                                        </span>
+                                        <div class="row mb-2">
+                                            <div class="col-8">@{{ combination.attribute.name }}: @{{ combination.value.value }} - @{{ combination.price }} </div>
+                                            <div class="row col-4">
+                                                <div class="btn btn-sm btn-primary mr-1" @click="editCombination(index)"><i class="fa fa-edit"></i></div>
+                                                <div class="btn btn-sm btn-danger" @click="deleteCombination(index)"><i class="fa fa-trash-o"></i></div>
+                                            </div>
+                                        </div>
                                     </li>
                                 </ul>
-                                <div class="btn btn-primary" @click="show">Vytvoriť kombináciu</div>
+                                <div class="row col-12 d-flex justify-content-center">
+                                <div class="btn btn-sm btn-primary" @click="show">{{ __('Create new combination') }}</div>
+                                </div>
                             </div>
 
                         </div>

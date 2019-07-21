@@ -3,7 +3,6 @@
 namespace App\Shop\Products;
 
 use App\Shop\Brands\Brand;
-use App\Shop\Categories\Category;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\ProductImages\ProductImage;
 use Brackets\Media\HasMedia\HasMediaCollections;
@@ -156,6 +155,7 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     }
 
     public function registerMediaCollections() {
+
         $this->addMediaCollection('cover')
         ->maxNumberOfFiles(1)
         ->accepts('image/*');

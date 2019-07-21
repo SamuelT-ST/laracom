@@ -1,6 +1,36 @@
 <?php
 
 return [
+    'products'=>[
+        'actions' =>[
+            'createAttribute' => 'Create Combination',
+            'create' => 'Create/edit Product',
+            'combinations' => 'Combinations',
+            'categories' => 'Categories'
+        ],
+        'columns' => [
+            'sku' => 'SKU',
+            'name' => 'Name',
+            'description' => 'Description',
+            'quantity' => 'Quantity',
+            'price' => 'Change in price',
+            'status' => 'Is active',
+            'feature' => 'Feature',
+            'value' => 'Value',
+            'salePrice' => 'Discount',
+            'defaultPrice' => 'Default Variant'
+        ],
+    ],
+    'address'=>[
+        'columns'=>[
+            'address_1'=>'Address 1',
+            'address_2'=>'Address 2',
+            'countries'=>'Countries',
+            'city'=>'City',
+            'phone'=>'Phone',
+            'zip'=>'Zip',
+        ]
+    ],
     'discount' => [
         'title' => 'Discounts',
 
@@ -46,6 +76,55 @@ return [
             //Belongs to many relations
             'roles' => "Roles",
                 
+        ],
+    ],
+
+    'order' => [
+        'title' => 'Orders',
+
+        'actions' => [
+            'index' => 'Orders',
+            'create' => 'New Order',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'reference' => "Reference",
+            'courier_id' => "Courier",
+            'customer_id' => "Customer",
+            'address_id' => "Address",
+            'order_status_id' => "Order status",
+            'payment' => "Payment",
+            'discounts' => "Discounts",
+            'total_products' => "Total products",
+            'tax' => "Tax",
+            'total' => "Total",
+            'total_paid' => "Total paid",
+            'invoice' => "Invoice",
+            'courier' => "Courier",
+            'label_url' => "Label url",
+            'tracking_number' => "Tracking number",
+            'total_shipping' => "Total shipping",
+            
+        ],
+    ],
+
+    'payment-method' => [
+        'title' => 'Payment Methods',
+
+        'actions' => [
+            'index' => 'Payment Methods',
+            'create' => 'New Payment Method',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'title' => "Title",
+            'description' => "Description",
+            'price' => "Price",
+            
         ],
     ],
 

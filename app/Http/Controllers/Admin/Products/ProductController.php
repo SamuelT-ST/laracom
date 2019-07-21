@@ -149,14 +149,12 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-
-        dd($request->toArray());
-
         $data = $request->except('_token', '_method', 'combinations', 'categories', 'cover', 'images', 'wysiwygMedia');
 
         $data['slug'] = str_slug($request->input('name'));
 
         $product = $this->productRepo->createProduct($data);
+
 
         if($request->has('combinations')){
             $combinations = $request->get('combinations');
@@ -238,17 +236,15 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  UpdateProductRequest $request
-     * @param  int $id
-     *
+     * @param Product $product
      * @return \Illuminate\Http\Response
      * @throws \App\Shop\Products\Exceptions\ProductUpdateErrorException
      */
-    public function update(UpdateProductRequest $request, int $id)
+    public function update(UpdateProductRequest $request, Product $product)
     {
 
-        $product = $this->productRepo->findProductById($id);
+        dd('test');
         $productRepo = new ProductRepository($product);
-
 
         if($request->has('combinations')){
             $combinations = $request->get('combinations');
@@ -287,7 +283,7 @@ class ProductController extends Controller
             '_token',
             '_method',
             'default',
-            'image',
+            'images',
             'productAttributeQuantity',
             'productAttributePrice',
             'attributeValue',
@@ -351,6 +347,9 @@ class ProductController extends Controller
         $productAttribute = ProductAttribute::find($combination['id']);
         $productAttribute->fill($combination);
         $productAttribute->save();
+        if(!empty($combination['valueCover'])){
+            $productAttribute->processMedia(collect($combination));
+        }
         $productAttribute->attributesValues()->detach();
         $productAttribute->attributesValues()->attach($combination['value']['id']);
     }
@@ -362,7 +361,6 @@ class ProductController extends Controller
      */
     private function saveProductCombinations($combination, Product $product): void
     {
-
         $combination = collect($combination);
 
         $quantity = $combination->get('quantity');
@@ -389,6 +387,10 @@ class ProductController extends Controller
         $productAttribute = $productRepo->saveProductAttributes(
             new ProductAttribute(compact('quantity', 'price', 'sale_price', 'default'))
         );
+
+        if(!empty($combination['valueCover'])){
+            $productAttribute->processMedia($combination);
+        }
 
         $attribute = $this->attributeValueRepository->find($combination['value']['id']);
 
@@ -427,7 +429,8 @@ class ProductController extends Controller
             'price' => $productAttribute->price,
             'quantity' => $productAttribute->quantity,
             'salePrice' => $productAttribute->sale_price,
-            'value' => $productAttribute->attributesValues()->first()
+            'value' => $productAttribute->attributesValues()->first(),
+            'thumb' => $productAttribute->getThumbs200ForCollection('valueCover')
         ]);
 
 

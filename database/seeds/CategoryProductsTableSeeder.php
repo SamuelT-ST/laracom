@@ -10,7 +10,7 @@ class CategoryProductsTableSeeder extends Seeder
     {
         factory(Category::class, 2)->create()->each(function (Category $category) {
             factory(Product::class, 6)->make()->each(function(Product $product) use ($category) {
-                $category->products()->save($product);
+                $category->entries(Product::class)->save($product);
             });
         });
     }

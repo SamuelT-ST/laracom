@@ -29,13 +29,10 @@ $factory->define(Category::class, function (Faker\Generator $faker) {
         'Grocery'
     ]);
 
-    $file = UploadedFile::fake()->image('category.png', 600, 600);
 
     return [
         'name' => $name,
         'slug' => str_slug($name),
         'description' => $faker->paragraph,
-        'cover' => $file->store('categories', ['disk' => 'public']),
-        'status' => 1
     ];
 });

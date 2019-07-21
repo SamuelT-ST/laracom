@@ -18,24 +18,6 @@ use Illuminate\Support\Facades\Route;
  * Admin routes
  */
 
-Route::get('/test', function (){
-
-    dd(Auth::guard('employee')->user());
-
-    dd(Auth::guard('employee')->user()->can('admin'));
-
-    dd(app()->getLocale());
-    app('rinvex.categories.category')->create(['name' => 'Home', 'slug' => 'home']);;
-});
-
-
-//Route::middleware('employee')->group(function () {
-//    Route::namespace('Admin\Overrides')->group(function () {
-//        Route::post('upload',                   'ModifiedFileUploadController@upload')->name('brackets/media::upload');
-//        Route::get('view',                      'ModifiedFileViewController@view')->name('brackets/media::view');
-//    });
-//});
-
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin'], 'as' => 'admin.' ], function () {
 
     Route::namespace('Admin')->group(function () {
@@ -47,6 +29,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth
                 Route::get('remove-image-thumb', 'ProductController@removeThumbnail')->name('product.remove.thumb');
             });
             Route::namespace('Customers')->group(function () {
+                Route::get('customer/{customer}/address','CustomerAddressController@getAvailableAddresses')->name('addresses.getAvailable');
                 Route::resource('customers', 'CustomerController')->except('update');
                 Route::post('customers/{customer}', 'CustomerController@update')->name('customers.update');
                 Route::resource('customers.addresses', 'CustomerAddressController');
@@ -87,14 +70,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth
             Route::get('discounts/{discount}/edit',              'Discounts\DiscountsController@edit')->name('admin/discounts/edit');
             Route::post('discounts/{discount}',                  'Discounts\DiscountsController@update')->name('admin/discounts/update');
             Route::delete('discounts/{discount}',                'Discounts\DiscountsController@destroy')->name('admin/discounts/destroy');
-
-        Route::group(['middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin']], function () {
-            Route::resource('employees', 'EmployeeController');
-            Route::get('employees/{id}/profile', 'EmployeeController@getProfile')->name('employee.profile');
-            Route::put('employees/{id}/profile', 'EmployeeController@updateProfile')->name('employee.profile.update');
-            Route::resource('roles', 'Roles\RoleController');
-            Route::resource('permissions', 'Permissions\PermissionController');
-        });
     });
 });
 
@@ -156,4 +131,24 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
     Route::post('/admin/profile',                               'Admin\ProfileController@updateProfile');
     Route::get('/admin/password',                               'Admin\ProfileController@editPassword');
     Route::post('/admin/password',                              'Admin\ProfileController@updatePassword');
+});
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/orders',                                 'Admin\OrdersController@index')->name('admin.orders.index');;
+    Route::get('/admin/orders/create',                          'Admin\OrdersController@create');
+    Route::post('/admin/orders',                                'Admin\OrdersController@store');
+    Route::get('/admin/orders/{order}/edit',                    'Admin\OrdersController@edit')->name('admin/orders/edit');
+    Route::post('/admin/orders/{order}',                        'Admin\OrdersController@update')->name('admin/orders/update');
+    Route::delete('/admin/orders/{order}',                      'Admin\OrdersController@destroy')->name('admin/orders/destroy');
+});
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/payment-methods',                        'Admin\PaymentMethodsController@index');
+    Route::get('/admin/payment-methods/create',                 'Admin\PaymentMethodsController@create');
+    Route::post('/admin/payment-methods',                       'Admin\PaymentMethodsController@store');
+    Route::get('/admin/payment-methods/{paymentMethod}/edit',   'Admin\PaymentMethodsController@edit')->name('admin/payment-methods/edit');
+    Route::post('/admin/payment-methods/{paymentMethod}',       'Admin\PaymentMethodsController@update')->name('admin/payment-methods/update');
+    Route::delete('/admin/payment-methods/{paymentMethod}',     'Admin\PaymentMethodsController@destroy')->name('admin/payment-methods/destroy');
 });
