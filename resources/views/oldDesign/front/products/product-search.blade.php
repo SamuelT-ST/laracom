@@ -10,7 +10,7 @@
         </div>
         <hr>
         <div class="col-md-3">
-            @include('front.categories.sidebar-category')
+            @include('oldDesign.front.categories.sidebar-category')
         </div>
         <div class="col-md-9">
             <div class="row">

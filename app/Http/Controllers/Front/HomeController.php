@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Models\Setting;
 use App\Shop\Categories\Category;
 use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 
@@ -29,8 +30,18 @@ class HomeController
 //        $cat1 = Category::first();
 //        $cat2 = Category::first();
 
-//        return view('front.index', compact('cat1', 'cat2'));
+        $settings = Setting::with('media')->get()->mapWithKeys(function ($setting){
+           return [$setting['option_slug'] => $setting];
+        });
 
-        return redirect('/HTML');
+//        dd(Setting::with('media')->get());
+
+//        dd($settings);
+
+        return view('front.home.index')->with([
+            'settings' => $settings
+        ]);
+
+//        return redirect('/HTML');
     }
 }

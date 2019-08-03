@@ -69,3 +69,15 @@ $factory->define(App\Models\PaymentMethod::class, function (Faker\Generator $fak
     ];
 });
 
+/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\Setting::class, function (Faker\Generator $faker) {
+    return [
+        'option' => $faker->sentence,
+        'value' => $faker->sentence,
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
+});
+

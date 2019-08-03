@@ -30,6 +30,7 @@ class StoreDiscount extends FormRequest
             'percentage' => ['required', 'integer'],
             'from_margin' => ['required', 'boolean'],
             'customer_groups' => ['nullable', 'array'],
+            'categories' => ['nullable', 'array'],
         ];
     }
 }

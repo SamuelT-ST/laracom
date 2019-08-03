@@ -2,7 +2,7 @@ import AppForm from '../app-components/Form/AppForm';
 
 Vue.component('discount-form', {
     mixins: [AppForm],
-    props: ['customerGroups'],
+    props: ['customerGroups', 'categories'],
     data: function() {
         return {
             form: {
@@ -10,7 +10,8 @@ Vue.component('discount-form', {
                 description:  '' ,
                 percentage:  '' ,
                 from_margin:  false ,
-                customer_groups: ''
+                customer_groups: '',
+                categories: ''
                 
             }
         }

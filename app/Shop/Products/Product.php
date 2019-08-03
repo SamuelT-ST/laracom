@@ -2,6 +2,7 @@
 
 namespace App\Shop\Products;
 
+use App\Models\Discounts\Discount;
 use App\Shop\Brands\Brand;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\ProductImages\ProductImage;
@@ -11,6 +12,7 @@ use Brackets\Media\HasMedia\HasMediaThumbsTrait;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Rinvex\Categories\Traits\Categorizable;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
@@ -84,6 +86,8 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
 
     protected $appends = ['resource_url'];
 
+    protected $with = ['categories'];
+
     public function getResourceUrlAttribute() {
         return url('/admin/products/'.$this->id);
     }
@@ -118,6 +122,12 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
      */
     public function getBuyablePrice($options = null)
     {
+        if (!is_null($this->sale_price)){
+            return $this->sale_price;
+        }
+    }
+
+    public function getPriceBeforeDiscount(){
         return $this->price;
     }
 

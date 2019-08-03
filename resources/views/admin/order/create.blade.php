@@ -20,13 +20,13 @@
 
                     @include('admin.order.components.form-elements')
 
-                    <div class="card-header">
-                        <i class="fa fa-plus"></i> {{ trans('admin.order.actions.create') }}
-                    </div>
+                    {{--<div class="card-header">--}}
+                        {{--<i class="fa fa-plus"></i> {{ trans('admin.order.actions.create') }}--}}
+                    {{--</div>--}}
 
-                    <div class="card-body">
+                    {{--<div class="card-body">--}}
 
-                    </div>
+                    {{--</div>--}}
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary" :disabled="submiting">

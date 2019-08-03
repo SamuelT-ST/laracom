@@ -434,4 +434,9 @@ class ProductController extends Controller
 
 
     }
+
+    public function ajaxFindProduct($query = null)
+    {
+        return app(ProductRepository::class)->getProductsOnAutocomplete($query);
+    }
 }

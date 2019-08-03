@@ -18,11 +18,52 @@ use Illuminate\Support\Facades\Route;
  * Admin routes
  */
 
+Route::get('/test', function(){
+
+//    join category_discount on category_discount.category_id =  categories.id
+//join discounts on category_discount.discount_id = discounts.id
+//left join customer_group_discount cgd on discounts.id = cgd.discount_id
+//left join customer_groups cg on cgd.customer_group_id = cg.id
+//where products.id = 1
+//GROUP BY products.id;
+
+    dd(app(\App\Shop\Products\Repositories\ProductRepository::class)->getProductsWithCalculatedDiscount(2));
+
+
+   dd( \App\Shop\Products\Product::selectRaw("products.*, MIN(
+            CASE
+            WHEN discounts.from_margin = true THEN
+            products.wholesale_price + ((products.price - products.wholesale_price) / 100 * (100-discounts.percentage))
+            ELSE
+            products.price / 100 * (100-discounts.percentage)
+            END) as discounted_price, json_agg(categories.name)")
+        ->join('categorizables', 'categorizable_id','=', 'products.id')
+        ->join('categories', 'categorizables.category_id', '=', 'categories.id')
+        ->join('category_discount', 'category_discount.category_id', '=', 'categories.id')
+        ->join('discounts', 'category_discount.discount_id', '=', 'discounts.id')
+        ->leftJoin('customer_group_discount', 'discounts.id','=', 'customer_group_discount.discount_id')
+        ->leftJoin('customer_groups', 'customer_group_id','=', 'customer_groups.id')
+        ->where('products.id', 1)
+        ->groupBy(['products.id', "categories.name->en"])->get());
+
+    dd(\App\Shop\Products\Product::with('categories', 'categories.discounts', 'categories.discounts.customerGroups')
+        ->where('id', 1)
+        ->whereHas('categories.discounts.customerGroups', function ($q){
+
+            $groups = \App\Shop\Customers\Customer::find(16)->groups()->pluck('id')->toArray();
+
+            $q->whereIn('id', $groups);
+        })
+        ->get());
+})->name('dashboard');
+
+
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin'], 'as' => 'admin.' ], function () {
 
     Route::namespace('Admin')->group(function () {
             Route::get('/', 'DashboardController@index')->name('dashboard');
             Route::namespace('Products')->group(function () {
+                Route::get('products/ajaxFindProduct/{query?}',      'ProductController@ajaxFindProduct')->name('ajaxFindProduct');
                 Route::resource('products', 'ProductController')->except('update');
                 Route::post('products/{product}', 'ProductController@update')->name('products.update');
                 Route::get('remove-image-product', 'ProductController@removeImage')->name('product.remove.image');
@@ -110,6 +151,7 @@ Route::namespace('Front')->group(function () {
     Route::get("category/{slug}", 'CategoryController@getCategory')->name('front.category.slug');
     Route::get("search", 'ProductController@search')->name('search.product');
     Route::get("{product}", 'ProductController@show')->name('front.get.product');
+
 });
 
 /* Auto-generated admin routes */
@@ -151,4 +193,14 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
     Route::get('/admin/payment-methods/{paymentMethod}/edit',   'Admin\PaymentMethodsController@edit')->name('admin/payment-methods/edit');
     Route::post('/admin/payment-methods/{paymentMethod}',       'Admin\PaymentMethodsController@update')->name('admin/payment-methods/update');
     Route::delete('/admin/payment-methods/{paymentMethod}',     'Admin\PaymentMethodsController@destroy')->name('admin/payment-methods/destroy');
+});
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/settings',                               'Admin\SettingsController@index');
+    Route::get('/admin/settings/create',                        'Admin\SettingsController@create');
+    Route::post('/admin/settings',                              'Admin\SettingsController@store');
+    Route::get('/admin/settings/{setting}/edit',                'Admin\SettingsController@edit')->name('admin/settings/edit');
+    Route::post('/admin/settings/{setting}',                    'Admin\SettingsController@update')->name('admin/settings/update');
+    Route::delete('/admin/settings/{setting}',                  'Admin\SettingsController@destroy')->name('admin/settings/destroy');
 });

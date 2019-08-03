@@ -1,7 +1,8 @@
-<?php namespace App\Models;
+<?php namespace App\Models\Discounts;
 
 use App\Shop\CustomerGroups\CustomerGroup;
 use Illuminate\Database\Eloquent\Model;
+use Rinvex\Categories\Models\Category;
 
 class Discount extends Model
 {
@@ -25,7 +26,7 @@ class Discount extends Model
     
     ];
     
-    protected $with = ['customerGroups'];
+    protected $with = ['customerGroups', 'categories'];
     
     protected $appends = ['resource_url'];
 
@@ -44,5 +45,7 @@ class Discount extends Model
         return url('/admin/discounts/'.$this->getKey());
     }
 
-    
+    public function categories(){
+        return $this->belongsToMany(Category::class);
+    }
 }

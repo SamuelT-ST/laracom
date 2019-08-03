@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoryDiscountsTable extends Migration
+class CreateCategoryDiscountTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCategoryDiscountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_discounts', function (Blueprint $table) {
+        Schema::create('category_discount', function (Blueprint $table) {
             $table->unsignedInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->unsignedInteger('discount_id');
@@ -28,6 +28,6 @@ class CreateCategoryDiscountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_discounts');
+        Schema::dropIfExists('category_discount');
     }
 }

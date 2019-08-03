@@ -3,6 +3,14 @@
 </div>
 
 <div class="card-body">
+    <div class="form-group row align-items-center" :class="{'has-danger': errors.has('reference'), 'has-success': this.fields.reference && this.fields.reference.valid }">
+    <label for="reference" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.reference') }}</label>
+    <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
+    <input type="text" v-model="form.reference" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('reference'), 'form-control-success': this.fields.reference && this.fields.reference.valid}" id="reference" name="reference" placeholder="{{ trans('admin.order.columns.reference') }}">
+    <div v-if="errors.has('reference')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('reference') }}</div>
+    </div>
+    </div>
+
     <div class="form-group row align-items-center" :class="{'has-danger': errors.has('order_status_id'), 'has-success': this.fields.order_status_id && this.fields.order_status_id.valid }">
         <label for="order_status_id" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.order_status_id') }}</label>
         <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">

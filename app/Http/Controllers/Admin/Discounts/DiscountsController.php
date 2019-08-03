@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers\Admin\Discounts;
 
 use App\Http\Controllers\Controller;
+use App\Shop\Categories\Category;
 use App\Shop\CustomerGroups\CustomerGroup;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -9,7 +10,7 @@ use App\Http\Requests\Admin\Discount\StoreDiscount;
 use App\Http\Requests\Admin\Discount\UpdateDiscount;
 use App\Http\Requests\Admin\Discount\DestroyDiscount;
 use Brackets\AdminListing\Facades\AdminListing;
-use App\Models\Discount;
+use App\Models\Discounts\Discount;
 
 class DiscountsController extends Controller
 {
@@ -52,7 +53,7 @@ class DiscountsController extends Controller
     {
 //        $this->authorize('admin.discount.create');
 
-        return view('admin.discount.create')->with(['customerGroups' => CustomerGroup::all()]);
+        return view('admin.discount.create')->with(['customerGroups' => CustomerGroup::all(), 'categories' => Category::all()]);
     }
 
     /**
@@ -73,7 +74,13 @@ class DiscountsController extends Controller
             return $item['id'];
         });
 
-        $discount->customerGroups()->attach($customerGroups);
+        $categories = collect($sanitized['categories'])->map(function ($item){
+            return $item['id'];
+        });
+
+        $discount->customerGroups()->sync($customerGroups);
+
+        $discount->categories()->sync($categories);
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/discounts'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
@@ -109,7 +116,8 @@ class DiscountsController extends Controller
 
         return view('admin.discount.edit', [
             'discount' => $discount,
-            'customerGroups' => CustomerGroup::all()
+            'customerGroups' => CustomerGroup::all(),
+            'categories' => Category::all()
         ]);
     }
 
@@ -132,7 +140,13 @@ class DiscountsController extends Controller
             return $item['id'];
         });
 
+        $categories = collect($sanitized['categories'])->map(function ($item){
+            return $item['id'];
+        });
+
         $discount->customerGroups()->sync($customerGroups);
+
+        $discount->categories()->sync($categories);
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/discounts'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
@@ -151,6 +165,11 @@ class DiscountsController extends Controller
      */
     public function destroy(DestroyDiscount $request, Discount $discount)
     {
+
+        $discount->customerGroups()->sync([]);
+
+        $discount->categories()->sync([]);
+
         $discount->delete();
 
         if ($request->ajax()) {

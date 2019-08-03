@@ -3,6 +3,7 @@
 namespace App\Shop\Categories;
 
 
+use App\Models\Discounts\Discount;
 use App\Shop\Products\Product;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Spatie\MediaLibrary\Media;
@@ -28,6 +29,10 @@ class Category extends \Rinvex\Categories\Models\Category implements HasMediaCol
 
     public function products(){
         return $this->hasMany(Product::class);
+    }
+
+    public function discounts(){
+        return $this->belongsToMany(Discount::class);
     }
 
 

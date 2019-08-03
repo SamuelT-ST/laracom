@@ -5,6 +5,7 @@ namespace App\Shop\Orders;
 use App\Shop\Addresses\Address;
 use App\Shop\Couriers\Courier;
 use App\Shop\Customers\Customer;
+use App\Shop\OrderProduct\OrderProduct;
 use App\Shop\OrderStatuses\OrderStatus;
 use App\Shop\Products\Product;
 use Illuminate\Database\Eloquent\Model;
@@ -74,21 +75,26 @@ class Order extends Model
         return url('/admin/orders/'.$this->getKey());
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function products()
-    {
-        return $this->belongsToMany(Product::class)
-                    ->withPivot([
-                        'quantity',
-                        'product_name',
-                        'product_sku',
-                        'product_description',
-                        'product_price',
-                        'product_attribute_id'
-                    ]);
+//    /**
+//     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+//     */
+//    public function products()
+//    {
+//        return $this->belongsToMany(Product::class)
+//                    ->withPivot([
+//                        'quantity',
+//                        'product_name',
+//                        'product_sku',
+//                        'product_description',
+//                        'product_price',
+//                        'product_attribute_id'
+//                    ]);
+//    }
+
+    public function orderProduct(){
+        return $this->hasMany(OrderProduct::class);
     }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

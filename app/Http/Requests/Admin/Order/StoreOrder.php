@@ -25,21 +25,21 @@ class StoreOrder extends FormRequest
     {
         return [
             'reference' => ['required', Rule::unique('orders', 'reference'), 'string'],
-            'courier_id' => ['required', 'integer'],
-            'customer_id' => ['required', 'integer'],
-            'address_id' => ['required', 'integer'],
-            'order_status_id' => ['required', 'integer'],
-            'payment' => ['required', 'string'],
+            'courier' => ['required'],
+            'customer' => ['required'],
+            'address' => ['required'],
+            'order_status' => ['required'],
+            'payment' => ['nullable', 'string'],
             'discounts' => ['required', 'numeric'],
             'total_products' => ['required', 'numeric'],
             'tax' => ['required', 'numeric'],
             'total' => ['required', 'numeric'],
             'total_paid' => ['required', 'numeric'],
             'invoice' => ['nullable', 'string'],
-            'courier' => ['nullable', 'string'],
             'label_url' => ['nullable', 'string'],
             'tracking_number' => ['nullable', 'string'],
             'total_shipping' => ['required', 'numeric'],
+            'products'=> ['required', 'array']
             
         ];
     }

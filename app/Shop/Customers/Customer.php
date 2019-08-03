@@ -80,6 +80,10 @@ class Customer extends Authenticatable
         return $this->belongsToMany(CustomerGroup::class);
     }
 
+    public function hasCustomerGroup(){
+        return is_null($this->groups()) ? false : true;
+    }
+
     /**
      * @param $term
      *

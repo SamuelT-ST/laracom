@@ -12,6 +12,7 @@
                 :action="'{{ $discount->resource_url }}'"
                 :data="{{ $discount->toJson() }}"
                 :customer-groups="{{$customerGroups}}"
+                :categories="{{$categories}}"
                 inline-template>
             
                 <form class="form-horizontal form-edit" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>

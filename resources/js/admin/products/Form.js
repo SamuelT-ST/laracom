@@ -17,7 +17,6 @@ Vue.component('product-form', {
     },
     data: function() {
         return {
-            bus: new Vue(),
             form: {
                 has_combinations: false,
                 sku: '',
@@ -35,6 +34,7 @@ Vue.component('product-form', {
                 weight: '',
                 mass_unit: '',
                 sale_price: '',
+                wholesale_price: '',
                 categories: [],
                 combinations: []
             },

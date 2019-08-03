@@ -2,10 +2,14 @@
 
 namespace App\Shop\Products\Repositories;
 
+use App\Models\Discounts\Discount;
 use App\Shop\AttributeValues\AttributeValue;
+use App\Shop\CustomerGroups\CustomerGroup;
+use App\Shop\Customers\Customer;
 use App\Shop\Products\Exceptions\ProductCreateErrorException;
 use App\Shop\Products\Exceptions\ProductUpdateErrorException;
 use App\Shop\Tools\UploadableTrait;
+use Illuminate\Support\Facades\Auth;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Brands\Brand;
 use App\Shop\ProductAttributes\ProductAttribute;
@@ -323,5 +327,83 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function findBrand()
     {
         return $this->model->brand;
+    }
+
+    public function getProductsOnAutocomplete($query = null)
+    {
+        $nameParts = explode(' ', $query);
+
+        if (!$query || count($nameParts) == 0 || count($nameParts) > 2) {
+            return Product::all();
+        }
+
+        $query = Product::with('attributes','attributes.attributesValues', 'attributes.attributesValues.attribute');
+//            ->join('product_attributes', 'product_attributes.product_id', '=', 'products.id')
+//            ->join('attribute_value_product_attribute', 'product_attribute_id', '=', 'product_attributes.id')
+//            ->join('attribute_values', 'attribute_values.id', '=', 'product_attribute_id')
+//            ->join('attributes', 'attributes.id', '=', 'attribute_values.attribute_id');
+
+        foreach ($nameParts as $part) {
+            $query->where(function ($q) use ($part) {
+                $q->orWhere('sku', 'ilike', '%' . $part . '%')
+                    ->orWhere('name', 'ilike', '%' . $part . '%')
+                    ->orWhere('description', 'ilike', '%' . $part . '%');
+            });
+        }
+
+        return $query->get();
+    }
+
+    public function getProductDiscountedPrice(){
+
+
+
+    }
+
+
+    public static function getProductsWithCalculatedDiscount($category, $limit = null){
+
+        $guestId = CustomerGroup::where('title', 'Guest')->first()->id;
+
+        $customerGroups = Auth::user() instanceof Customer ? Auth::user()->groups()->pluck('id') : [$guestId];
+
+
+        $discountsWithGroupAndCategory = Discount::selectRaw('discounts.percentage, discounts.from_margin, discounts.id, category_id, customer_group_id')
+            ->join('customer_group_discount', 'discounts.id', '=', 'discount_id')
+            ->join('customer_groups', 'customer_group_id', '=', 'customer_groups.id')
+            ->join('category_discount', 'category_discount.discount_id', '=', 'discounts.id')
+            ->whereIn('customer_group_id', $customerGroups);
+
+
+        $calculatedDiscount = Product::selectRaw("products.*, MIN(
+            CASE
+            WHEN dwg.from_margin = true THEN
+            products.wholesale_price + ((products.price - products.wholesale_price) / 100 * (100-dwg.percentage))
+            ELSE
+            products.price / 100 * (100-dwg.percentage)
+            END) as discounted_price")
+            ->join('categorizables', 'categorizable_id','=', 'products.id')
+            ->join('categories', 'categorizables.category_id', '=', 'categories.id')
+            ->leftJoinSub($discountsWithGroupAndCategory, 'dwg','dwg.category_id', '=', 'categorizables.category_id')
+            ->groupBy(['products.id']);
+
+//        $result = DB::table('categorizables')
+//            ->joinSub($calculatedDiscount, 'cd', 'cd.id', '=', 'categorizables.categorizable_id')
+//            ->where('category_id', $category);
+
+        $categories = DB::table('categorizables')
+            ->where('category_id', $category);
+
+        $result = $calculatedDiscount->joinSub($categories, 'cat', 'cat.categorizable_id', '=', 'products.id');
+
+//        dd($result2->get());
+
+//        dd($result->get());
+
+        if($limit){
+            $result->limit($limit);
+        }
+
+        return $result->get();
     }
 }

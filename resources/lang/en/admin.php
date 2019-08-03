@@ -13,11 +13,12 @@ return [
             'name' => 'Name',
             'description' => 'Description',
             'quantity' => 'Quantity',
-            'price' => 'Change in price',
+            'price' => 'Price',
             'status' => 'Is active',
             'feature' => 'Feature',
             'value' => 'Value',
             'salePrice' => 'Discount',
+            'wholesale_price' => 'Wholesale price',
             'defaultPrice' => 'Default Variant'
         ],
     ],
@@ -124,6 +125,23 @@ return [
             'title' => "Title",
             'description' => "Description",
             'price' => "Price",
+            
+        ],
+    ],
+
+    'setting' => [
+        'title' => 'Settings',
+
+        'actions' => [
+            'index' => 'Settings',
+            'create' => 'New Setting',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'option' => "Option",
+            'value' => "Value",
             
         ],
     ],

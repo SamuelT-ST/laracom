@@ -1,11 +1,13 @@
 <?php namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Discount;
+use App\Models\Discounts\Discount;
 use App\Models\PaymentMethod;
 use App\Shop\Countries\Country;
 use App\Shop\Couriers\Courier;
 use App\Shop\Customers\Customer;
+use App\Shop\OrderProduct\OrderProduct;
+use App\Shop\OrderProduct\Repositories\OrderProductRepository;
 use App\Shop\OrderStatuses\OrderStatus;
 use App\Shop\PaymentMethods\Payment;
 use Illuminate\Http\Request;
@@ -76,9 +78,19 @@ class OrdersController extends Controller
     {
         // Sanitize input
         $sanitized = $request->validated();
+        $sanitized['courier_id'] = $sanitized['courier']['id'];
+        $sanitized['customer_id'] = $sanitized['customer']['id'];
+        $sanitized['address_id'] = $sanitized['address']['id'];
+        $sanitized['order_status_id'] = $sanitized['order_status']['id'];
+        $sanitized['payment'] = 'personally';
+
+        $sanitized = collect($sanitized)->except('courier', 'customer', 'address', 'order_status');
 
         // Store the Order
-        $order = Order::create($sanitized);
+        $order = Order::create($sanitized->toArray());
+        app(OrderProductRepository::class)->createOrderProduct($sanitized['products'], $order);
+
+        dd($sanitized);
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/orders'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
