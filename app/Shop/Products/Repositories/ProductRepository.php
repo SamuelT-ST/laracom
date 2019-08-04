@@ -354,14 +354,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return $query->get();
     }
 
-    public function getProductDiscountedPrice(){
 
-
-
-    }
-
-
-    public static function getProductsWithCalculatedDiscount($category, $limit = null){
+    public static function getProductsWithCalculatedDiscount($category, $limit = null, $singleProduct = null){
 
         $guestId = CustomerGroup::where('title', 'Guest')->first()->id;
 
@@ -374,6 +368,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->join('category_discount', 'category_discount.discount_id', '=', 'discounts.id')
             ->whereIn('customer_group_id', $customerGroups);
 
+//        Ako sa bude ratat zlava z defaultAtributov? Zatial asi nijak.
 
         $calculatedDiscount = Product::selectRaw("products.*, MIN(
             CASE
@@ -383,25 +378,23 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             products.price / 100 * (100-dwg.percentage)
             END) as discounted_price")
             ->join('categorizables', 'categorizable_id','=', 'products.id')
+            ->leftJoin('product_attributes', 'categorizable_id','=', 'products.id')
             ->join('categories', 'categorizables.category_id', '=', 'categories.id')
             ->leftJoinSub($discountsWithGroupAndCategory, 'dwg','dwg.category_id', '=', 'categorizables.category_id')
             ->groupBy(['products.id']);
 
-//        $result = DB::table('categorizables')
-//            ->joinSub($calculatedDiscount, 'cd', 'cd.id', '=', 'categorizables.categorizable_id')
-//            ->where('category_id', $category);
-
         $categories = DB::table('categorizables')
             ->where('category_id', $category);
 
-        $result = $calculatedDiscount->joinSub($categories, 'cat', 'cat.categorizable_id', '=', 'products.id');
 
-//        dd($result2->get());
-
-//        dd($result->get());
+        $result = $calculatedDiscount->with('attributes')->joinSub($categories, 'cat', 'cat.categorizable_id', '=', 'products.id');
 
         if($limit){
             $result->limit($limit);
+        }
+
+        if($singleProduct){
+            return $result->where('products.id', $singleProduct)->first();
         }
 
         return $result->get();

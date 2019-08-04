@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-md-12 content">
                         <div class="box-body">
-                            @include('layouts.errors-and-messages')
+                            @include('admin.layout.errors-and-messages')
                         </div>
                         <h3><i class="fa fa-cart-plus"></i> Shopping Cart</h3>
                         <table class="table table-striped">

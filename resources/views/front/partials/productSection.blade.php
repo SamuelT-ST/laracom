@@ -12,6 +12,7 @@
             @foreach($product->categories as $category)
             <span class="category">{{ $category->name }}</span>
             @endforeach
+            {{dd($product)}}
             <a href="#"><h4 class="title">{{ $product->name }}</h4></a>
             <div class="price"><span class="sprice">{{ $product->discounted_price ? $product->discounted_price : $product->price }}</span> @if($product->discounted_price)<del class="dprice">{{ $product->price }}</del>@endif</div>
         </div>

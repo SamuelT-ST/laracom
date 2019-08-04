@@ -4,7 +4,7 @@
     <!-- Main content -->
     <section class="content">
 
-        @include('layouts.errors-and-messages')
+        @include('admin.layout.errors-and-messages')
         <!-- Default box -->
         <div class="box">
             <form action="{{ route('admin.payment-methods.update', $paymentMethod->id) }}" method="post">

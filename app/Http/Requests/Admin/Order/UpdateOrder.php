@@ -24,23 +24,22 @@ class UpdateOrder extends FormRequest
     public function rules()
     {
         return [
-            'reference' => ['sometimes', Rule::unique('orders', 'reference')->ignore($this->order->getKey(), $this->order->getKeyName()), 'string'],
-            'courier_id' => ['sometimes', 'integer'],
-            'customer_id' => ['sometimes', 'integer'],
-            'address_id' => ['sometimes', 'integer'],
-            'order_status_id' => ['sometimes', 'integer'],
-            'payment' => ['sometimes', 'string'],
-            'discounts' => ['sometimes', 'numeric'],
-            'total_products' => ['sometimes', 'numeric'],
-            'tax' => ['sometimes', 'numeric'],
-            'total' => ['sometimes', 'numeric'],
-            'total_paid' => ['sometimes', 'numeric'],
-            'invoice' => ['nullable', 'string'],
-            'courier' => ['nullable', 'string'],
-            'label_url' => ['nullable', 'string'],
-            'tracking_number' => ['nullable', 'string'],
-            'total_shipping' => ['sometimes', 'numeric'],
-            
-        ];
+        'reference' => ['required', 'string'],
+        'courier' => ['required'],
+        'customer' => ['required'],
+        'address' => ['required'],
+        'order_status' => ['required'],
+        'payment' => ['nullable', 'string'],
+        'discounts' => ['required', 'numeric'],
+        'total_products' => ['required', 'numeric'],
+        'tax' => ['required', 'numeric'],
+        'total' => ['required', 'numeric'],
+        'total_paid' => ['required', 'numeric'],
+        'invoice' => ['nullable', 'string'],
+        'label_url' => ['nullable', 'string'],
+        'tracking_number' => ['nullable', 'string'],
+        'total_shipping' => ['required', 'numeric'],
+        'products'=> ['required', 'array']
+    ];
     }
 }

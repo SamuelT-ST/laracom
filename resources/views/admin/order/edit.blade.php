@@ -4,26 +4,22 @@
 
 @section('body')
 
-    <div class="container-xl">
+    <div class="container-xxl">
 
-        <div class="card">
 
             <order-form
                 :action="'{{ $order->resource_url }}'"
                 :data="{{ $order->toJson() }}"
+                :customers="{{$customers}}"
+                :statuses="{{$statuses}}"
+                :couriers="{{$couriers}}"
+                :countries="{{$countries->toJson()}}"
+                :payment-methods="{{$paymentMethods}}"
                 inline-template>
             
                 <form class="form-horizontal form-edit" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
 
-                    <div class="card-header">
-                        <i class="fa fa-pencil"></i> {{ trans('admin.order.actions.edit', ['name' => $order->id]) }}
-                    </div>
-
-                    <div class="card-body">
-
                         @include('admin.order.components.form-elements')
-
-                    </div>
 
                     <div class="card-footer">
 	                    <button type="submit" class="btn btn-primary" :disabled="submiting">
@@ -37,7 +33,5 @@
         </order-form>
 
     </div>
-
-</div>
 
 @endsection

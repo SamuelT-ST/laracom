@@ -4,7 +4,7 @@
     <!-- Main content -->
     <section class="content">
 
-    @include('layouts.errors-and-messages')
+    @include('admin.layout.errors-and-messages')
     <!-- Default box -->
         @if($product)
             <div class="box">

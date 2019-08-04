@@ -5,7 +5,7 @@
     <section class="container content">
         <div class="row">
             <div class="box-body">
-                @include('layouts.errors-and-messages')
+                @include('admin.layout.errors-and-messages')
             </div>
             <div class="col-md-12">
                 <h2> <i class="fa fa-home"></i> My Account</h2>

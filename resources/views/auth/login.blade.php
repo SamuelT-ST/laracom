@@ -98,7 +98,7 @@
     {{--<hr>--}}
     {{--<!-- Main content -->--}}
     {{--<section class="container content">--}}
-        {{--<div class="col-md-12">@include('layouts.errors-and-messages')</div>--}}
+        {{--<div class="col-md-12">@include('admin.layout.errors-and-messages')</div>--}}
         {{--<div class="col-md-4 col-md-offset-4">--}}
             {{--<h2>Login to your account</h2>--}}
             {{--<form action="{{ route('login') }}" method="post" class="form-horizontal">--}}

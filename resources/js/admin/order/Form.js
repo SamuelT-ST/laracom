@@ -23,10 +23,10 @@ Vue.component('order-form', {
                 order_status:  '' ,
                 payment:  '' ,
                 discounts:  '' ,
-                total_products:  '' ,
-                tax:  '' ,
-                total:  '' ,
-                total_paid:  '' ,
+                total_products:  0 ,
+                tax:  0 ,
+                total:  0 ,
+                total_paid:  0 ,
                 invoice:  '' ,
                 label_url:  '' ,
                 tracking_number:  '' ,
@@ -59,7 +59,7 @@ Vue.component('order-form', {
     },
     methods: {
         createNewCustomer(){
-            axios.post('/customers', this.form.customer).then(response => {
+            axios.post('/admin/customers', this.form.customer).then(response => {
                 this.$notify({ type: 'success', title: 'Success!', text: 'Customer successfully added.'});
                 this.customerState = 'new';
             }, error => {

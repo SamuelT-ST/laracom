@@ -3,7 +3,7 @@
 @section('content')
     <!-- Main content -->
     <section class="container content">
-        @include('layouts.errors-and-messages')
+        @include('admin.layout.errors-and-messages')
         <div class="box">
             <form action="{{ route('customer.address.update', [$customer->id, $address->id]) }}" method="post" class="form" enctype="multipart/form-data">
                 <input type="hidden" name="status" value="1">

@@ -95,7 +95,7 @@
         <td colspan="5"></td>
         <td style="vertical-align: middle">{{__('Products total')}}</td>
         <td colspan="2">
-            <input type="text" v-model="totalPrice" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('total_products'), 'form-control-success': this.fields.total_products && this.fields.total_products.valid}" id="total_products" name="total_products" placeholder="{{ trans('admin.order.columns.total_products') }}">
+            <input type="text" v-model="totalPrice ? totalPrice : form.total_products" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('total_products'), 'form-control-success': this.fields.total_products && this.fields.total_products.valid}" id="total_products" name="total_products" placeholder="{{ trans('admin.order.columns.total_products') }}">
             <div v-if="errors.has('total_products')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('total_products') }}</div>
         </td>
     </tr>
@@ -104,7 +104,7 @@
         <td colspan="5"></td>
         <td style="vertical-align: middle">{{__('Tax')}}</td>
         <td colspan="2">
-            <input type="text" :value="totalTax" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('tax'), 'form-control-success': this.fields.tax && this.fields.tax.valid}" id="tax" name="tax" placeholder="{{ trans('admin.order.columns.tax') }}">
+            <input type="text" :value="totalTax != 0 ? totalTax : form.tax" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('tax'), 'form-control-success': this.fields.tax && this.fields.tax.valid}" id="tax" name="tax" placeholder="{{ trans('admin.order.columns.tax') }}">
             <div v-if="errors.has('tax')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('tax') }}</div>
         </td>
     </tr>
@@ -113,7 +113,7 @@
         <td colspan="5"></td>
         <td style="vertical-align: middle">{{__('Total')}}</td>
         <td colspan="2">
-            <input type="text" :value="total" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('total'), 'form-control-success': this.fields.total && this.fields.total.valid}" id="total" name="total" placeholder="{{ trans('admin.order.columns.total') }}">
+            <input type="text" :value="total != 0 ? total : form.total" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('total'), 'form-control-success': this.fields.total && this.fields.total.valid}" id="total" name="total" placeholder="{{ trans('admin.order.columns.total') }}">
             <div v-if="errors.has('total')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('total') }}</div>
         </td>
     </tr>

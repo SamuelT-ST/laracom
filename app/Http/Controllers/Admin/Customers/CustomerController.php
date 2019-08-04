@@ -81,6 +81,8 @@ class CustomerController extends Controller
      */
     public function store(CreateCustomerRequest $request)
     {
+        dd($request->toArray());
+
         $this->customerRepo->createCustomer($request->except('_token', '_method'));
 
         if ($request->ajax()) {

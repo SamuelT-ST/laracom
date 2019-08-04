@@ -27,6 +27,8 @@ Route::get('/test', function(){
 //where products.id = 1
 //GROUP BY products.id;
 
+    dd(app(\App\Shop\OrderProduct\Transformations\OrderProductTransformation::class)->prepareOrderForUpdate(\App\Shop\Orders\Order::find(25)));
+
     dd(app(\App\Shop\Products\Repositories\ProductRepository::class)->getProductsWithCalculatedDiscount(2));
 
 
@@ -177,8 +179,8 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
 
 /* Auto-generated admin routes */
 Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
-    Route::get('/admin/orders',                                 'Admin\OrdersController@index')->name('admin.orders.index');;
-    Route::get('/admin/orders/create',                          'Admin\OrdersController@create');
+    Route::get('/admin/orders',                                 'Admin\OrdersController@index')->name('admin.orders.index');
+    Route::get('/admin/orders/create',                          'Admin\OrdersController@create')->name('admin.orders.create');
     Route::post('/admin/orders',                                'Admin\OrdersController@store');
     Route::get('/admin/orders/{order}/edit',                    'Admin\OrdersController@edit')->name('admin/orders/edit');
     Route::post('/admin/orders/{order}',                        'Admin\OrdersController@update')->name('admin/orders/update');

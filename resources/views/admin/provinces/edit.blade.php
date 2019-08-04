@@ -3,7 +3,7 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
-        @include('layouts.errors-and-messages')
+        @include('admin.layout.errors-and-messages')
         <div class="box">
             <form action="{{ route('admin.countries.provinces.update', [$countryId, $province->id]) }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="box-body">

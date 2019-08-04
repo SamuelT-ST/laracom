@@ -3,7 +3,7 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
-        @include('layouts.errors-and-messages')
+        @include('admin.layout.errors-and-messages')
         <form action="{{ route('admin.employee.profile.update', $employee->id) }}" method="post" class="form">
             <input type="hidden" name="_method" value="put">
             {{ csrf_field() }}

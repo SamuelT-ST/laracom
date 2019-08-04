@@ -3,7 +3,7 @@
 @section('body')
     <!-- Main content -->
     <section class="content">
-    @include('layouts.errors-and-messages')
+    @include('admin.layout.errors-and-messages')
     <!-- Default box -->
         @if(!$products->isEmpty())
             <div class="card">

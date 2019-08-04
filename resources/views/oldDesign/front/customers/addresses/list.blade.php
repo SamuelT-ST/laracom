@@ -3,7 +3,7 @@
 @section('content')
     <!-- Main content -->
     <section class="content container">
-    @include('layouts.errors-and-messages')
+    @include('admin.layout.errors-and-messages')
     <!-- Default box -->
         @if($addresses)
             <div class="box">

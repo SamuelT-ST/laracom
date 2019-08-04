@@ -3,13 +3,16 @@
 use App\Http\Controllers\Controller;
 use App\Models\Discounts\Discount;
 use App\Models\PaymentMethod;
+use App\Shop\Addresses\Address;
 use App\Shop\Countries\Country;
 use App\Shop\Couriers\Courier;
 use App\Shop\Customers\Customer;
 use App\Shop\OrderProduct\OrderProduct;
 use App\Shop\OrderProduct\Repositories\OrderProductRepository;
+use App\Shop\OrderProduct\Transformations\OrderProductTransformation;
 use App\Shop\OrderStatuses\OrderStatus;
 use App\Shop\PaymentMethods\Payment;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\Admin\Order\IndexOrder;
@@ -17,7 +20,7 @@ use App\Http\Requests\Admin\Order\StoreOrder;
 use App\Http\Requests\Admin\Order\UpdateOrder;
 use App\Http\Requests\Admin\Order\DestroyOrder;
 use Brackets\AdminListing\Facades\AdminListing;
-use App\Models\Order;
+use App\Shop\Orders\Order;
 
 class OrdersController extends Controller
 {
@@ -39,7 +42,10 @@ class OrdersController extends Controller
             ['id', 'reference', 'courier_id', 'customer_id', 'address_id', 'order_status_id', 'payment', 'discounts', 'total_products', 'tax', 'total', 'total_paid', 'invoice', 'courier', 'label_url', 'tracking_number', 'total_shipping'],
 
             // set columns to searchIn
-            ['id', 'reference', 'payment', 'invoice', 'courier', 'label_url', 'tracking_number']
+            ['id', 'reference', 'payment', 'invoice', 'courier', 'label_url', 'tracking_number'],
+            function (Builder $q){
+                $q->with('customer', 'orderStatus');
+            }
         );
 
         if ($request->ajax()) {
@@ -76,11 +82,22 @@ class OrdersController extends Controller
      */
     public function store(StoreOrder $request)
     {
+
+//        dd($request->toArray()['address']);
         // Sanitize input
         $sanitized = $request->validated();
         $sanitized['courier_id'] = $sanitized['courier']['id'];
         $sanitized['customer_id'] = $sanitized['customer']['id'];
-        $sanitized['address_id'] = $sanitized['address']['id'];
+
+        if(!isset($sanitized['address']['id'])){
+            $sanitized['address']['customer_id'] = $sanitized['customer']['id'];
+            $sanitized['address']['alias'] =  $sanitized['address']['address_1'];
+            $sanitized['address']['country_id'] =  $sanitized['address']['country']['id'];
+            $sanitized['address_id'] = Address::create($sanitized['address'])->id;
+        } else {
+            $sanitized['address_id'] = $sanitized['address']['id'];
+        }
+
         $sanitized['order_status_id'] = $sanitized['order_status']['id'];
         $sanitized['payment'] = 'personally';
 
@@ -89,8 +106,6 @@ class OrdersController extends Controller
         // Store the Order
         $order = Order::create($sanitized->toArray());
         app(OrderProductRepository::class)->createOrderProduct($sanitized['products'], $order);
-
-        dd($sanitized);
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/orders'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
@@ -124,8 +139,17 @@ class OrdersController extends Controller
     {
         $this->authorize('admin.order.edit', $order);
 
+        $order->load('customer', 'address', 'courier', 'orderStatus','address.country');
+
+        $order['products'] = app(OrderProductTransformation::class)->prepareOrderForUpdate($order);
+
         return view('admin.order.edit', [
             'order' => $order,
+            'customers' => Customer::all(),
+            'statuses'=>OrderStatus::all(),
+            'couriers'=>Courier::all(),
+            'paymentMethods'=>PaymentMethod::all(),
+            'countries'=>Country::all()
         ]);
     }
 
@@ -140,9 +164,26 @@ class OrdersController extends Controller
     {
         // Sanitize input
         $sanitized = $request->validated();
+        $sanitized['courier_id'] = $sanitized['courier']['id'];
+        $sanitized['customer_id'] = $sanitized['customer']['id'];
 
-        // Update changed values Order
-        $order->update($sanitized);
+        if(!isset($sanitized['address']['id'])){
+            $sanitized['address']['customer_id'] = $sanitized['customer']['id'];
+            $sanitized['address']['alias'] =  $sanitized['address']['address_1'];
+            $sanitized['address']['country_id'] =  $sanitized['address']['country']['id'];
+            $sanitized['address_id'] = Address::create($sanitized['address'])->id;
+        } else {
+            $sanitized['address_id'] = $sanitized['address']['id'];
+        }
+
+        $sanitized['order_status_id'] = $sanitized['order_status']['id'];
+        $sanitized['payment'] = 'personally';
+
+        $sanitized = collect($sanitized)->except('courier', 'customer', 'address', 'order_status');
+
+        // Store the Order
+        $order->update($sanitized->toArray());
+        app(OrderProductRepository::class)->updateOrderProduct($sanitized['products'], $order);
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/orders'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];

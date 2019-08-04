@@ -45,20 +45,14 @@
                                 <tr>
                                     <th is='sortable' :column="'id'">{{ trans('admin.order.columns.id') }}</th>
                                     <th is='sortable' :column="'reference'">{{ trans('admin.order.columns.reference') }}</th>
-                                    <th is='sortable' :column="'courier_id'">{{ trans('admin.order.columns.courier_id') }}</th>
-                                    <th is='sortable' :column="'customer_id'">{{ trans('admin.order.columns.customer_id') }}</th>
-                                    <th is='sortable' :column="'address_id'">{{ trans('admin.order.columns.address_id') }}</th>
-                                    <th is='sortable' :column="'order_status_id'">{{ trans('admin.order.columns.order_status_id') }}</th>
+                                    <th is='sortable' :column="'customer'">{{ trans('admin.order.columns.customer_id') }}</th>
+                                    <th is='sortable' :column="'order_status'">{{ trans('admin.order.columns.order_status_id') }}</th>
                                     <th is='sortable' :column="'payment'">{{ trans('admin.order.columns.payment') }}</th>
-                                    <th is='sortable' :column="'discounts'">{{ trans('admin.order.columns.discounts') }}</th>
                                     <th is='sortable' :column="'total_products'">{{ trans('admin.order.columns.total_products') }}</th>
                                     <th is='sortable' :column="'tax'">{{ trans('admin.order.columns.tax') }}</th>
                                     <th is='sortable' :column="'total'">{{ trans('admin.order.columns.total') }}</th>
                                     <th is='sortable' :column="'total_paid'">{{ trans('admin.order.columns.total_paid') }}</th>
-                                    <th is='sortable' :column="'invoice'">{{ trans('admin.order.columns.invoice') }}</th>
                                     <th is='sortable' :column="'courier'">{{ trans('admin.order.columns.courier') }}</th>
-                                    <th is='sortable' :column="'label_url'">{{ trans('admin.order.columns.label_url') }}</th>
-                                    <th is='sortable' :column="'tracking_number'">{{ trans('admin.order.columns.tracking_number') }}</th>
                                     <th is='sortable' :column="'total_shipping'">{{ trans('admin.order.columns.total_shipping') }}</th>
                                     
                                     <th></th>
@@ -68,20 +62,14 @@
                                 <tr v-for="(item, index) in collection">
                                     <td>@{{ item.id }}</td>
                                     <td>@{{ item.reference }}</td>
-                                    <td>@{{ item.courier_id }}</td>
-                                    <td>@{{ item.customer_id }}</td>
-                                    <td>@{{ item.address_id }}</td>
-                                    <td>@{{ item.order_status_id }}</td>
+                                    <td>@{{ item.customer.name }}</td>
+                                    <td><div class="badge badge-primary" :style="'background-color: '+item.order_status.color"> @{{ item.order_status.name }}</div></td>
                                     <td>@{{ item.payment }}</td>
-                                    <td>@{{ item.discounts }}</td>
                                     <td>@{{ item.total_products }}</td>
                                     <td>@{{ item.tax }}</td>
                                     <td>@{{ item.total }}</td>
                                     <td>@{{ item.total_paid }}</td>
-                                    <td>@{{ item.invoice }}</td>
                                     <td>@{{ item.courier }}</td>
-                                    <td>@{{ item.label_url }}</td>
-                                    <td>@{{ item.tracking_number }}</td>
                                     <td>@{{ item.total_shipping }}</td>
                                     
                                     <td>

@@ -4,9 +4,7 @@
             <li class="nav-title">Dashboard</li>
             <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard')  }}"><i class="nav-icon icon-home"></i>Home</a></li>
             <li class="nav-title">{{ trans('brackets/admin-ui::admin.sidebar.content') }}</li>
-           <li class="nav-item"><a class="nav-link" href="{{ url('admin/orders') }}"><i class="nav-icon icon-drop"></i> {{ trans('admin.order.title') }}</a></li>
-           <li class="nav-item"><a class="nav-link" href="{{ url('admin/payment-methods') }}"><i class="nav-icon icon-plane"></i> {{ trans('admin.payment-method.title') }}</a></li>
-           <li class="nav-item"><a class="nav-link" href="{{ url('admin/settings') }}"><i class="nav-icon icon-ghost"></i> {{ trans('admin.setting.title') }}</a></li>
+{{--           <li class="nav-item"><a class="nav-link" href="{{ url('admin/orders') }}"><i class="nav-icon icon-drop"></i> {{ trans('admin.order.title') }}</a></li>--}}
            {{-- Do not delete me :) I'm used for auto-generation menu items --}}
 
             <li class="nav-title">Predaj</li>
@@ -32,13 +30,15 @@
                     {{--</li>--}}
                 </ul>
             </li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('admin/payment-methods') }}"><i class="nav-icon icon-plane"></i> Platobné metódy</a></li>
+
             <li class="nav-item">
                 <a class="nav-link" href="{{route('admin.categories.index')}}">
                     <i class="nav-icon cui-list"></i> Kategórie
                 </a>
             </li>
 
-            <li class="nav-item"><a class="nav-link" href="{{ url('admin/discounts') }}"><i class="nav-icon cui-tags"></i> {{ trans('admin.discount.title') }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('admin/discounts') }}"><i class="nav-icon cui-tags"></i> Zľavy</a></li>
 
 
             <li class="nav-item nav-dropdown">
@@ -65,7 +65,7 @@
             </li>
             <li class="nav-title">Objednávky</li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('admin.orders.create') }}">
                     <i class="nav-icon cui-note"></i> Rýchla objednávka
                 </a>
             </li>
@@ -99,6 +99,7 @@
             <li class="nav-title">{{ trans('brackets/admin-ui::admin.sidebar.settings') }}</li>
             <li class="nav-item"><a class="nav-link" href="{{ url('admin/admin-users') }}"><i class="nav-icon icon-user"></i> {{ __('Manage access') }}</a></li>
             <li class="nav-item"><a class="nav-link" href="{{ url('admin/translations') }}"><i class="nav-icon icon-location-pin"></i> {{ __('Translations') }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('admin/settings') }}"><i class="nav-icon icon-ghost"></i> {{ trans('admin.setting.title') }}</a></li>
             {{-- Do not delete me :) I'm also used for auto-generation menu items --}}
             {{--<li class="nav-item"><a class="nav-link" href="{{ url('admin/configuration') }}"><i class="nav-icon icon-settings"></i> {{ __('Configuration') }}</a></li>--}}
         </ul>

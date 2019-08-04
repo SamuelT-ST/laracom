@@ -48,7 +48,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-12">
-                    @include('layouts.errors-and-messages')
+                    @include('admin.layout.errors-and-messages')
                     <form action="{{ route('cart.store') }}" class="form-inline" method="post">
                         {{ csrf_field() }}
                         @if(isset($productAttributes) && !$productAttributes->isEmpty())

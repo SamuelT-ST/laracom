@@ -40,7 +40,6 @@ class StoreOrder extends FormRequest
             'tracking_number' => ['nullable', 'string'],
             'total_shipping' => ['required', 'numeric'],
             'products'=> ['required', 'array']
-            
         ];
     }
 }

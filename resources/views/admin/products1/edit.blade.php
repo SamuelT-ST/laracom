@@ -3,7 +3,7 @@
 @section('body')
     <!-- Main content -->
     <section class="content">
-        @include('layouts.errors-and-messages')
+        @include('admin.layout.errors-and-messages')
         <div class="card">
             <form action="{{ route('admin.products.update', $product->id) }}" method="post" class="form" enctype="multipart/form-data">
                 <div class="card-body">

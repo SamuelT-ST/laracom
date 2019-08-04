@@ -3,7 +3,7 @@
 @section('body')
     <!-- Main content -->
     <section class="content">
-        @include('layouts.errors-and-messages')
+        @include('admin.layout.errors-and-messages')
         <div class="card">
             <div class="card-header">
                 <i class="fa fa-align-justify"></i> Nastaviť hodnotu pre {{ $attribute->name }}
