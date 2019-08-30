@@ -4,6 +4,7 @@ namespace App\Shop\Products;
 
 use App\Models\Discounts\Discount;
 use App\Shop\Brands\Brand;
+use App\Shop\Features\FeatureValue;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\ProductImages\ProductImage;
 use Brackets\Media\HasMedia\HasMediaCollections;
@@ -178,5 +179,9 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     public function registerMediaConversions(Media $media = null)
     {
         $this->autoRegisterThumb200();
+    }
+
+    public function featureValues(){
+        return $this->belongsToMany(FeatureValue::class);
     }
 }

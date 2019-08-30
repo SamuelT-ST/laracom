@@ -50,7 +50,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
     public function createCustomer(array $params) : Customer
     {
         try {
-            $data = collect($params)->except('password')->all();
+            $data = collect($params)->except('password', '_token', '_method')->all();
 
             $customer = new Customer($data);
             if (isset($params['password'])) {

@@ -1,4 +1,4 @@
-@extends('brackets/admin-ui::admin.layout.default')
+@extends('admin.products.default')
 
 @section('title', trans('admin.products.actions.create'))
 
@@ -10,6 +10,7 @@
         <product-form
                 :categories = "{{ $categories }}"
                 :action="'{{ route('admin.products.update', $product->id) }}'"
+                :available-features = "{{ $features }}"
                 :data="{{ $data->toJson() }}"
                 inline-template>
 
@@ -26,6 +27,26 @@
                         <div class="card-body">
 
                             @include('admin.products.components.form-elements')
+
+                        </div>
+
+                        <div class="card-header">
+                            <i class="fa fa-plus"></i> Vlastnosti produktu
+                        </div>
+
+                        <div class="card-body">
+
+                            @include('admin.products.components.shipping')
+
+                        </div>
+
+                        <div class="card-header">
+                            <i class="fa fa-plus"></i> Vlastnosti produktu
+                        </div>
+
+                        <div class="card-body">
+
+                            @include('admin.products.components.features')
 
                         </div>
 

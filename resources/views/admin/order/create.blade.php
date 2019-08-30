@@ -28,7 +28,7 @@
 
                     {{--</div>--}}
 
-                    <div class="card-footer">
+                    <div class="text-center">
                         <button type="submit" class="btn btn-primary" :disabled="submiting">
                             <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
                             {{ trans('brackets/admin-ui::admin.btn.save') }}

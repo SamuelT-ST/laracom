@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddProductAttributeIdColumnInOrderProductTable extends Migration
+class CreateFeaturesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddProductAttributeIdColumnInOrderProductTable extends Migration
      */
     public function up()
     {
-        Schema::table('order_product', function (Blueprint $table) {
-            $table->unsignedInteger('product_attribute_id')->after('product_id')->nullable();
+        Schema::create('features', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->boolean('is_number')->default(false);
         });
     }
 
@@ -25,8 +27,6 @@ class AddProductAttributeIdColumnInOrderProductTable extends Migration
      */
     public function down()
     {
-        Schema::table('order_product', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('features');
     }
 }

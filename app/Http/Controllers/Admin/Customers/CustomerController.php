@@ -13,6 +13,7 @@ use App\Shop\Customers\Transformations\CustomerTransformable;
 use App\Http\Controllers\Controller;
 use Brackets\AdminListing\Facades\AdminListing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 
 class CustomerController extends Controller
@@ -77,16 +78,20 @@ class CustomerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  CreateCustomerRequest $request
-     * @return array|\Illuminate\Http\Response
+     * @return Customer
      */
     public function store(CreateCustomerRequest $request)
     {
-        dd($request->toArray());
+        $sanitized = $request->validated();
 
-        $this->customerRepo->createCustomer($request->except('_token', '_method'));
+        if(!$request->has('password')) {
+            $sanitized['password'] = Hash::make(str_random(16));
+        }
+
+        $customer = $this->customerRepo->createCustomer($sanitized);
 
         if ($request->ajax()) {
-            return ['redirect' => url('admin/customers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+            return $customer;
         }
 
         return redirect()->route('admin.customers.index');

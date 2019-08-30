@@ -1,6 +1,15 @@
 <?php
 
 return [
+    'attributes'=>[
+        'actions' => [
+            'index' => 'Atribúty',
+            'create' => 'Nový atribút'
+        ],
+        'columns'=> [
+            'name' => 'Názov'
+        ],
+    ],
     'customers' => [
         'title' => 'Zákazníci',
 
@@ -102,6 +111,9 @@ return [
             'id' => "ID",
             'name' => "Meno",
             'email' => "Email",
+            'width' => "Śírka",
+            'height' => "Výška",
+            'length' => "Hĺbka",
             'status' => "Aktívny",
             'groups' => "Zákaznícke skupiny",
             'enabled' => "Enabled",

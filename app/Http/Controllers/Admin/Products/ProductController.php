@@ -9,6 +9,8 @@ use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
 use App\Shop\Brands\Repositories\BrandRepositoryInterface;
 use App\Shop\Categories\Category;
 use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Shop\Features\Feature;
+use App\Shop\Features\Transformations\FeatureValueTransformable;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\Products\Exceptions\ProductInvalidArgumentException;
 use App\Shop\Products\Exceptions\ProductNotFoundException;
@@ -136,6 +138,7 @@ class ProductController extends Controller
             'default_weight' => env('SHOP_WEIGHT'),
             'weight_units' => Product::MASS_UNIT,
             'attributes' => Attribute::all(),
+            'features' => Feature::all(),
             'product' => new Product
         ]);
     }
@@ -149,6 +152,7 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
+
         $data = $request->except('_token', '_method', 'combinations', 'categories', 'cover', 'images', 'wysiwygMedia');
 
         $data['slug'] = str_slug($request->input('name'));
@@ -169,6 +173,16 @@ class ProductController extends Controller
             $product->categories()->sync($categories);
         } else {
             $product->categories()->sync([]);
+        }
+
+        if ($request->has('featureValues')){
+           $featureValuesIds = collect($request->get('featureValues'))->map(function ($item){
+                return $item['chosenValue']['id'];
+            });
+//            dd($featureValuesIds);
+           $product->featureValues()->sync($featureValuesIds);
+        } else {
+            $product->featureValues()->sync([]);
         }
 
         if ($request->ajax()) {
@@ -215,6 +229,8 @@ class ProductController extends Controller
 
         $data = collect($product);
 
+        $data->put('featureValues', app(FeatureValueTransformable::class)->prepareFeaturesForEdit($product));
+
         $data['categories'] = $product->categories()->pluck('id');
 
         $categories = Category::whereNull('parent_id')->get();
@@ -224,6 +240,7 @@ class ProductController extends Controller
             'data' => $data,
             'categories' => $categories,
             'attributes' => $this->attributeRepo->listAttributes(),
+            'features' => Feature::all(),
             'qty' => $qty,
             'brands' => $this->brandRepo->listBrands(['*'], 'name', 'asc'),
             'weight' => $product->weight,
@@ -299,10 +316,21 @@ class ProductController extends Controller
         if ($request->has('categories')) {
             $product->syncCategories($request->input('categories'));
         } else {
-            $product->syncCategories();
+            $product->syncCategories([]);
+        }
+
+        if ($request->has('featureValues')){
+            $featureValuesIds = collect($request->get('featureValues'))->map(function ($item){
+                return $item['chosenValue']['id'];
+            });
+            $product->featureValues()->sync($featureValuesIds);
+        } else {
+            $product->featureValues()->sync([]);
         }
 
         $productRepo->updateProduct($data);
+
+
 
         if ($request->ajax()){
             return ['redirect' => url('admin/products/'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];

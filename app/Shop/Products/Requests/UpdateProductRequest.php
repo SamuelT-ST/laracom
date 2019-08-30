@@ -20,7 +20,7 @@ class UpdateProductRequest extends BaseFormRequest
             'quantity' => ['required', 'integer'],
             'price' => ['required'],
             'wholesale_price' => ['numeric', 'required'],
-
+            'featureValues' => ['array']
         ];
     }
 }

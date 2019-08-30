@@ -1,5 +1,5 @@
 <div class="card-header">
-    <i class="fa fa-plus"></i> {{ trans('admin.order.actions.create') }}
+    <i class="fa fa-plus"></i> Informácie o zákazníkovi
 </div>
 
 <div class="card-body">
@@ -18,6 +18,7 @@
                     track-by="id"
                     placeholder="{{ __('Select customer') }}">
             </multiselect>
+            <button class="btn btn-primary mt-2" @click.prevent="$modal.show('add-new-customer')">{{ trans('admin.order.actions.new_customer') }}</button>
 
         </div>
     </div>
@@ -40,9 +41,9 @@
         </div>
     </div>
 
-
-    <hr>
     <div v-if="form.customer">
-    @include('admin.order.components.address')
+        <hr>
+
+        @include('admin.order.components.address')
     </div>
 </div>

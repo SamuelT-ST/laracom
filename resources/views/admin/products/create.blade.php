@@ -1,4 +1,4 @@
-@extends('brackets/admin-ui::admin.layout.default')
+@extends('admin.products.default')
 
 @section('title', trans('admin.products.actions.create'))
 
@@ -9,6 +9,7 @@
 
         <product-form
                 :categories = "{{ $categories }}"
+                :available-features = "{{ $features }}"
                 :action="'{{ route('admin.products.store') }}'"
                 inline-template>
 
@@ -25,6 +26,26 @@
                             <div class="card-body">
 
                                 @include('admin.products.components.form-elements')
+
+                            </div>
+
+                            <div class="card-header">
+                                <i class="fa fa-plus"></i> Doručenie
+                            </div>
+
+                            <div class="card-body">
+
+                                @include('admin.products.components.shipping')
+
+                            </div>
+
+                            <div class="card-header">
+                                <i class="fa fa-plus"></i> Vlastnosti produktu
+                            </div>
+
+                            <div class="card-body">
+
+                                @include('admin.products.components.features')
 
                             </div>
 
@@ -65,7 +86,9 @@
                                         </span>
                                     </li>
                                 </ul>
-                                <div class="btn btn-primary" @click="show">Vytvoriť kombináciu</div>
+                                <div class="text-center">
+                                    <div class="btn btn-primary" @click="show">Vytvoriť kombináciu</div>
+                                </div>
                             </div>
 
                         </div>

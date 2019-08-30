@@ -1,14 +1,9 @@
 <div class="row">
-    <div class="col-md-6">
-        <div class="card">
+    <div class="col card mr-3">
             @include('admin.order.components.left-elements')
-        </div>
     </div>
-
-    <div class="col-md-6">
-        <div class="card">
+    <div class="col card">
             @include('admin.order.components.right-elements')
-        </div>
     </div>
 </div>
 
@@ -23,6 +18,7 @@
 
 </div>
 
+@include('admin.order.components.add-new-customer-modal')
 
 {{--<div class="form-group row align-items-center" :class="{'has-danger': errors.has('reference'), 'has-success': this.fields.reference && this.fields.reference.valid }">--}}
     {{--<label for="reference" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.reference') }}</label>--}}

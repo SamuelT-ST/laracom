@@ -12,7 +12,7 @@
             inline-template
             :index = "activeCombinationIndex"
             :active-data-form="activeData"
-            :bus="bus">
+            >
 
         <div>
 

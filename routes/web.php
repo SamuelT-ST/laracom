@@ -206,3 +206,10 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
     Route::post('/admin/settings/{setting}',                    'Admin\SettingsController@update')->name('admin/settings/update');
     Route::delete('/admin/settings/{setting}',                  'Admin\SettingsController@destroy')->name('admin/settings/destroy');
 });
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::post('/admin/features/create',                        'Admin\Features\FeaturesController@create');
+    Route::post('/admin/features/createValue',                        'Admin\Features\FeaturesController@createValue');
+    Route::get('/admin/features/loadFeatureValues/{feature}',             'Admin\Features\FeaturesController@loadFeatureValues');
+});

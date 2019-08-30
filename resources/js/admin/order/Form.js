@@ -41,6 +41,10 @@ Vue.component('order-form', {
                     phone:  '' ,
                 }
             },
+            newCustomer: {
+                name: '',
+                email: ''
+            }
         }
     },
     created: function () {
@@ -58,14 +62,14 @@ Vue.component('order-form', {
         }
     },
     methods: {
-        createNewCustomer(){
-            axios.post('/admin/customers', this.form.customer).then(response => {
-                this.$notify({ type: 'success', title: 'Success!', text: 'Customer successfully added.'});
-                this.customerState = 'new';
-            }, error => {
-                this.$notify({ type: 'error', title: 'Error!', text: 'An error has occured.'});
-            });
-        },
+        // createNewCustomer(){
+        //     axios.post('/admin/customers', this.form.customer).then(response => {
+        //         this.$notify({ type: 'success', title: 'Success!', text: 'Customer successfully added.'});
+        //         this.customerState = 'new';
+        //     }, error => {
+        //         this.$notify({ type: 'error', title: 'Error!', text: 'An error has occured.'});
+        //     });
+        // },
         loadAvailableAddresses(url){
             axios.get(url).then(response => {
                 this.availableAddresses = response.data
@@ -128,6 +132,16 @@ Vue.component('order-form', {
         updateProduct(){
             this.calculateTotalPrice();
             this.$forceUpdate();
+        },
+
+        createNewCustomer(){
+            axios.post('/admin/customers', this.newCustomer).then(response => {
+                this.customers.push(response.data);
+                this.form.customer = response.data;
+                $modal.hide('add-new-customer');
+            }).catch(error => {
+                this.$notify({ type: 'error', title: 'Error!', text: 'An error has occured.'});
+            })
         },
 
 

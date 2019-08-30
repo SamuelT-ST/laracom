@@ -13,6 +13,9 @@ Vue.component('product-form', {
         },
         'combinations': {
             type: Object
+        },
+        'availableFeatures': {
+            type: Array
         }
     },
     data: function() {
@@ -36,10 +39,17 @@ Vue.component('product-form', {
                 sale_price: '',
                 wholesale_price: '',
                 categories: [],
-                combinations: []
+                combinations: [],
+                featureValues: [{
+                    feature: '',
+                    chosenValue:'',
+                    availableValues: [],
+                    is_number: false
+                }]
             },
             activeData: {},
             activeCombinationIndex: null,
+            availableFeaturesNew: this.availableFeatures,
             mediaCollections: ['cover', 'images']
         }
     },
@@ -86,6 +96,78 @@ Vue.component('product-form', {
                 this.form.combinations[event.params.index].wasEdited = true;
                 this.activeCombinationIndex = event.params.index;
             }
+        },
+        createFeature(value, id){
+
+            let self = this;
+
+            this.$modal.show('dialog', {
+                title: 'Typ vlastnosti',
+                text: 'Vyberte prosím typ tejto vlastnosti',
+                buttons: [{
+                    title: 'Text',
+                    handler: function handler() {
+                        self.$modal.hide('dialog');
+                        let data = {
+                            title: value,
+                            is_number: false
+                        };
+
+                        axios.post('/admin/features/create/', data).then(response => {
+                            self.availableFeaturesNew.push(response.data);
+                            self.form.featureValues[id].feature = self.availableFeaturesNew[self.availableFeaturesNew.length-1];
+                        });
+                    }
+                }, {
+                    title: 'Číslo',
+                    handler: function handler() {
+
+                        self.$modal.hide('dialog');
+                        let data = {
+                            title: value,
+                            is_number: true
+                        };
+
+                        axios.post('/admin/features/create/', data).then(response => {
+                            self.availableFeaturesNew.push(response.data);
+                            self.form.featureValues[id].feature = self.availableFeaturesNew[self.availableFeaturesNew.length-1];
+                        });
+                    }
+                }]
+            });
+        },
+
+        createValue(value, id){
+
+            let data = {
+                featureId: id,
+                value: value
+            };
+
+            axios.post('/admin/features/createValue', data).then(response => {
+                let index = _.findIndex(this.form.featureValues, (o) => { return o.feature.id === id; });
+                console.log(index);
+                this.form.featureValues[index].availableValues.push(response.data);
+                this.form.featureValues[index].chosenValue = this.form.featureValues[index].availableValues[this.form.featureValues[index].availableValues.length-1];
+            }).catch(error => {
+                this.$notify({ type: 'error', title: 'Error', text: error.response.data.errors.value[0]});
+            });
+        },
+        fillValues(id, index){
+            console.log(id);
+            axios.get('/admin/features/loadFeatureValues/'+id).then(response => {
+                if (response.data.length > 0 ) this.form.featureValues[index].availableValues = response.data;
+            });
+        },
+        addNewFeature(){
+            this.form.featureValues.push({
+                feature: '',
+                chosenValue:'',
+                availableValues: []
+            });
+        },
+        deleteFeature(index){
+            this.form.featureValues.splice(index,1);
         }
     }
 
