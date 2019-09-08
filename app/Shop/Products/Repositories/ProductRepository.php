@@ -9,6 +9,7 @@ use App\Shop\Customers\Customer;
 use App\Shop\Products\Exceptions\ProductCreateErrorException;
 use App\Shop\Products\Exceptions\ProductUpdateErrorException;
 use App\Shop\Tools\UploadableTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Brands\Brand;
@@ -354,8 +355,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return $query->get();
     }
 
-
-    public static function getProductsWithCalculatedDiscount($category, $limit = null, $singleProduct = null){
+    public function getProductsWithCalculatedDiscountBuilder($category) : Builder {
 
         $guestId = CustomerGroup::where('title', 'Guest')->first()->id;
 
@@ -388,6 +388,16 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
 
         $result = $calculatedDiscount->with('attributes')->joinSub($categories, 'cat', 'cat.categorizable_id', '=', 'products.id');
+
+
+        return $result;
+
+    }
+
+
+    public function getProductsWithCalculatedDiscount($category, $limit = null, $singleProduct = null){
+
+        $result = $this->getProductsWithCalculatedDiscountBuilder($category);
 
         if($limit){
             $result->limit($limit);

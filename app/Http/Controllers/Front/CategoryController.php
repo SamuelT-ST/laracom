@@ -2,44 +2,30 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Shop\Categories\Repositories\CategoryRepository;
-use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Services\FrontListing;
+use App\Shop\Categories\Category;
 use App\Http\Controllers\Controller;
+use App\Shop\Products\Repositories\ProductRepository;
+use App\Shop\Products\Requests\IndexProduct;
 
 class CategoryController extends Controller
 {
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepo;
 
-    /**
-     * CategoryController constructor.
-     *
-     * @param CategoryRepositoryInterface $categoryRepository
-     */
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    public function getCategory(String $slug, IndexProduct $request)
     {
-        $this->categoryRepo = $categoryRepository;
-    }
+        $category = Category::whereSlug($slug)->first();
 
-    /**
-     * Find the category via the slug
-     *
-     * @param string $slug
-     * @return \App\Shop\Categories\Category
-     */
-    public function getCategory(string $slug)
-    {
-        $category = $this->categoryRepo->findCategoryBySlug(['slug' => $slug]);
+        // create and AdminListing instance for a specific model and
+        $data = app(FrontListing::class)
+            ->attachQuery(app(ProductRepository::class)->getProductsWithCalculatedDiscountBuilder($category->id))
+            ->attachPagination($request->input('page', 1), $request->input('per_page', $request->cookie('per_page', 3)))
+            ->getResults();
 
-        $repo = new CategoryRepository($category);
+        if ($request->ajax()) {
+            return ['data' => $data];
+        }
 
-        $products = $repo->findProducts()->where('status', 1)->all();
 
-        return view('front.categories.category', [
-            'category' => $category,
-            'products' => $repo->paginateArrayResults($products, 20)
-        ]);
+        return view('front.category.index', ['category' => Category::whereSlug($slug)->first(), 'data' => $data]);
     }
 }

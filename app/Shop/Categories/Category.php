@@ -13,7 +13,7 @@ use Brackets\Media\HasMedia\HasMediaThumbsTrait;
 
 class Category extends \Rinvex\Categories\Models\Category implements HasMediaCollections, HasMediaConversions
 {
-    protected $appends = ['resource_url'];
+    protected $appends = ['resource_url', 'front_url'];
 
     use HasMediaCollectionsTrait;
     use HasMediaThumbsTrait;
@@ -40,7 +40,15 @@ class Category extends \Rinvex\Categories\Models\Category implements HasMediaCol
         return url('/admin/categories/'.$this->slug);
     }
 
+    public function getFrontUrlAttribute() {
+        return url('/category/'.$this->slug);
+    }
+
     public function getRouteKeyName() {
         return 'slug';
+    }
+
+    public function getCategoryThumb() {
+        return $this->getFirstMediaUrl('cover') ? $this->getFirstMediaUrl('cover') : asset('images/camera.png');
     }
 }

@@ -81,3 +81,21 @@ $factory->define(App\Models\Setting::class, function (Faker\Generator $faker) {
     ];
 });
 
+/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\Courier::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->firstName,
+        'description' => $faker->text(),
+        'from_width' => $faker->randomNumber(5),
+        'from_height' => $faker->randomNumber(5),
+        'from_length' => $faker->randomNumber(5),
+        'url' => $faker->sentence,
+        'price' => $faker->randomNumber(5),
+        'status' => $faker->boolean(),
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
+});
+

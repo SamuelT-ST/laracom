@@ -42,16 +42,17 @@ mix
         ],
         'public/css/style.min.css'
     )
-    .scripts(
-        [
-            'node_modules/bootstrap/dist/js/bootstrap.js',
-            'node_modules/select2/dist/js/select2.js',
-            'resources/assets/js/owl.carousel.min.js',
-            'resources/assets/js/Drift.min.js',
-            'resources/assets/js/admin.js'
-        ],
-        'public/js/front.min.js'
-    )
+    // .scripts(
+    //     [
+    //         'node_modules/bootstrap/dist/js/bootstrap.js',
+    //         'node_modules/select2/dist/js/select2.js',
+    //         'resources/assets/js/owl.carousel.min.js',
+    //         'resources/assets/js/Drift.min.js',
+    //         'resources/assets/js/admin.js',
+    //         'resources/js/front.js'
+    //     ],
+    //     'public/js/front.min.js'
+    // )
     .copyDirectory('node_modules/datatables/media/images', 'public/images')
     .copyDirectory('node_modules/font-awesome/fonts', 'public/fonts')
     .copyDirectory('resources/assets/admin-lte/img', 'public/img')
@@ -65,6 +66,8 @@ mix
 
 mix.js(['resources/js/admin/admin.js'], 'public/js')
     .sass('resources/sass/admin/admin.scss', 'public/css');
+
+mix.js(['resources/js/front.js'], 'public/js');
 
 if (mix.inProduction()) {
     mix.version();

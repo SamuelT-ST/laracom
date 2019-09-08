@@ -193,5 +193,28 @@ return [
         ],
     ],
 
+    'courier' => [
+        'title' => 'Couriers',
+
+        'actions' => [
+            'index' => 'Couriers',
+            'create' => 'New Courier',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'name' => "Name",
+            'description' => "Description",
+            'from_width' => "From width",
+            'from_height' => "From height",
+            'from_length' => "From length",
+            'url' => "Url",
+            'price' => "Price",
+            'status' => "Status",
+            
+        ],
+    ],
+
     // Do not delete me :) I'm used for auto-generation
 ];

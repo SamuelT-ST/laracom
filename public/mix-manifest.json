@@ -2,8 +2,8 @@
     "/js/admin.js": "/js/admin.js",
     "/js/admin.min.js": "/js/admin.min.js",
     "/css/admin.css": "/css/admin.css",
+    "/js/front.js": "/js/front.js",
     "/css/style.min.css": "/css/style.min.css",
-    "/js/front.min.js": "/js/front.min.js",
     "/js/scripts.js": "/js/scripts.js",
     "/js/custom.js": "/js/custom.js"
 }

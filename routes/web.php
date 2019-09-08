@@ -100,8 +100,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth
             Route::resource('countries', 'Countries\CountryController');
             Route::resource('countries.provinces', 'Provinces\ProvinceController');
             Route::resource('countries.provinces.cities', 'Cities\CityController');
-            Route::resource('couriers', 'Couriers\CourierController')->except('update');
-            Route::post('couriers/{courier}', 'Couriers\CourierController@update')->name('couriers.update');
             Route::resource('attributes', 'Attributes\AttributeController')->except('update');
             Route::post('attributes/{attribute}', 'Attributes\AttributeController@update')->name('attributes.update');
             Route::resource('attributes.values', 'Attributes\AttributeValueController');
@@ -212,4 +210,16 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
     Route::post('/admin/features/create',                        'Admin\Features\FeaturesController@create');
     Route::post('/admin/features/createValue',                        'Admin\Features\FeaturesController@createValue');
     Route::get('/admin/features/loadFeatureValues/{feature}',             'Admin\Features\FeaturesController@loadFeatureValues');
+});
+
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/couriers',                               'Admin\CouriersController@index')->name('admin.couriers.index');
+    Route::get('/admin/couriers/create',                        'Admin\CouriersController@create');
+    Route::post('/admin/couriers',                              'Admin\CouriersController@store');
+    Route::get('/admin/couriers/{courier}/edit',                'Admin\CouriersController@edit')->name('admin/couriers/edit');
+    Route::post('/admin/couriers/bulk-destroy',                 'Admin\CouriersController@bulkDestroy')->name('admin/couriers/bulk-destroy');
+    Route::post('/admin/couriers/{courier}',                    'Admin\CouriersController@update')->name('admin/couriers/update');
+    Route::delete('/admin/couriers/{courier}',                  'Admin\CouriersController@destroy')->name('admin/couriers/destroy');
 });

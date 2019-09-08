@@ -3,7 +3,7 @@
 <div class="col-lg-3 col-md-6">
     <div class="single-new-collection-item"><!-- single new collections -->
         <div class="thumb">
-            <img src="{{$product->getFirstMediaUrl('cover')}}" alt="new collcetion image">
+            <img src="{{$product->getProductThumb()}}" alt="new collcetion image">
             <div class="hover">
                 <a href="#" class="addtocart">{{ __('Add to cart') }}</a>
             </div>

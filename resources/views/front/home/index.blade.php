@@ -8,10 +8,10 @@
             <div class="col-lg-7">
                 <div class="header-inner "><!-- header inner -->
                     {{--<span class="subtitle ">SPRING - SUMMER 2018</span>--}}
-                    <h1 class="title ">{{ $settings['frontpage-banner-header']->value }}</h1>
-                    <p class="wow fadeInDown">{{ $settings['frontpage-banner-text']->value }}</p>
+                    <h1 class="title ">{{ trans('home.banner1.title') }}</h1>
+                    <p class="wow fadeInDown">{{ trans('home.banner1.value') }}</p>
                     <div class="btn-wrapper wow fadeInDown">
-                        {!! $settings['frontpage-banner-link']->value  !!}
+                        {!! trans('home.banner1.button') !!}
                     </div>
                 </div><!-- //. header inner -->
             </div>
@@ -30,8 +30,8 @@
                         <img src="{{ $settings['banner-1']->getFirstMediaUrl('image') }}" alt="promotional images">
                         <div class="hover">
                             <div class="hover-inner">
-                                <span class="subtitle wow fadeInDown">{{ $settings['banner-1']->value }}</span>
-                                <h2 class="title wow fadeIn">{{ $settings['banner-1-link']->value }}</h2>
+                                <span class="subtitle wow fadeInDown">{{ trans('home.banner2.title') }}</span>
+                                <h2 class="title wow fadeIn">{{ trans('home.banner2.value') }}</h2>
                             </div>
                         </div>
                     </div>
@@ -43,10 +43,10 @@
                         <img src="{{ $settings['banner-2']->getFirstMediaUrl('image') }}" alt="promotional images">
                         <div class="hover">
                             <div class="hover-inner">
-                                <h2 class="title ">{{ $settings['banner-2']->value }}</h2>
+                                <h2 class="title ">{{ trans('home.banner3.title') }}</h2>
                                 <div class="btn-wrapper wow fadeIn">
                                     {{--<a href="category.html" class="boxed-btn">go shop</a>--}}
-                                    {!! $settings['banner-2-link']->value !!}
+                                    {!! trans('home.banner2.link') !!}
                                 </div>
                             </div>
                         </div>
@@ -89,22 +89,22 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="bestseller_2" role="tabpanel" aria-labelledby="bestseller-tab_2">
                             <div class="row">
-                                @include('front.partials.productSection', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(2, 15)])
+                                @include('front.home.partials.product', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(2, 15)])
                             </div>
                         </div>
                         <div class="tab-pane fade" id="newflower_2" role="tabpanel" aria-labelledby="newflower-tab_2">
                             <div class="row">
-                                @include('front.partials.productSection', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(3, 15)])
+                                @include('front.home.partials.product', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(3, 15)])
                             </div>
                         </div>
                         <div class="tab-pane fade" id="topseller_2" role="tabpanel" aria-labelledby="topseller-tab_2">
                             <div class="row">
-                                @include('front.partials.productSection', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(4, 15)])
+                                @include('front.home.partials.product', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(4, 15)])
                             </div>
                         </div>
                         <div class="tab-pane fade" id="specialflower_2" role="tabpanel" aria-labelledby="specialflower-tab_2">
                             <div class="row">
-                                @include('front.partials.productSection', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(5, 15)])
+                                @include('front.home.partials.product', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(5, 15)])
                             </div>
                         </div>
                     </div>

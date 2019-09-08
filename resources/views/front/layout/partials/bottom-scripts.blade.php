@@ -46,4 +46,6 @@
 <!-- main -->
 <script src="{{asset('/js/main.js')}}"></script>
 
+<script src="{{asset('/js/front.js')}}"></script>
+
 @yield('bottom-scripts')

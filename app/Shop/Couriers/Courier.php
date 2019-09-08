@@ -1,36 +1,42 @@
-<?php
+<?php namespace App\Shop\Couriers;
 
-namespace App\Shop\Couriers;
-
-use App\Shop\Orders\Order;
 use Illuminate\Database\Eloquent\Model;
 
 class Courier extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    
+    
     protected $fillable = [
-        'name',
-        'description',
-        'url',
-        'is_free',
-        'cost',
-        'status'
+        "name",
+        "description",
+        "from_width",
+        "from_height",
+        "from_length",
+        "url",
+        "price",
+        "status",
+    
     ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [];
+    
+    protected $hidden = [
+    
+    ];
+    
+    protected $dates = [
+        "created_at",
+        "updated_at",
+    
+    ];
+    
+    
+    
     protected $appends = ['resource_url'];
 
+    /* ************************ ACCESSOR ************************* */
 
     public function getResourceUrlAttribute() {
         return url('/admin/couriers/'.$this->getKey());
     }
+
+    
 }

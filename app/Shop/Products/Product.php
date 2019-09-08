@@ -85,12 +85,20 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
      */
     protected $hidden = [];
 
-    protected $appends = ['resource_url'];
+    protected $appends = ['resource_url', 'product_thumb', 'front_url'];
 
-    protected $with = ['categories'];
+    protected $with = ['categories', 'media'];
 
     public function getResourceUrlAttribute() {
         return url('/admin/products/'.$this->id);
+    }
+
+    public function getFrontUrlAttribute() {
+        return url('/products/'.$this->id);
+    }
+
+    public function getProductThumbAttribute() {
+        return $this->getFirstMediaUrl('cover') ? $this->getFirstMediaUrl('cover') : asset('images/camera.png');
     }
 
     /**
@@ -183,5 +191,9 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
 
     public function featureValues(){
         return $this->belongsToMany(FeatureValue::class);
+    }
+
+    public function getProductThumb() {
+        return $this->getFirstMediaUrl('cover') ? $this->getFirstMediaUrl('cover') : asset('images/camera.png');
     }
 }
