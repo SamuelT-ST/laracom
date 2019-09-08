@@ -89,22 +89,22 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="bestseller_2" role="tabpanel" aria-labelledby="bestseller-tab_2">
                             <div class="row">
-                                @include('front.home.partials.product', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(2, 15)])
+                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(2)->getProducts(15)])
                             </div>
                         </div>
                         <div class="tab-pane fade" id="newflower_2" role="tabpanel" aria-labelledby="newflower-tab_2">
                             <div class="row">
-                                @include('front.home.partials.product', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(3, 15)])
+                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(3)->getProducts(15)])
                             </div>
                         </div>
                         <div class="tab-pane fade" id="topseller_2" role="tabpanel" aria-labelledby="topseller-tab_2">
                             <div class="row">
-                                @include('front.home.partials.product', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(4, 15)])
+                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(4)->getProducts(15)])
                             </div>
                         </div>
                         <div class="tab-pane fade" id="specialflower_2" role="tabpanel" aria-labelledby="specialflower-tab_2">
                             <div class="row">
-                                @include('front.home.partials.product', ['products' => \App\Shop\Products\Repositories\ProductRepository::getProductsWithCalculatedDiscount(5, 15)])
+                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(5)->getProducts(15)])
                             </div>
                         </div>
                     </div>

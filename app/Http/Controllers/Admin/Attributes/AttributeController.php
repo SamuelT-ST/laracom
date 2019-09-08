@@ -4,11 +4,6 @@ namespace App\Http\Controllers\Admin\Attributes;
 
 use App\Http\Controllers\Controller;
 use App\Shop\Attributes\Attribute;
-use App\Shop\Attributes\Exceptions\AttributeNotFoundException;
-use App\Shop\Attributes\Exceptions\CreateAttributeErrorException;
-use App\Shop\Attributes\Exceptions\UpdateAttributeErrorException;
-use App\Shop\Attributes\Repositories\AttributeRepository;
-use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
 use App\Shop\Attributes\Requests\CreateAttributeRequest;
 use App\Shop\Attributes\Requests\UpdateAttributeRequest;
 use App\Shop\Attributes\Requests\IndexAttribute;
@@ -17,18 +12,8 @@ use Illuminate\Http\Request;
 
 class AttributeController extends Controller
 {
-    private $attributeRepo;
-
     /**
-     * AttributeController constructor.
-     * @param AttributeRepositoryInterface $attributeRepository
-     */
-    public function __construct(AttributeRepositoryInterface $attributeRepository)
-    {
-        $this->attributeRepo = $attributeRepository;
-    }
-
-    /**
+     * @param IndexAttribute $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(IndexAttribute $request)
@@ -67,7 +52,8 @@ class AttributeController extends Controller
      */
     public function store(CreateAttributeRequest $request)
     {
-        $attribute = $this->attributeRepo->createAttribute($request->except('_token'));
+        $attribute = Attribute::create($request->except('_token'));
+
         $request->session()->flash('message', 'Create attribute successful!');
 
         if ($request->ajax()) {
@@ -78,28 +64,23 @@ class AttributeController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Support\Collection|\Illuminate\View\View
      */
     public function show(Request $request, $id)
     {
-        try {
-            $attribute = $this->attributeRepo->findAttributeById($id);
-            $attributeRepo = new AttributeRepository($attribute);
 
-            if ($request->ajax()) {
-                return response()->json($attributeRepo->listAttributeValues());
-            }
+        $attribute = Attribute::findOrFail($id);
 
-            return view('admin.attributes.show', [
-                'attribute' => $attribute,
-                'values' => $attributeRepo->listAttributeValues()
-            ]);
-        } catch (AttributeNotFoundException $e) {
-            request()->session()->flash('error', 'The attribute you are looking for is not found.');
-
-            return redirect()->route('admin.attributes.index');
+        if ($request->ajax()) {
+            return response()->json($attribute->values);
         }
+
+        return view('admin.attributes.show', [
+            'attribute' => $attribute,
+            'values' => $attribute->values
+        ]);
     }
 
     /**
@@ -108,7 +89,7 @@ class AttributeController extends Controller
      */
     public function edit($id)
     {
-        $attribute = $this->attributeRepo->findAttributeById($id);
+        $attribute = Attribute::findOrFail($id);
 
         return view('admin.attributes.edit', compact('attribute'));
     }
@@ -120,33 +101,27 @@ class AttributeController extends Controller
      */
     public function update(UpdateAttributeRequest $request, $id)
     {
-        try {
-            $attribute = $this->attributeRepo->findAttributeById($id);
+        $attribute = Attribute::findOrFail($id);
 
-            $attributeRepo = new AttributeRepository($attribute);
-            $attributeRepo->updateAttribute($request->except('_token'));
+        $attribute->update($request->except('_token'));
 
-            $request->session()->flash('message', 'Attribute update successful!');
+        $request->session()->flash('message', 'Attribute update successful!');
 
-            if ($request->ajax()){
-                return ['redirect' => url('admin/attributes'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
-            }
-
-            return redirect()->route('admin.attributes.edit', $attribute->id);
-        } catch (UpdateAttributeErrorException $e) {
-            $request->session()->flash('error', $e->getMessage());
-
-            return redirect()->route('admin.attributes.edit', $id)->withInput();
+        if ($request->ajax()){
+            return ['redirect' => url('admin/attributes'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
+
+        return redirect()->route('admin.attributes.edit', $attribute->id);
     }
 
     /**
+     * @param Request $request
      * @param $id
      * @return bool|null
      */
     public function destroy(Request $request, $id)
     {
-        $this->attributeRepo->findAttributeById($id)->delete();
+        Attribute::findOrFail($id)->delete();
 
         if ($request->ajax()) {
             return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);

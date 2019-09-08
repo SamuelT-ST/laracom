@@ -1,76 +1,108 @@
-@extends('layouts.front.app')
+@extends('front.layout.master')
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
-                        {{ csrf_field() }}
+@section('body')
+    <!-- breadcrumb area start -->
+    <section class="breadcrumb-area breadcrumb-bg extra">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-inner"><!-- breadcrumb inner -->
+                        <div class="left-content-area"><!-- left content area -->
+                            <h1 class="title">Signup</h1>
+                        </div><!-- //. left content area -->
+                        <div class="right-content-area">
+                            <ul>
+                                <li><a href="index.html">Home</a></li>
+                                <li>Signup</li>
+                            </ul>
+                        </div>
+                    </div><!-- //. breadcrumb inner -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb area end -->
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
+    <!-- login page content area start -->
+    <div class="login-page-content-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="signup-page-wrapper"><!-- login page wrapper -->
+                        <div class="or">
+                            <span>alebo</span>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 padding-right-0">
+                                <div class="right-contnet-area">
+                                    <div class="top-content">
+                                        <h4 class="title">{{ __('Prihláste sa pomocou inej siete') }}</h4>
+                                        {{--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>--}}
+                                    </div>
+                                    <div class="bottom-content">
+                                        <form class="login-form">
+                                            <div class="block-link">
+                                                <a href="#" class="facebook">{{ __('Prihlásenie cez Facebook') }}</a>
+                                                <a href="#" class="google">{{ __('Prihlásenie cez Google') }}</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="right-contnet-area">
+                                    <div class="top-content">
+                                        <h4 class="title">{{ __('Alebo sa zaregistrujte') }}</h4>
+                                        {{--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>--}}
+                                    </div>
+                                    <div class="bottom-content">
+                                        <form action="login.html" class="login-form">
 
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" autofocus>
+                                            <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
+                                                {{ csrf_field() }}
+                                                <div class="form-element">
+                                                    <input type="name" class="input-field" name="name" value="{{ old('name') }}" autofocus placeholder="{{ __('Meno') }}">
+                                                    @if ($errors->has('name'))
+                                                        <span class="help-block">
+                                                    <strong>{{ $errors->first('name') }}</strong>
+                                                 </span>
+                                                    @endif
+                                                </div>
+                                                <div class="form-element">
+                                                    <input type="email" class="input-field" name="email" value="{{ old('email') }}" placeholder="{{ __('E-mail') }}">
 
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
+                                                    @if ($errors->has('email'))
+                                                        <span class="help-block">
+                                                    <strong>{{ $errors->first('email') }}</strong>
+                                                </span>
+                                                    @endif
+
+                                                </div>
+                                                <div class="form-element">
+                                                    <input type="password" class="input-field" name="password" placeholder="{{ __('Heslo') }}">
+                                                    @if ($errors->has('password'))
+                                                        <span class="help-block">
+                                                    <strong>{{ $errors->first('password') }}</strong>
+                                                </span>
+                                                    @endif
+                                                </div>
+                                                <div class="form-element">
+                                                    <input type="password" class="input-field" name="password_confirmation" placeholder="{{ __('Heslo znovu') }}">
+                                                </div>
+                                                <div class="btn-wrapper">
+                                                    <button type="submit" class="submit-btn">{{ __('Registrácia') }}</button>
+                                                    <a href="{{ route('login') }}" class="link">{{ __('Už máte účet?') }}</a>
+                                                </div>
+                                            </form>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    </div><!-- //.login page wrapper -->
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- login page content area end -->
 @endsection

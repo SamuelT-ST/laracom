@@ -19,44 +19,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/test', function(){
-
-//    join category_discount on category_discount.category_id =  categories.id
-//join discounts on category_discount.discount_id = discounts.id
-//left join customer_group_discount cgd on discounts.id = cgd.discount_id
-//left join customer_groups cg on cgd.customer_group_id = cg.id
-//where products.id = 1
-//GROUP BY products.id;
-
-    dd(app(\App\Shop\OrderProduct\Transformations\OrderProductTransformation::class)->prepareOrderForUpdate(\App\Shop\Orders\Order::find(25)));
-
-    dd(app(\App\Shop\Products\Repositories\ProductRepository::class)->getProductsWithCalculatedDiscount(2));
-
-
-   dd( \App\Shop\Products\Product::selectRaw("products.*, MIN(
-            CASE
-            WHEN discounts.from_margin = true THEN
-            products.wholesale_price + ((products.price - products.wholesale_price) / 100 * (100-discounts.percentage))
-            ELSE
-            products.price / 100 * (100-discounts.percentage)
-            END) as discounted_price, json_agg(categories.name)")
-        ->join('categorizables', 'categorizable_id','=', 'products.id')
-        ->join('categories', 'categorizables.category_id', '=', 'categories.id')
-        ->join('category_discount', 'category_discount.category_id', '=', 'categories.id')
-        ->join('discounts', 'category_discount.discount_id', '=', 'discounts.id')
-        ->leftJoin('customer_group_discount', 'discounts.id','=', 'customer_group_discount.discount_id')
-        ->leftJoin('customer_groups', 'customer_group_id','=', 'customer_groups.id')
-        ->where('products.id', 1)
-        ->groupBy(['products.id', "categories.name->en"])->get());
-
-    dd(\App\Shop\Products\Product::with('categories', 'categories.discounts', 'categories.discounts.customerGroups')
-        ->where('id', 1)
-        ->whereHas('categories.discounts.customerGroups', function ($q){
-
-            $groups = \App\Shop\Customers\Customer::find(16)->groups()->pluck('id')->toArray();
-
-            $q->whereIn('id', $groups);
-        })
-        ->get());
+    dd(Auth::guard('web')->user());
 })->name('dashboard');
 
 
@@ -177,22 +140,22 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
 
 /* Auto-generated admin routes */
 Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
-    Route::get('/admin/orders',                                 'Admin\OrdersController@index')->name('admin.orders.index');
-    Route::get('/admin/orders/create',                          'Admin\OrdersController@create')->name('admin.orders.create');
-    Route::post('/admin/orders',                                'Admin\OrdersController@store');
-    Route::get('/admin/orders/{order}/edit',                    'Admin\OrdersController@edit')->name('admin/orders/edit');
-    Route::post('/admin/orders/{order}',                        'Admin\OrdersController@update')->name('admin/orders/update');
-    Route::delete('/admin/orders/{order}',                      'Admin\OrdersController@destroy')->name('admin/orders/destroy');
+    Route::get('/admin/orders',                                 'Admin\Orders\OrdersController@index')->name('admin.orders.index');
+    Route::get('/admin/orders/create',                          'Admin\Orders\OrdersController@create')->name('admin.orders.create');
+    Route::post('/admin/orders',                                'Admin\Orders\OrdersController@store');
+    Route::get('/admin/orders/{order}/edit',                    'Admin\Orders\OrdersController@edit')->name('admin/orders/edit');
+    Route::post('/admin/orders/{order}',                        'Admin\Orders\OrdersController@update')->name('admin/orders/update');
+    Route::delete('/admin/orders/{order}',                      'Admin\Orders\OrdersController@destroy')->name('admin/orders/destroy');
 });
 
 /* Auto-generated admin routes */
 Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
-    Route::get('/admin/payment-methods',                        'Admin\PaymentMethodsController@index');
-    Route::get('/admin/payment-methods/create',                 'Admin\PaymentMethodsController@create');
-    Route::post('/admin/payment-methods',                       'Admin\PaymentMethodsController@store');
-    Route::get('/admin/payment-methods/{paymentMethod}/edit',   'Admin\PaymentMethodsController@edit')->name('admin/payment-methods/edit');
-    Route::post('/admin/payment-methods/{paymentMethod}',       'Admin\PaymentMethodsController@update')->name('admin/payment-methods/update');
-    Route::delete('/admin/payment-methods/{paymentMethod}',     'Admin\PaymentMethodsController@destroy')->name('admin/payment-methods/destroy');
+    Route::get('/admin/payment-methods',                        'Admin\PaymentMethods\PaymentMethodsController@index');
+    Route::get('/admin/payment-methods/create',                 'Admin\PaymentMethods\PaymentMethodsController@create');
+    Route::post('/admin/payment-methods',                       'Admin\PaymentMethods\PaymentMethodsController@store');
+    Route::get('/admin/payment-methods/{paymentMethod}/edit',   'Admin\PaymentMethods\PaymentMethodsController@edit')->name('admin/payment-methods/edit');
+    Route::post('/admin/payment-methods/{paymentMethod}',       'Admin\PaymentMethods\PaymentMethodsController@update')->name('admin/payment-methods/update');
+    Route::delete('/admin/payment-methods/{paymentMethod}',     'Admin\PaymentMethods\PaymentMethodsController@destroy')->name('admin/payment-methods/destroy');
 });
 
 /* Auto-generated admin routes */
@@ -215,11 +178,11 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
 
 /* Auto-generated admin routes */
 Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
-    Route::get('/admin/couriers',                               'Admin\CouriersController@index')->name('admin.couriers.index');
-    Route::get('/admin/couriers/create',                        'Admin\CouriersController@create');
-    Route::post('/admin/couriers',                              'Admin\CouriersController@store');
-    Route::get('/admin/couriers/{courier}/edit',                'Admin\CouriersController@edit')->name('admin/couriers/edit');
-    Route::post('/admin/couriers/bulk-destroy',                 'Admin\CouriersController@bulkDestroy')->name('admin/couriers/bulk-destroy');
-    Route::post('/admin/couriers/{courier}',                    'Admin\CouriersController@update')->name('admin/couriers/update');
-    Route::delete('/admin/couriers/{courier}',                  'Admin\CouriersController@destroy')->name('admin/couriers/destroy');
+    Route::get('/admin/couriers',                               'Admin\Couriers\CouriersController@index')->name('admin.couriers.index');
+    Route::get('/admin/couriers/create',                        'Admin\Couriers\CouriersController@create');
+    Route::post('/admin/couriers',                              'Admin\Couriers\CouriersController@store');
+    Route::get('/admin/couriers/{courier}/edit',                'Admin\Couriers\CouriersController@edit')->name('admin/couriers/edit');
+    Route::post('/admin/couriers/bulk-destroy',                 'Admin\Couriers\CouriersController@bulkDestroy')->name('admin/couriers/bulk-destroy');
+    Route::post('/admin/couriers/{courier}',                    'Admin\Couriers\CouriersController@update')->name('admin/couriers/update');
+    Route::delete('/admin/couriers/{courier}',                  'Admin\Couriers\CouriersController@destroy')->name('admin/couriers/destroy');
 });

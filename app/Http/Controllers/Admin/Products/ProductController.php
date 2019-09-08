@@ -3,19 +3,11 @@
 namespace App\Http\Controllers\Admin\Products;
 
 use App\Shop\Attributes\Attribute;
-use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
-use App\Shop\AttributeValues\AttributeValue;
-use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
-use App\Shop\Brands\Repositories\BrandRepositoryInterface;
 use App\Shop\Categories\Category;
-use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Shop\Features\Feature;
 use App\Shop\Features\Transformations\FeatureValueTransformable;
 use App\Shop\ProductAttributes\ProductAttribute;
-use App\Shop\Products\Exceptions\ProductInvalidArgumentException;
-use App\Shop\Products\Exceptions\ProductNotFoundException;
 use App\Shop\Products\Product;
-use App\Shop\Products\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Requests\CreateProductRequest;
 use App\Shop\Products\Requests\IndexProduct;
@@ -25,69 +17,14 @@ use App\Shop\Products\Transformations\ProductTransformable;
 use App\Shop\Tools\UploadableTrait;
 use Brackets\AdminListing\Facades\AdminListing;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
     use ProductTransformable, UploadableTrait;
 
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepo;
-
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepo;
-
-    /**
-     * @var AttributeRepositoryInterface
-     */
-    private $attributeRepo;
-
-    /**
-     * @var AttributeValueRepositoryInterface
-     */
-    private $attributeValueRepository;
-
-    /**
-     * @var ProductAttribute
-     */
-    private $productAttribute;
-
-    /**
-     * @var BrandRepositoryInterface
-     */
-    private $brandRepo;
-
-    /**
-     * ProductController constructor.
-     *
-     * @param ProductRepositoryInterface $productRepository
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param AttributeRepositoryInterface $attributeRepository
-     * @param AttributeValueRepositoryInterface $attributeValueRepository
-     * @param ProductAttribute $productAttribute
-     * @param BrandRepositoryInterface $brandRepository
-     */
-    public function __construct(
-        ProductRepositoryInterface $productRepository,
-        CategoryRepositoryInterface $categoryRepository,
-        AttributeRepositoryInterface $attributeRepository,
-        AttributeValueRepositoryInterface $attributeValueRepository,
-        ProductAttribute $productAttribute,
-        BrandRepositoryInterface $brandRepository
-    ) {
-        $this->productRepo = $productRepository;
-        $this->categoryRepo = $categoryRepository;
-        $this->attributeRepo = $attributeRepository;
-        $this->attributeValueRepository = $attributeValueRepository;
-        $this->productAttribute = $productAttribute;
-        $this->brandRepo = $brandRepository;
+    public function __construct(){
 
 //        $this->middleware(['permission:create-product, guard:employee'], ['only' => ['create', 'store']]);
 //        $this->middleware(['permission:update-product, guard:employee'], ['only' => ['edit', 'update']]);
@@ -157,7 +94,7 @@ class ProductController extends Controller
 
         $data['slug'] = str_slug($request->input('name'));
 
-        $product = $this->productRepo->createProduct($data);
+        $product = Product::create($data);
 
 
         if($request->has('combinations')){
@@ -201,7 +138,7 @@ class ProductController extends Controller
      */
     public function show(int $id)
     {
-        $product = $this->productRepo->findProductById($id);
+        $product = Product::with('featureValues', 'featureValues.feature')->findOrFail($id);
         return view('admin.products.show', compact('product'));
     }
 
@@ -214,7 +151,7 @@ class ProductController extends Controller
      */
     public function edit(int $id)
     {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         $productAttributes = $product->attributes()->with('attributesValues')->get();
         $qty = $productAttributes->map(function ($item) {
             return $item->quantity;
@@ -239,10 +176,9 @@ class ProductController extends Controller
             'product' => $product,
             'data' => $data,
             'categories' => $categories,
-            'attributes' => $this->attributeRepo->listAttributes(),
+            'attributes' => Attribute::all(),
             'features' => Feature::all(),
             'qty' => $qty,
-            'brands' => $this->brandRepo->listBrands(['*'], 'name', 'asc'),
             'weight' => $product->weight,
             'default_weight' => $product->mass_unit,
             'weight_units' => Product::MASS_UNIT
@@ -259,8 +195,6 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-
-        $productRepo = new ProductRepository($product);
 
         if($request->has('combinations')){
             $combinations = $request->get('combinations');
@@ -328,15 +262,13 @@ class ProductController extends Controller
             $product->featureValues()->sync([]);
         }
 
-        $productRepo->updateProduct($data);
-
-
+        $product->update($data);
 
         if ($request->ajax()){
             return ['redirect' => url('admin/products/'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
-        return redirect()->route('admin.products.edit', $id)
+        return redirect()->route('admin.products.edit', $product->id)
             ->with('message', 'Update successful');
     }
 
@@ -358,8 +290,7 @@ class ProductController extends Controller
             DB::table('attribute_value_product_attribute')->where('product_attribute_id', $pa->id)->delete();
         });
         $productAttr->where('product_id', $product->id)->delete();
-        $productRepo = new ProductRepository($product);
-        $productRepo->removeProduct();
+        $product->delete();
 
 
         if ($request->ajax()) {
@@ -398,9 +329,7 @@ class ProductController extends Controller
             $sale_price = $combination->get('sale_price');
         }
 
-        $productRepo = new ProductRepository($product);
-
-        $hasDefault = $productRepo->listProductAttributes()->where('default', 1)->count();
+        $hasDefault = $product->attributes()->where('default', 1)->count();
 
         $default = 0;
         if ($combination->has('defaultPrice')) {
@@ -411,7 +340,7 @@ class ProductController extends Controller
             $default = 0;
         }
 
-        $productAttribute = $productRepo->saveProductAttributes(
+        $productAttribute = $product->attributes()->save(
             new ProductAttribute(compact('quantity', 'price', 'sale_price', 'default'))
         );
 
@@ -419,7 +348,7 @@ class ProductController extends Controller
             $productAttribute->processMedia($combination);
         }
 
-        $attribute = $this->attributeValueRepository->find($combination['value']['id']);
+        $attribute = Attribute::find($combination['value']['id']);
 
         $productAttribute->attributesValues()->save($attribute);
 

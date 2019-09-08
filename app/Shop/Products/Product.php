@@ -75,6 +75,7 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
         'width',
         'height',
         'distance_unit',
+        'wholesale_price',
         'slug',
     ];
 
@@ -180,14 +181,26 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
         ->accepts('image/*');
 
         $this->addMediaCollection('images')
-             ->accepts('image/*');
+             ->accepts('image/*')->maxNumberOfFiles(100);
 
     }
 
     public function registerMediaConversions(Media $media = null)
     {
         $this->autoRegisterThumb200();
+
+        $this->addMediaConversion('product_detail')
+            ->width(540)
+            ->height(540)
+            ->performOnCollections('cover', 'images');
+
+        $this->addMediaConversion('product_detail_thumb')
+            ->width(160)
+            ->height(160)
+            ->performOnCollections('cover', 'images');
     }
+
+
 
     public function featureValues(){
         return $this->belongsToMany(FeatureValue::class);

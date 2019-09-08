@@ -20,7 +20,15 @@ class UpdateProductRequest extends BaseFormRequest
             'quantity' => ['required', 'integer'],
             'price' => ['required'],
             'wholesale_price' => ['numeric', 'required'],
-            'featureValues' => ['array']
+            'featureValues' => ['array'],
+            'sale_price' => ['numeric', 'nullable'],
+            'categories' => ['array', 'required'],
+            'description' => ['string', 'required'],
+            'height' => ['numeric', 'nullable'],
+            'length' => ['numeric', 'nullable'],
+            'weight' => ['numeric', 'nullable'],
+            'width' => ['numeric', 'nullable'],
+            'combinations' => ['array', 'nullable'],
         ];
     }
 }

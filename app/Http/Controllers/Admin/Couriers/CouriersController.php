@@ -1,4 +1,4 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php namespace App\Http\Controllers\Admin\Couriers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

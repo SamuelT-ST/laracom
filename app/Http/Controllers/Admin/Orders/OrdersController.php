@@ -1,4 +1,4 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php namespace App\Http\Controllers\Admin\Orders;
 
 use App\Http\Controllers\Controller;
 use App\Models\Discounts\Discount;

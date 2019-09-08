@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: shehbaz
- * Date: 1/21/19
- * Time: 12:19 PM
- */
 
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 if (!function_exists("helper_test")) {
@@ -84,4 +78,8 @@ if (!function_exists('validate_breadcumb')) {
         }
         return ["errors" => $errors, "valid" => $validated];
     }
+}
+
+function getCustomer(){
+    return Auth::guard('web')->user();
 }

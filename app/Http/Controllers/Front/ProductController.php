@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Services\CategoriesWithDiscount;
 use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
@@ -53,17 +54,12 @@ class ProductController extends Controller
      */
     public function show(string $slug)
     {
-        $product = $this->productRepo->findProductBySlug(['slug' => $slug]);
-        $images = $product->images()->get();
-        $category = $product->categories()->first();
+        $product = app(CategoriesWithDiscount::class)->getSingleProductBySlug($slug);
         $productAttributes = $product->attributes;
 
-        return view('front.products.product', compact(
+        return view('front.product-detail.index', compact(
             'product',
-            'images',
-            'productAttributes',
-            'category',
-            'combos'
+            'productAttributes'
         ));
     }
 }
