@@ -69,9 +69,16 @@ Vue.component('product-form', {
             }
 
             if(data.index == null){
+                data.backupValueCover = _.cloneDeep(data.valueCover);
                 this.form.combinations.push(data);
             } else {
-                this.form.combinations[data.index] = data;
+                if(data.valueCover && data.valueCover.length === 0){
+                    this.form.combinations[data.index] = data;
+                    this.form.combinations[data.index].valueCover = this.form.combinations[data.index].backupValueCover;
+                } else {
+                    data.backupValueCover = _.cloneDeep(data.valueCover);
+                    this.form.combinations[data.index] = data;
+                }
             }
             this.$modal.hide('attributes');
         },

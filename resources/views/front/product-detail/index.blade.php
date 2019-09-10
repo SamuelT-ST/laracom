@@ -40,6 +40,13 @@
                             <img src="{{ $media->getUrl('product_detail') }}" alt="product details image">
                         </div>
                         @endforeach
+                        @foreach($product->attributes as $attribute)
+                            @if($attribute->getFirstMediaUrl('valueCover', 'cover_detail'))
+                                <div class="single-product-thumb">
+                                    <img src="{{ $attribute->getFirstMediaUrl('valueCover', 'cover_detail') }}" alt="product details image">
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
                     <ul class="owl-thumbs product-deails-thumb" data-slider-id="1">
                         @if($product->getFirstMediaUrl('cover'))
@@ -51,6 +58,13 @@
                         <li class="owl-thumb-item">
                             <img src="{{ $media->getUrl('product_detail_thumb') }}" alt="product details thumb">
                         </li>
+                        @endforeach
+                        @foreach($product->attributes as $attribute)
+                            @if($attribute->getFirstMediaUrl('valueCover', 'cover_detail_thumb'))
+                                <li class="owl-thumb-item">
+                                    <img src="{{ $attribute->getFirstMediaUrl('valueCover', 'cover_detail_thumb') }}" alt="product details thumb">
+                                </li>
+                            @endif
                         @endforeach
                     </ul>
                 </div><!-- //.left content area -->
@@ -99,28 +113,33 @@
                             </li>
 
                         </ul>
-                        <div class="pdescription">
-                            <h4 class="title">{{ __('Popis') }}</h4>
-                            <p>{!! $product->description !!}</p>
 
-                        </div>
-                        <div class="paction">
-                            <div class="qty">
-                                <ul>
-                                    <li><span class="qtminus"><i class="fas fa-minus"></i></span></li>
-                                    <li><span class="qttotal">1</span></li>
-                                    <li><span class="qtplus"><i class="fas fa-plus"></i></span></li>
-                                </ul>
+                        <product-detail-form @updated-cart="updateCart" :product="{{ $product->id }}" :url="'{{ route('cart.store') }}'" inline-template>
+                            <div>
+                                <div class="pdescription">
+                                    <h4 class="title">{{ __('Popis') }}</h4>
+                                    <p>{!! $product->description !!}</p>
+                                    @include('front.product-detail.partials.combinations')
+                                </div>
+                                <div class="paction">
+                                    <div class="qty">
+                                        <ul>
+                                            <li><span class="qtminus" @click="quantity--"><i class="fas fa-minus"></i></span></li>
+                                            <li><span class="qttotal">@{{ quantity }}</span></li>
+                                            <li><span class="qtplus" @click="quantity++"><i class="fas fa-plus"></i></span></li>
+                                        </ul>
+                                    </div>
+                                    <ul class="activities">
+                                        <li><a href="#"><i class="fas fa-heart"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-hourglass"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-share-square"></i></a></li>
+                                    </ul>
+                                    <div class="btn-wrapper">
+                                        <a href="#" class="boxed-btn addtocart" data-product-id="{{ $product->id }}" @click="addToCart">{{ __('Do košíka') }}</a>
+                                    </div>
+                                </div>
                             </div>
-                            <ul class="activities">
-                                <li><a href="#"><i class="fas fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fas fa-hourglass"></i></a></li>
-                                <li><a href="#"><i class="fas fa-share-square"></i></a></li>
-                            </ul>
-                            <div class="btn-wrapper">
-                                <a href="#" class="boxed-btn">{{ __('Do košíka') }}</a>
-                            </div>
-                        </div>
+                        </product-detail-form>
                     </div>
                 </div><!-- //. right content area -->
             </div>
@@ -304,3 +323,24 @@
 <!-- recently added end -->
 
 @endsection
+
+{{--@section('bottom-scripts')--}}
+    {{--<script>--}}
+        {{--$('.addtocart').on('click', function(){--}}
+            {{--$.ajax({--}}
+                {{--method: "POST",--}}
+                {{--url: "/cart",--}}
+                {{--data: {--}}
+                    {{--product: $('.addtocart').data('product-id'),--}}
+                    {{--quantity: $('.qttotal').text(),--}}
+                    {{--productAttribute: $('.attribute-select').val(),--}}
+                    {{--_token: "{{ csrf_token() }}",--}}
+                {{--}--}}
+            {{--}).done(() => {--}}
+                {{--console.log('addedToCart');--}}
+            {{--}).fail((response) => {--}}
+                {{--console.log('fail');--}}
+                {{--});--}}
+            {{--});--}}
+    {{--</script>--}}
+{{--@endsection--}}

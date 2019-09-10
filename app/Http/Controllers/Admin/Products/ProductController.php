@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Products;
 
 use App\Shop\Attributes\Attribute;
+use App\Shop\AttributeValues\AttributeValue;
 use App\Shop\Categories\Category;
 use App\Shop\Features\Feature;
 use App\Shop\Features\Transformations\FeatureValueTransformable;
@@ -348,9 +349,10 @@ class ProductController extends Controller
             $productAttribute->processMedia($combination);
         }
 
-        $attribute = Attribute::find($combination['value']['id']);
+        $attributeValue = AttributeValue::find($combination['value']['id']);
 
-        $productAttribute->attributesValues()->save($attribute);
+
+        $productAttribute->attributesValues()->save($attributeValue);
 
 
 //        // save the combinations

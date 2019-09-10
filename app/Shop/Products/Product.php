@@ -95,7 +95,7 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     }
 
     public function getFrontUrlAttribute() {
-        return url('/products/'.$this->id);
+        return url('/'.$this->slug);
     }
 
     public function getProductThumbAttribute() {
@@ -135,6 +135,7 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
         if (!is_null($this->sale_price)){
             return $this->sale_price;
         }
+        return $this->price;
     }
 
     public function getPriceBeforeDiscount(){

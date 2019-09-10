@@ -51,18 +51,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth
                 Route::get('remove-image-category', 'CategoryController@removeImage')->name('category.remove.image');
             });
             Route::namespace('Orders')->group(function () {
-                Route::resource('orders', 'OrderController');
                 Route::resource('order-statuses', 'OrderStatusController')->except('update');
                 Route::post('order-statuses/{order_status}', 'OrderStatusController@update')->name('order-statuses.update');
-                Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');
+//                Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');
             });
             Route::resource('addresses', 'Addresses\AddressController')->except('update');
             Route::post('addresses/{address}', 'Addresses\AddressController@update')->name('addresses.update');
             Route::resource('customerGroups', 'CustomerGroups\CustomerGroupsController')->except('update');
             Route::post('customerGroups/{customerGroup}', 'CustomerGroups\CustomerGroupsController@update')->name('customerGroups.update');
             Route::resource('countries', 'Countries\CountryController');
-            Route::resource('countries.provinces', 'Provinces\ProvinceController');
-            Route::resource('countries.provinces.cities', 'Cities\CityController');
             Route::resource('attributes', 'Attributes\AttributeController')->except('update');
             Route::post('attributes/{attribute}', 'Attributes\AttributeController@update')->name('attributes.update');
             Route::resource('attributes.values', 'Attributes\AttributeValueController');
@@ -98,7 +95,6 @@ Route::namespace('Front')->group(function () {
 
         Route::namespace('Addresses')->group(function () {
             Route::resource('country.state', 'CountryStateController');
-            Route::resource('state.city', 'StateCityController');
         });
 
         Route::get('accounts', 'AccountsController@index')->name('accounts');

@@ -43,6 +43,8 @@
 <script src="{{asset('/js/jquery.counterup.min.js')}}"></script>
 <!-- select 2 -->
 <script src="{{asset('/js/select2.min.js')}}"></script>
+<script src="{{ asset('/js/owl.carousel2.thumbs.js') }}"></script>
+
 <!-- main -->
 <script src="{{asset('/js/main.js')}}"></script>
 

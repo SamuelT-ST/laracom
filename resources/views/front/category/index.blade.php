@@ -28,15 +28,6 @@
         <!-- breadcrumb area end -->
         <div class="body-overlay" id="body-overlay"></div>
 
-            @include('front.partials.search')
-
-            @include('front.partials.recently-reviewed')
-
-        <!-- slide sidebar area end -->
-        <!-- cart sidebar area start -->
-
-            @include('front.partials.cart')
-
         <!-- cart sidebar area end -->
         <!-- category block area start -->
         <div class="category-block-area">

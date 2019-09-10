@@ -50,6 +50,16 @@ class ProductAttribute extends Model implements HasMediaCollections, HasMediaCon
     public function registerMediaConversions(Media $media = null)
     {
         $this->autoRegisterThumb200();
+
+        $this->addMediaConversion('cover_detail')
+            ->width(540)
+            ->height(540)
+            ->performOnCollections('valueCover');
+
+        $this->addMediaConversion('cover_detail_thumb')
+            ->width(160)
+            ->height(160)
+            ->performOnCollections('valueCover');
     }
 
 

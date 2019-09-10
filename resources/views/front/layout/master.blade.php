@@ -14,6 +14,12 @@
         @yield('body')
 
         @include('front.layout.partials.footer')
+        {{--<div class="modals">--}}
+            {{--<v-dialog/>--}}
+        {{--</div>--}}
+        <div>
+            <notifications position="bottom right" :duration="2000" />
+        </div>
     </div>
 </body>
 

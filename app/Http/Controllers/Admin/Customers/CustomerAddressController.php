@@ -3,43 +3,13 @@
 namespace App\Http\Controllers\Admin\Customers;
 
 use App\Shop\Addresses\Address;
-use App\Shop\Addresses\Repositories\Interfaces\AddressRepositoryInterface;
-use App\Shop\Countries\Repositories\Interfaces\CountryRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Shop\Countries\Country;
 use App\Shop\Customers\Customer;
-use App\Shop\Provinces\Repositories\Interfaces\ProvinceRepositoryInterface;
 use Illuminate\Http\Request;
 
 class CustomerAddressController extends Controller
 {
-    /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepo;
-    /**
-     * @var CountryRepositoryInterface
-     */
-    private $countryRepo;
-    /**
-     * @var ProvinceRepositoryInterface
-     */
-    private $provinceRepo;
-
-    /**
-     * CustomerAddressController constructor.
-     * @param AddressRepositoryInterface $addressRepository
-     * @param CountryRepositoryInterface $countryRepository
-     * @param ProvinceRepositoryInterface $provinceRepository
-     */
-    public function __construct(
-        AddressRepositoryInterface $addressRepository,
-        CountryRepositoryInterface $countryRepository,
-        ProvinceRepositoryInterface $provinceRepository
-    ) {
-        $this->addressRepo = $addressRepository;
-        $this->countryRepo = $countryRepository;
-        $this->provinceRepo = $provinceRepository;
-    }
 
     /**
      * Show the customer's address
@@ -57,7 +27,7 @@ class CustomerAddressController extends Controller
         }
 
         return view('admin.addresses.customers.show', [
-            'address' => $this->addressRepo->findAddressById($addressId),
+            'address' => Address::find($addressId),
             'customerId' => $customerId
         ]);
     }
@@ -71,14 +41,12 @@ class CustomerAddressController extends Controller
      */
     public function edit(int $customerId, int $addressId)
     {
-        $this->countryRepo->findCountryById(env('COUNTRY_ID', 1));
-        $province = $this->provinceRepo->findProvinceById(1);
+        $country = Country::find(env('COUNTRY_ID', 1));
 
         return view('admin.addresses.customers.edit', [
-            'address' => $this->addressRepo->findAddressById($addressId),
-            'countries' => $this->countryRepo->listCountries(),
-            'provinces' => $this->countryRepo->findProvinces(),
-            'cities' => $this->provinceRepo->listCities($province->id),
+            'country' => $country,
+            'address' => Address::find($addressId),
+            'countries' => Country::all(),
             'customerId' => $customerId
         ]);
     }

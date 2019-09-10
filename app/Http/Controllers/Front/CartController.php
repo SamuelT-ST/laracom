@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Services\CategoriesWithDiscount;
 use App\Shop\Carts\Requests\AddToCartRequest;
 use App\Shop\Carts\Repositories\Interfaces\CartRepositoryInterface;
 use App\Shop\Couriers\Repositories\Interfaces\CourierRepositoryInterface;
@@ -11,6 +12,7 @@ use App\Shop\Products\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Transformations\ProductTransformable;
 use Gloudemans\Shoppingcart\CartItem;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -62,12 +64,16 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $courier = $this->courierRepo->findCourierById(request()->session()->get('courierId', 1));
         $shippingFee = $this->cartRepo->getShippingFee($courier);
 
-        return view('front.carts.cart', [
+        if ($request->ajax()){
+            return Cart::content();
+        }
+
+        return view('front.cart.index', [
             'cartItems' => $this->cartRepo->getCartItemsTransformed(),
             'subtotal' => $this->cartRepo->getSubTotal(),
             'tax' => $this->cartRepo->getTax(),
@@ -84,31 +90,41 @@ class CartController extends Controller
      */
     public function store(AddToCartRequest $request)
     {
-        $product = $this->productRepo->findProductById($request->input('product'));
+
+        $product = app(CategoriesWithDiscount::class)->getSingleProductById($request->input('product'));
 
         if ($product->attributes()->count() > 0) {
             $productAttr = $product->attributes()->where('default', 1)->first();
 
-            if (isset($productAttr->sale_price)) {
+            if (!is_null($productAttr) && $productAttr->price !== 0 && isset($productAttr->sale_price)) {
                 $product->price = $productAttr->price;
 
-                if (!is_null($productAttr->sale_price)) {
+                if (!is_null($productAttr) && $productAttr->price !== 0 && !is_null($productAttr->sale_price)) {
                     $product->price = $productAttr->sale_price;
                 }
             }
         }
 
         $options = [];
-        if ($request->has('productAttribute')) {
+        if ($request->has('productAttribute') && $request->get('productAttribute') !== null) {
 
             $attr = $this->productAttributeRepo->findProductAttributeById($request->input('productAttribute'));
-            $product->price = $attr->price;
+
+            $attr->price = is_null($attr->price) ? 0 : $attr->price;
+
+            $product->price = $product->price + $attr->price;
 
             $options['product_attribute_id'] = $request->input('productAttribute');
             $options['combination'] = $attr->attributesValues->toArray();
         }
 
+        $options['thumb_url'] = $product->getFirstMediaUrl('cover', 'thumb_200');
+
         $this->cartRepo->addToCart($product, $request->input('quantity'), $options);
+
+        if ($request->ajax()){
+            return Cart::content();
+        }
 
         return redirect()->route('cart.index')
             ->with('message', 'Add to cart successful');
