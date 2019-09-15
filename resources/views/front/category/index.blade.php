@@ -4,6 +4,7 @@
     <category-listing
             :data="{{ $data->toJson() }}"
             :url="'{{ url('category/'.$category->slug) }}'"
+            @updated-cart="updateCart"
             inline-template>
         <div>
         <section class="breadcrumb-area breadcrumb-bg extra">
@@ -12,12 +13,17 @@
                     <div class="col-lg-12">
                         <div class="breadcrumb-inner"><!-- breadcrumb inner -->
                             <div class="left-content-area"><!-- left content area -->
-                                <h1 class="title">Category</h1>
+                                <h1 class="title">{{ $category->name }}</h1>
                             </div><!-- //. left content area -->
                             <div class="right-content-area">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li>Category</li>
+                                    <li><a href="{{ url('/') }}">{{ __('Domov') }}</a></li>
+
+                                    @foreach($category->getAncestors()->toFlatTree() as $categoryPath)
+                                        <li><a href="{{$categoryPath->front_url}}">{{ $categoryPath->name }}</a></li>
+                                    @endforeach
+
+                                    <li>{{ $category->name }}</li>
                                 </ul>
                             </div>
                         </div><!-- //. breadcrumb inner -->

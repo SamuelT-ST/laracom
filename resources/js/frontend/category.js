@@ -52,6 +52,10 @@ Vue.component('category-listing', {
 
     methods: {
 
+        updateCart(data) {
+            this.$emit('updated-cart', data)
+        },
+
         loadData (resetCurrentPage) {
             let options = {
                 params: {

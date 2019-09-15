@@ -11,9 +11,11 @@ use App\Shop\Products\Requests\IndexProduct;
 class CategoryController extends Controller
 {
 
-    public function getCategory(String $slug, IndexProduct $request)
+    public function getCategory(String $hierarchy, IndexProduct $request)
     {
-        $category = Category::whereSlug($slug)->first();
+        $slugs = explode('/', $hierarchy);
+
+        $category = Category::whereSlug(last($slugs))->first();
 
         // create and AdminListing instance for a specific model and
         $data = app(FrontListing::class)
@@ -25,6 +27,6 @@ class CategoryController extends Controller
             return ['data' => $data];
         }
 
-        return view('front.category.index', ['category' => Category::whereSlug($slug)->first(), 'data' => $data]);
+        return view('front.category.index', ['category' => $category, 'data' => $data]);
     }
 }

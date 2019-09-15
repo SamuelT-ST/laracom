@@ -1,124 +1,111 @@
 @extends('front.layout.master')
 
 @section('body')
-
-    <div class="container product-in-cart-list">
-        @if(!$cartItems->isEmpty())
+    <section class="breadcrumb-area breadcrumb-bg">
+        <div class="container">
             <div class="row">
-                <div class="col-md-12">
-                    <ol class="breadcrumb">
-                        <li><a href="{{ route('home') }}"> <i class="fa fa-home"></i> Home</a></li>
-                        <li class="active">Cart</li>
-                    </ol>
-                </div>
-                <div class="col-md-12 content">
-                    <div class="box-body">
-                        @include('admin.layout.errors-and-messages')
-                    </div>
-                    <h3><i class="fa fa-cart-plus"></i> Shopping Cart</h3>
-                    <table class="table table-striped">
-                        <thead>
-                        <th class="col-md-2 col-lg-2">Cover</th>
-                        <th class="col-md-2 col-lg-5">Name</th>
-                        <th class="col-md-2 col-lg-2">Quantity</th>
-                        <th class="col-md-2 col-lg-1"></th>
-                        <th class="col-md-2 col-lg-2">Price</th>
-                        </thead>
-                        <tfoot>
-                        <tr>
-                            <td class="bg-warning">Subtotal</td>
-                            <td class="bg-warning"></td>
-                            <td class="bg-warning"></td>
-                            <td class="bg-warning"></td>
-                            <td class="bg-warning">{{config('cart.currency')}} {{ number_format($subtotal, 2, '.', ',') }}</td>
-                        </tr>
-                        @if(isset($shippingFee) && $shippingFee != 0)
-                            <tr>
-                                <td class="bg-warning">Shipping</td>
-                                <td class="bg-warning"></td>
-                                <td class="bg-warning"></td>
-                                <td class="bg-warning"></td>
-                                <td class="bg-warning">{{config('cart.currency')}} {{ $shippingFee }}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <td class="bg-warning">Tax</td>
-                            <td class="bg-warning"></td>
-                            <td class="bg-warning"></td>
-                            <td class="bg-warning"></td>
-                            <td class="bg-warning">{{config('cart.currency')}} {{ number_format($tax, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <td class="bg-success">Total</td>
-                            <td class="bg-success"></td>
-                            <td class="bg-success"></td>
-                            <td class="bg-success"></td>
-                            <td class="bg-success">{{config('cart.currency')}} {{ number_format($total, 2, '.', ',') }}</td>
-                        </tr>
-                        </tfoot>
-                        <tbody>
-                        @foreach($cartItems as $cartItem)
-                            <tr>
-                                <td>
-                                    <a href="{{ route('front.get.product', [$cartItem->product->slug]) }}" class="hover-border">
-                                        @if(isset($cartItem->cover))
-                                            <img src="{{$cartItem->cover}}" alt="{{ $cartItem->name }}" class="img-responsive img-thumbnail">
-                                        @else
-                                            <img src="https://placehold.it/120x120" alt="" class="img-responsive img-thumbnail">
-                                        @endif
-                                    </a>
-                                </td>
-                                <td>
-                                    <h3>{{ $cartItem->name }}</h3>
-                                    @if($cartItem->options->has('combination'))
-                                        @foreach($cartItem->options->combination as $option)
-                                            <small class="label label-primary">{{$option['value']}}</small>
-                                        @endforeach
-                                    @endif
-                                    <div class="product-description">
-                                        {!! $cartItem->product->description !!}
-                                    </div>
-                                </td>
-                                <td>
-                                    <form action="{{ route('cart.update', $cartItem->rowId) }}" class="form-inline" method="post">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="_method" value="put">
-                                        <div class="input-group">
-                                            <input type="text" name="quantity" value="{{ $cartItem->qty }}" class="form-control" />
-                                            <span class="input-group-btn"><button class="btn btn-default">Update</button></span>
-                                        </div>
-                                    </form>
-                                </td>
-                                <td>
-                                    <form action="{{ route('cart.destroy', $cartItem->rowId) }}" method="post">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="_method" value="delete">
-                                        <button onclick="return confirm('Are you sure?')" class="btn btn-danger"><i class="fa fa-times"></i></button>
-                                    </form>
-                                </td>
-                                <td>{{config('cart.currency')}} {{ number_format($cartItem->price, 2) }}</td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="btn-group pull-right">
-                                <a href="{{ route('home') }}" class="btn btn-default">Continue shopping</a>
-                                <a href="{{ route('checkout.index') }}" class="btn btn-primary">Go to checkout</a>
-                            </div>
+                <div class="col-lg-12">
+                    <div class="breadcrumb-inner"><!-- breadcrumb inner -->
+                        <div class="left-content-area"><!-- left content area -->
+                            <h1 class="title">Cart</h1>
+                        </div><!-- //. left content area -->
+                        <div class="right-content-area">
+                            <ul>
+                                <li><a href="index.html">Home</a></li>
+                                <li>{{ __('Košík') }}</li>
+                            </ul>
                         </div>
+                    </div><!-- //. breadcrumb inner -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- cart contetn area start -->
+    <cart :initial-content="{{ app(\App\Shop\Carts\Repositories\CartRepository::class)->getWholeCart() }}" :updated-content="cartContent" v-cloak inline-template>
+        <div class="cart-content-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="cart-content-inner"><!-- cart content inner -->
+                            <div class="top-content"><!-- top content -->
+                                <table class="table table-responsive">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ __('Produkt') }}</th>
+                                        <th>{{ __('Cena') }}</th>
+                                        <th>{{ __('Množstvo') }}</th>
+                                        <th>{{ __('Celkom') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item, index) in content.cartItems">
+                                        <td>
+                                            <div class="product-details"><!-- product details -->
+                                                <div class="close-btn cart-remove-item">
+                                                    <i class="fas fa-times" @click="removeItem(index)"></i>
+                                                </div>
+                                                <div class="thumb">
+                                                    <img style="max-width: 150px" :src="item.options.thumb_url ? item.options.thumb_url : '/images/camera.png'" alt="cart image">
+                                                </div>
+                                                <div class="content">
+                                                    <h4 class="title">@{{ item.name }}</h4>
+                                                </div>
+                                            </div><!-- //. product detials -->
+                                        </td>
+                                        <td>
+                                            <div class="price">@{{ item.price }} €</div>
+                                        </td>
+                                        <td>
+                                            <div class="qty">
+                                                <ul>
+                                                    <li><span class="qtminus" @click="item.qty--"><i class="fas fa-minus"></i></span></li>
+                                                    <li><span class="qttotal">@{{ item.qty }}</span></li>
+                                                    <li><span class="qtplus" @click="item.qty++"><i class="fas fa-plus"></i></span></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="price">@{{ item.subtotal }} €</div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div><!-- //. top content -->
+                            <div class="bottom-content"><!-- bottom content -->
+                                <div class="left-content-area">
+                                    <div class="coupon-code-wrapper">
+                                        <div class="form-element">
+                                            <input type="text" class="input-field" placeholder="Coupon Code">
+                                        </div>
+                                        <button type="button" class="submit-btn">{{ __('Použiť zľavový kód') }}</button>
+                                    </div>
+                                </div>
+                                <div class="right-content-area">
+                                    <div class="btn-wrapper">
+                                        <button type="button" class="boxed-btn" @click="massUpdate"> {{ __('Aktualizovať košík') }} </button>
+                                        <button type="button" class="boxed-btn"> {{ __('Pokladňa') }} </button>
+                                    </div>
+                                    <div class="cart-total">
+                                        <h3 class="title">{{ __('Zhrnutie') }}</h3>
+                                        <ul class="cart-list">
+                                            <li>{{ __('Celkom') }} <span class="right">@{{ content.subtotal }} €</span></li>
+                                            <li>{{ __('Doprava') }} <span class="right">@{{ content.shippingFee }} €</span></li>
+                                            <li>{{ __('Daň') }}	 <span class="right">@{{ content.tax }} €</span></li>
+                                            <li class="total">{{ __('Celkom s DPH') }} <span class="right">@{{ content.total }} €</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div><!-- //. bottom content -->
+                        </div><!-- //. cart content inner -->
                     </div>
                 </div>
             </div>
-        @else
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="alert alert-warning">No products in cart yet. <a href="{{ route('home') }}">Shop now!</a></p>
-                </div>
-            </div>
-        @endif
-    </div>
+        </div>
+    </cart>
 
 @endsection
+
+<!-- cart contetn area end -->
+<!-- breadcrumb area end -->

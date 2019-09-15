@@ -5,7 +5,7 @@ import 'moment-timezone';
 import Notifications from 'vue-notification';
 import './frontend/category';
 import './frontend/product-detail-form';
-import './frontend/right-cart-panel';
+import './frontend/cart';
 import VueCookie from 'vue-cookie';
 
 Vue.use(VueCookie);

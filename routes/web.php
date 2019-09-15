@@ -106,8 +106,12 @@ Route::namespace('Front')->group(function () {
         Route::get('checkout/success', 'CheckoutController@success')->name('checkout.success');
         Route::resource('customer.address', 'CustomerAddressController');
     });
+    Route::post('cart/mass-update', 'CartController@massUpdate');
     Route::resource('cart', 'CartController');
-    Route::get("category/{slug}", 'CategoryController@getCategory')->name('front.category.slug');
+//    Route::post('cart/mass-update', function(){
+//        dd('test');
+//    });
+    Route::get("category/{hierarchy}", 'CategoryController@getCategory')->where('hierarchy','^[a-zA-Z0-9-_\/]+$')->name('front.category.slug');
     Route::get("search", 'ProductController@search')->name('search.product');
     Route::get("{product}", 'ProductController@show')->name('front.get.product');
 

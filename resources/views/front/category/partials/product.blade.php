@@ -2,9 +2,11 @@
     <div class="single-new-collection-item"><!-- single new collections -->
         <div class="thumb">
             <img :src="item.product_thumb" alt="new collcetion image">
-            <div class="hover">
-                <a href="#" class="addtocart">Add To Cart</a>
-            </div>
+            <product-detail-form @updated-cart="updateCart" :product="item.id" :url="'{{ route('cart.store') }}'" inline-template>
+                <div class="hover">
+                    <a href="#" class="addtocart" @click.prevent="addToCart">Add To Cart</a>
+                </div>
+            </product-detail-form>
         </div>
         <div class="content">
             <span class="category">@{{ item.categories.name }}</span>

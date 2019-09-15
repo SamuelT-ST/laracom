@@ -56,44 +56,41 @@
                                         {{--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>--}}
                                     </div>
                                     <div class="bottom-content">
-                                        <form action="login.html" class="login-form">
+                                        <form class="form-horizontal login-form" role="form" method="POST" action="{{ route('register') }}">
+                                            {{ csrf_field() }}
+                                            <div class="form-element">
+                                                <input type="name" class="input-field" name="name" value="{{ old('name') }}" autofocus placeholder="{{ __('Meno') }}">
+                                                @if ($errors->has('name'))
+                                                    <span class="help-block">
+                                                <strong>{{ $errors->first('name') }}</strong>
+                                             </span>
+                                                @endif
+                                            </div>
+                                            <div class="form-element">
+                                                <input type="email" class="input-field" name="email" value="{{ old('email') }}" placeholder="{{ __('E-mail') }}">
 
-                                            <form class="form-horizontal" role="form" method="POST" action="{{ route('register') }}">
-                                                {{ csrf_field() }}
-                                                <div class="form-element">
-                                                    <input type="name" class="input-field" name="name" value="{{ old('name') }}" autofocus placeholder="{{ __('Meno') }}">
-                                                    @if ($errors->has('name'))
-                                                        <span class="help-block">
-                                                    <strong>{{ $errors->first('name') }}</strong>
-                                                 </span>
-                                                    @endif
-                                                </div>
-                                                <div class="form-element">
-                                                    <input type="email" class="input-field" name="email" value="{{ old('email') }}" placeholder="{{ __('E-mail') }}">
+                                                @if ($errors->has('email'))
+                                                    <span class="help-block">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
+                                                @endif
 
-                                                    @if ($errors->has('email'))
-                                                        <span class="help-block">
-                                                    <strong>{{ $errors->first('email') }}</strong>
-                                                </span>
-                                                    @endif
-
-                                                </div>
-                                                <div class="form-element">
-                                                    <input type="password" class="input-field" name="password" placeholder="{{ __('Heslo') }}">
-                                                    @if ($errors->has('password'))
-                                                        <span class="help-block">
-                                                    <strong>{{ $errors->first('password') }}</strong>
-                                                </span>
-                                                    @endif
-                                                </div>
-                                                <div class="form-element">
-                                                    <input type="password" class="input-field" name="password_confirmation" placeholder="{{ __('Heslo znovu') }}">
-                                                </div>
-                                                <div class="btn-wrapper">
-                                                    <button type="submit" class="submit-btn">{{ __('Registrácia') }}</button>
-                                                    <a href="{{ route('login') }}" class="link">{{ __('Už máte účet?') }}</a>
-                                                </div>
-                                            </form>
+                                            </div>
+                                            <div class="form-element">
+                                                <input type="password" class="input-field" name="password" placeholder="{{ __('Heslo') }}">
+                                                @if ($errors->has('password'))
+                                                    <span class="help-block">
+                                                <strong>{{ $errors->first('password') }}</strong>
+                                            </span>
+                                                @endif
+                                            </div>
+                                            <div class="form-element">
+                                                <input type="password" class="input-field" name="password_confirmation" placeholder="{{ __('Heslo znovu') }}">
+                                            </div>
+                                            <div class="btn-wrapper">
+                                                <button type="submit" class="submit-btn">{{ __('Registrácia') }}</button>
+                                                <a href="{{ route('login') }}" class="link">{{ __('Už máte účet?') }}</a>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>

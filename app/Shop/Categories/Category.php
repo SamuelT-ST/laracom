@@ -41,6 +41,9 @@ class Category extends \Rinvex\Categories\Models\Category implements HasMediaCol
     }
 
     public function getFrontUrlAttribute() {
+        if ($this->parent !== null) {
+            return url('/category/'.$this->getAncestors()->toFlatTree()->map->slug->implode('/').'/'.$this->slug);
+        }
         return url('/category/'.$this->slug);
     }
 

@@ -1,0 +1,32 @@
+
+.slide-sidebar-area {
+  width: 350px;
+
+  .recent-reviews {
+
+    h4, h5 {
+      color: white;
+    }
+
+    .boxed-btn {
+      width: auto;
+    }
+
+  }
+
+}
+
+.user-menu {
+  color: white;
+
+  li {
+    list-style: none;
+    margin: 10px;
+    font-weight: 600;
+
+    a {
+      color: white;
+    }
+  }
+
+}

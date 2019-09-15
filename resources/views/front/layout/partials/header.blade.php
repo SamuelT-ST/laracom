@@ -22,7 +22,7 @@
                                             <h6 class="title">{{ __('Subcategories') }}</h6>
                                             <ul class="menga-menu-page-links">
                                                 @foreach($category->children as $child)
-                                                <li><a href="category.html">{{ $child->name }}</a></li>
+                                                <li><a href="{{ $child->front_url }}">{{ $child->name }}</a></li>
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -62,66 +62,66 @@
 
                 @guest
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">
-                        {{ __('Prihlásenie') }}
-                    </a>
-                </li>
+                {{--<li class="nav-item">--}}
+                    {{--<a class="nav-link" href="{{ route('login') }}">--}}
+                        {{--{{ __('Prihlásenie') }}--}}
+                    {{--</a>--}}
+                {{--</li>--}}
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('register') }}">
-                        {{ __('Registrácia') }}
-                    </a>
-                </li>
+                {{--<li class="nav-item">--}}
+                    {{--<a class="nav-link" href="{{ route('register') }}">--}}
+                        {{--{{ __('Registrácia') }}--}}
+                    {{--</a>--}}
+                {{--</li>--}}
 
                 @else
 
-                    <li class="nav-item dropdown mega-menu"><!-- mega menu start -->
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">{{ getCustomer()->name }}</a>
-                        <div class="mega-menu-wrapper">
-                            <div class="container mega-menu-container">
-                                <div class="row">
-                                    <div class="col-lg-3 col-sm-12">
-                                        <div class="mega-menu-columns">
-                                            <h6 class="title">{{ __('Subcategories') }}</h6>
-                                            <ul class="menga-menu-page-links">
-                                                <li><a href="category.html">{{ __('Profil') }}</a></li>
-                                                <li><a href="category.html">{{ __('Adresy') }}</a></li>
-                                                <li><a href="category.html">{{ __('Objednávky') }}</a></li>
-                                                <li><a href="{{ route('logout') }}">{{ __('Odhlásiť sa') }}</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-12">
-                                        <div class="mega-menu-columns">
-                                            <h6 class="title">Other Pages</h6>
-                                            <ul class="menga-menu-page-links">
-                                                <li><a href="product_upload.html">Product Upload</a></li>
-                                                <li><a href="offers.html">Offer</a></li>
-                                                <li><a href="invoice.html">Invoice</a></li>
-                                                <li><a href="vendor-list.html">Vendor List</a></li>
-                                                <li><a href="partners.html">Partners</a></li>
-                                                <li><a href="404.html">404 Page</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-12">
-                                        <div class="mega-menu-columns">
-                                            <h6 class="title">{{ __('Information') }}</h6>
-                                            <div class="card">
-                                                {{ $category->description }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-12">
-                                        <a href="product-details.html">
-                                            <img src="{{ $category->getFirstMediaUrl('cover') }}" alt="product image">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    {{--<li class="nav-item dropdown mega-menu"><!-- mega menu start -->--}}
+                        {{--<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">{{ getCustomer()->name }}</a>--}}
+                        {{--<div class="mega-menu-wrapper">--}}
+                            {{--<div class="container mega-menu-container">--}}
+                                {{--<div class="row">--}}
+                                    {{--<div class="col-lg-3 col-sm-12">--}}
+                                        {{--<div class="mega-menu-columns">--}}
+                                            {{--<h6 class="title">{{ __('Subcategories') }}</h6>--}}
+                                            {{--<ul class="menga-menu-page-links">--}}
+                                                {{--<li><a href="category.html">{{ __('Profil') }}</a></li>--}}
+                                                {{--<li><a href="category.html">{{ __('Adresy') }}</a></li>--}}
+                                                {{--<li><a href="category.html">{{ __('Objednávky') }}</a></li>--}}
+                                                {{--<li><a href="{{ route('logout') }}">{{ __('Odhlásiť sa') }}</a></li>--}}
+                                            {{--</ul>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="col-lg-3 col-sm-12">--}}
+                                        {{--<div class="mega-menu-columns">--}}
+                                            {{--<h6 class="title">Other Pages</h6>--}}
+                                            {{--<ul class="menga-menu-page-links">--}}
+                                                {{--<li><a href="product_upload.html">Product Upload</a></li>--}}
+                                                {{--<li><a href="offers.html">Offer</a></li>--}}
+                                                {{--<li><a href="invoice.html">Invoice</a></li>--}}
+                                                {{--<li><a href="vendor-list.html">Vendor List</a></li>--}}
+                                                {{--<li><a href="partners.html">Partners</a></li>--}}
+                                                {{--<li><a href="404.html">404 Page</a></li>--}}
+                                            {{--</ul>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="col-lg-3 col-sm-12">--}}
+                                        {{--<div class="mega-menu-columns">--}}
+                                            {{--<h6 class="title">{{ __('Information') }}</h6>--}}
+                                            {{--<div class="card">--}}
+                                                {{--{{ $category->description }}--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="col-lg-3 col-sm-12">--}}
+                                        {{--<a href="product-details.html">--}}
+                                            {{--<img src="{{ $category->getFirstMediaUrl('cover') }}" alt="product image">--}}
+                                        {{--</a>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                    {{--</li>--}}
 
                 @endguest
 
@@ -215,7 +215,7 @@
                     <li class="cart" id="cart"><i class="fas fa-shopping-basket"></i>
                         <span class="badge">12</span>
                     </li>
-                    <li class="right-menu" id="side-menu"><i class="fas fa-bars"></i> </li>
+                    <li class="right-menu" id="side-menu"><i class="fas fa-user"></i> </li>
                 </ul>
             </div>
         </div>
@@ -232,7 +232,7 @@
                 <li class="cart" id="cart"><i class="fas fa-shopping-basket"></i>
                     <span class="badge">12</span>
                 </li>
-                <li class="right-menu" id="side-menu"><i class="fas fa-bars"></i> </li>
+                <li class="right-menu" id="side-menu"><i class="fas fa-user"></i> </li>
             </ul>
         </div>
         <!-- /.navbar btn wrapper -->

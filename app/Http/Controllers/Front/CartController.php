@@ -62,31 +62,22 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        $courier = $this->courierRepo->findCourierById(request()->session()->get('courierId', 1));
-        $shippingFee = $this->cartRepo->getShippingFee($courier);
-
         if ($request->ajax()){
-            return Cart::content();
+            return $this->cartRepo->getWholeCart();
         }
 
-        return view('front.cart.index', [
-            'cartItems' => $this->cartRepo->getCartItemsTransformed(),
-            'subtotal' => $this->cartRepo->getSubTotal(),
-            'tax' => $this->cartRepo->getTax(),
-            'shippingFee' => $shippingFee,
-            'total' => $this->cartRepo->getTotal(2, $shippingFee)
-        ]);
+        return view('front.cart.index', $this->cartRepo->getWholeCart());
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  AddToCartRequest $request
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function store(AddToCartRequest $request)
     {
@@ -123,7 +114,7 @@ class CartController extends Controller
         $this->cartRepo->addToCart($product, $request->input('quantity'), $options);
 
         if ($request->ajax()){
-            return Cart::content();
+            return $this->cartRepo->getWholeCart();
         }
 
         return redirect()->route('cart.index')
@@ -148,14 +139,27 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int $id
+     * @param Request $request
+     * @return array
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $this->cartRepo->removeToCart($id);
 
+        if ($request->ajax()){
+            return $this->cartRepo->getWholeCart();
+        }
+
         request()->session()->flash('message', 'Removed to cart successful');
         return redirect()->route('cart.index');
+    }
+
+    public function massUpdate(Request $request){
+        collect($request->post('cartItems'))->each(function ($item, $index){
+            $this->cartRepo->updateQuantityInCart($index, $item['qty']);
+        });
+
+        return $this->cartRepo->getWholeCart();
     }
 }

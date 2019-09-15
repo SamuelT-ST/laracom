@@ -67,6 +67,8 @@ mix
 mix.js(['resources/js/admin/admin.js'], 'public/js')
     .sass('resources/sass/admin/admin.scss', 'public/css');
 
+mix.sass('resources/sass/front/front.scss', 'public/css');
+
 mix.js(['resources/js/front.js'], 'public/js');
 
 if (mix.inProduction()) {
