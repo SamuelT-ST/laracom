@@ -1,5 +1,6 @@
 <?php namespace App\Shop\Couriers;
 
+use App\Models\PaymentMethod;
 use Illuminate\Database\Eloquent\Model;
 
 class Courier extends Model
@@ -38,5 +39,8 @@ class Courier extends Model
         return url('/admin/couriers/'.$this->getKey());
     }
 
+    public function paymentMethods(){
+        return $this->belongsToMany(PaymentMethod::class);
+    }
     
 }

@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers\Admin\Couriers;
 
 use App\Http\Controllers\Controller;
+use App\Models\PaymentMethod;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Shop\Couriers\Requests\IndexCourier;
@@ -56,7 +57,9 @@ class CouriersController extends Controller
     {
         $this->authorize('admin.courier.create');
 
-        return view('admin.courier.create');
+        return view('admin.courier.create')->with([
+            'paymentMethods' => PaymentMethod::all()
+        ]);
     }
 
     /**
@@ -68,10 +71,13 @@ class CouriersController extends Controller
     public function store(StoreCourier $request)
     {
         // Sanitize input
-        $sanitized = $request->validated();
+        $sanitized = $request->getSanitized();
 
-        // Store the Courier
-        $courier = Courier::create($sanitized);
+        DB::transaction(function () use ($sanitized){
+            // Store the PaymentMethod
+            $courier = Courier::create($sanitized);
+            $courier->paymentMethods()->sync($sanitized['payment_methods']);
+        });
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/couriers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
@@ -104,10 +110,11 @@ class CouriersController extends Controller
     public function edit(Courier $courier)
     {
         $this->authorize('admin.courier.edit', $courier);
-
+        $courier->load('paymentMethods');
 
         return view('admin.courier.edit', [
             'courier' => $courier,
+            'paymentMethods' => PaymentMethod::all()
         ]);
     }
 
@@ -123,8 +130,11 @@ class CouriersController extends Controller
         // Sanitize input
         $sanitized = $request->getSanitized();
 
-        // Update changed values Courier
-        $courier->update($sanitized);
+        DB::transaction(function () use ($sanitized, $courier){
+            // Store the PaymentMethod
+            $courier->update($sanitized);
+            $courier->paymentMethods()->sync($sanitized['payment_methods']);
+        });
 
         if ($request->ajax()) {
             return [

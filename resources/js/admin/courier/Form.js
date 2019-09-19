@@ -2,6 +2,7 @@ import AppForm from '../app-components/Form/AppForm';
 
 Vue.component('courier-form', {
     mixins: [AppForm],
+    props: ['paymentMethods'],
     data: function() {
         return {
             form: {
@@ -13,7 +14,7 @@ Vue.component('courier-form', {
                 url:  '' ,
                 price:  '' ,
                 status:  false ,
-                
+                payment_methods: ''
             }
         }
     }

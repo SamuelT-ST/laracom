@@ -17,29 +17,57 @@ Vue.component('order-form', {
             chosenAttribute: null,
             totalPrice: 0,
                 form: {
-                reference:  '' ,
-                products: [],
-                courier:  '' ,
-                order_status:  '' ,
-                payment:  '' ,
-                discounts:  '' ,
-                total_products:  0 ,
-                tax:  0 ,
-                total:  0 ,
-                total_paid:  0 ,
-                invoice:  '' ,
-                label_url:  '' ,
-                tracking_number:  '' ,
-                total_shipping:  '' ,
-                customer:'',
-                address:{
-                    address_1:  '' ,
-                    address_2:  '' ,
-                    zip:  '' ,
-                    city:  '' ,
-                    country:  '' ,
-                    phone:  '' ,
-                }
+                    reference:  '' ,
+                    products: [],
+                    courier:  '' ,
+                    order_status:  '' ,
+                    payment:  '' ,
+                    discounts:  '' ,
+                    total_products:  0 ,
+                    tax:  0 ,
+                    total:  0 ,
+                    total_paid:  0 ,
+                    invoice:  '' ,
+                    tracking_number:  '' ,
+                    total_shipping:  '' ,
+
+                    customer:{},
+
+                    customer_name: '',
+                    customer_email: '',
+                    customer_phone: '',
+                    customer_is_company: false,
+                    customer_company: '',
+                    customer_ico: '',
+                    customer_dic: '',
+
+                    shipping_customer_name: '',
+                    shipping_customer_email: '',
+                    shipping_customer_phone: '',
+                    shipping_customer_is_company: false,
+                    shipping_customer_company: '',
+                    shipping_customer_ico: '',
+                    shipping_customer_dic: '',
+
+                    billing_address: {},
+
+                    billing_address_1:  '' ,
+                    billing_address_2:  '' ,
+                    billing_zip:  '' ,
+                    billing_city:  '' ,
+                    billing_country:  '' ,
+                    billing_phone:  '' ,
+
+                    shipping_address: {},
+                    shipping_address_1:  '' ,
+                    shipping_address_2:  '' ,
+                    shipping_zip:  '' ,
+                    shipping_city:  '' ,
+                    shipping_country:  '' ,
+                    shipping_phone:  '' ,
+
+                    same_addresses: true
+
             },
             newCustomer: {
                 name: '',
@@ -51,7 +79,10 @@ Vue.component('order-form', {
         axios.get('/admin/products/ajaxFindProduct/')
             .then(response => {
                 this.availableProductsLoaded = response.data
-            })
+            });
+        if (this.form.customer){
+            this.loadAvailableAddresses('/admin/customer/'+this.form.customer.id+'/address')
+        }
     },
     computed: {
         totalTax: function() {
@@ -62,14 +93,6 @@ Vue.component('order-form', {
         }
     },
     methods: {
-        // createNewCustomer(){
-        //     axios.post('/admin/customers', this.form.customer).then(response => {
-        //         this.$notify({ type: 'success', title: 'Success!', text: 'Customer successfully added.'});
-        //         this.customerState = 'new';
-        //     }, error => {
-        //         this.$notify({ type: 'error', title: 'Error!', text: 'An error has occured.'});
-        //     });
-        // },
         loadAvailableAddresses(url){
             axios.get(url).then(response => {
                 this.availableAddresses = response.data
@@ -179,6 +202,41 @@ Vue.component('order-form', {
                 });
             });
         },
+
+    //    BILLING ADDRESS
+
+        loadBillingAddress(data){
+            console.log(data.address_1);
+            this.form.billing_address_1 = data.address_1;
+            this.form.billing_address_2 = data.billing_address_1;
+            this.form.billing_zip = data.zip;
+            this.form.billing_city = data.city;
+            this.form.billing_country = data.country;
+            this.form.billing_phone = data.phone;
+        },
+
+    // SHIPPING ADDRESS
+
+        loadShoppingAddress(data){
+            this.form.shipping_address_1 = data.address_1;
+            this.form.shipping_address_2 = data.address_2;
+            this.form.shipping_zip = data.zip;
+            this.form.shipping_city = data.city;
+            this.form.shipping_country = data.country;
+            this.form.shipping_phone = data.phone;
+        },
+
+    //    CUSTOMER
+
+        loadCustomer(data){
+            this.form.customer_name = data.name;
+            this.form.customer_email = data.email;
+            this.form.customer_company = data.company;
+            this.form.customer_ico = data.ico;
+            this.form.customer_dic = data.dic;
+        }
+
+
     }
 
 });

@@ -1,9 +1,11 @@
 <div class="row">
-    <div class="col card mr-3">
-            @include('admin.order.components.left-elements')
+    <div class="col mr-3">
+        @include('admin.order.components.left-elements')
     </div>
-    <div class="col card">
+    <div class="col">
+        <div class="card">
             @include('admin.order.components.right-elements')
+        </div>
     </div>
 </div>
 

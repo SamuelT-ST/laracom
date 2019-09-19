@@ -16,6 +16,9 @@ class CreateCustomerRequest extends BaseFormRequest
         return [
             'name' => ['required'],
             'email' => ['required', 'email', 'unique:customers'],
+            'company' => ['string'],
+            'ico' => ['integer'],
+            'dic' => ['string'],
             'password' => ['nullable', 'min:8'],
             'groups' => ['array', 'nullable'],
             'status' => ['nullable', 'integer']

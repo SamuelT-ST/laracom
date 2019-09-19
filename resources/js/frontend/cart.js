@@ -9,7 +9,12 @@ Vue.component('cart', {
     watch: {
         updatedContent: function (val) {
             this.content = val;
+            this.$emit('cart-count-update', Object.keys(this.content.cartItems).length);
         },
+    },
+
+    created(){
+        this.$emit('cart-count-update', Object.keys(this.content.cartItems).length)
     },
 
     methods: {

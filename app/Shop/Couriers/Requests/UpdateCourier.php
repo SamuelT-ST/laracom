@@ -25,14 +25,15 @@ class UpdateCourier extends FormRequest
     {
         return [
             'name' => ['sometimes', 'string'],
-                        'description' => ['nullable', 'string'],
-                        'from_width' => ['nullable', 'integer'],
-                        'from_height' => ['nullable', 'integer'],
-                        'from_length' => ['nullable', 'integer'],
-                        'url' => ['nullable', 'string'],
-                        'price' => ['nullable', 'integer'],
-                        'status' => ['sometimes', 'boolean'],
-                                ];
+            'description' => ['nullable', 'string'],
+            'from_width' => ['nullable', 'integer'],
+            'from_height' => ['nullable', 'integer'],
+            'from_length' => ['nullable', 'integer'],
+            'url' => ['nullable', 'string'],
+            'price' => ['nullable', 'integer'],
+            'status' => ['sometimes', 'boolean'],
+            'payment_methods' => ['nullable', 'array'],
+            ];
     }
 
 
@@ -45,8 +46,7 @@ class UpdateCourier extends FormRequest
     {
         $sanitized = $this->validated();
 
-
-        //Add your code for manipulation with request data here
+        $sanitized['payment_methods'] = $this->has('payment_methods') ? collect($sanitized['payment_methods'])->map->id : null;
 
         return $sanitized;
     }

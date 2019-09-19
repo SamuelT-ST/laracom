@@ -1,4 +1,4 @@
-<cart :initial-content="{{ app(\App\Shop\Carts\Repositories\CartRepository::class)->getWholeCart() }}" :updated-content="cartContent" inline-template>
+<cart @cart-count-update="updateCartCount" :initial-content="{{ app(\App\Shop\Carts\Repositories\CartRepository::class)->getWholeCart() }}" :updated-content="cartContent" inline-template>
     <div class="cart-sidebar-area" id="cart-sidebar-area">
         <div class="top-content"><!-- top content -->
             {{--<a href="#" class="logo">--}}

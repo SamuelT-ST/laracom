@@ -213,7 +213,7 @@
                 <ul>
                     <li class="search" id="search"><i class="fas fa-search"></i> </li>
                     <li class="cart" id="cart"><i class="fas fa-shopping-basket"></i>
-                        <span class="badge">12</span>
+                        <span class="badge">@{{ this.cartCount }}</span>
                     </li>
                     <li class="right-menu" id="side-menu"><i class="fas fa-user"></i> </li>
                 </ul>
@@ -230,7 +230,7 @@
             <ul>
                 <li class="search" id="search"><i class="fas fa-search"></i> </li>
                 <li class="cart" id="cart"><i class="fas fa-shopping-basket"></i>
-                    <span class="badge">12</span>
+                    <span class="badge">@{{ this.cartCount }}</span>
                 </li>
                 <li class="right-menu" id="side-menu"><i class="fas fa-user"></i> </li>
             </ul>

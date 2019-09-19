@@ -10,8 +10,7 @@
         
         <courier-form
             :action="'{{ url('admin/couriers') }}'"
-             
-            
+            :payment-methods="{{ $paymentMethods }}"
             v-cloak
             inline-template>
 

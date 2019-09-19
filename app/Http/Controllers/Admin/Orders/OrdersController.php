@@ -21,6 +21,7 @@ use App\Http\Requests\Admin\Order\UpdateOrder;
 use App\Http\Requests\Admin\Order\DestroyOrder;
 use Brackets\AdminListing\Facades\AdminListing;
 use App\Shop\Orders\Order;
+use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
@@ -39,7 +40,7 @@ class OrdersController extends Controller
             $request,
 
             // set columns to query
-            ['id', 'reference', 'courier_id', 'customer_id', 'address_id', 'order_status_id', 'payment', 'discounts', 'total_products', 'tax', 'total', 'total_paid', 'invoice', 'courier', 'label_url', 'tracking_number', 'total_shipping'],
+            ['id', 'reference', 'courier_id', 'customer_id', 'billing_address_id', 'order_status_id', 'payment_method_id', 'discounts', 'total_products', 'tax', 'total', 'total_paid', 'invoice', 'courier_id', 'label_url', 'tracking_number', 'total_shipping'],
 
             // set columns to searchIn
             ['id', 'reference', 'payment', 'invoice', 'courier', 'label_url', 'tracking_number'],
@@ -83,29 +84,14 @@ class OrdersController extends Controller
     public function store(StoreOrder $request)
     {
 
-//        dd($request->toArray()['address']);
-        // Sanitize input
-        $sanitized = $request->validated();
-        $sanitized['courier_id'] = $sanitized['courier']['id'];
-        $sanitized['customer_id'] = $sanitized['customer']['id'];
-
-        if(!isset($sanitized['address']['id'])){
-            $sanitized['address']['customer_id'] = $sanitized['customer']['id'];
-            $sanitized['address']['alias'] =  $sanitized['address']['address_1'];
-            $sanitized['address']['country_id'] =  $sanitized['address']['country']['id'];
-            $sanitized['address_id'] = Address::create($sanitized['address'])->id;
-        } else {
-            $sanitized['address_id'] = $sanitized['address']['id'];
-        }
-
-        $sanitized['order_status_id'] = $sanitized['order_status']['id'];
-        $sanitized['payment'] = 'personally';
-
-        $sanitized = collect($sanitized)->except('courier', 'customer', 'address', 'order_status');
+        $sanitized = $request->getSanitized();
 
         // Store the Order
-        $order = Order::create($sanitized->toArray());
-        app(OrderProductRepository::class)->createOrderProduct($sanitized['products'], $order);
+
+        DB::transaction(function () use ($sanitized){
+            $order = Order::create($sanitized);
+            app(OrderProductRepository::class)->createOrderProduct($sanitized['products'], $order);
+        });
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/orders'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
@@ -139,7 +125,7 @@ class OrdersController extends Controller
     {
         $this->authorize('admin.order.edit', $order);
 
-        $order->load('customer', 'address', 'courier', 'orderStatus','address.country');
+        $order->load('customer', 'orderStatus', 'payment');
 
         $order['products'] = app(OrderProductTransformation::class)->prepareOrderForUpdate($order);
 
@@ -163,28 +149,13 @@ class OrdersController extends Controller
     public function update(UpdateOrder $request, Order $order)
     {
         // Sanitize input
-        $sanitized = $request->validated();
-        $sanitized['courier_id'] = $sanitized['courier']['id'];
-        $sanitized['customer_id'] = $sanitized['customer']['id'];
+        $sanitized = $request->getSanitized();
 
-        if(!isset($sanitized['address']['id'])){
-            $sanitized['address']['customer_id'] = $sanitized['customer']['id'];
-            $sanitized['address']['alias'] =  $sanitized['address']['address_1'];
-            $sanitized['address']['country_id'] =  $sanitized['address']['country']['id'];
-            $sanitized['address_id'] = Address::create($sanitized['address'])->id;
-        } else {
-            $sanitized['address_id'] = $sanitized['address']['id'];
-        }
+        DB::transaction(function() use ($order, $sanitized){
+            $order->update($sanitized);
+            app(OrderProductRepository::class)->updateOrderProduct($sanitized['products'], $order);
 
-        $sanitized['order_status_id'] = $sanitized['order_status']['id'];
-        $sanitized['payment'] = 'personally';
-
-        $sanitized = collect($sanitized)->except('courier', 'customer', 'address', 'order_status');
-
-        // Store the Order
-        $order->update($sanitized->toArray());
-        app(OrderProductRepository::class)->updateOrderProduct($sanitized['products'], $order);
-
+        });
         if ($request->ajax()) {
             return ['redirect' => url('admin/orders'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }

@@ -10,6 +10,7 @@
             <courier-form
                 :action="'{{ $courier->resource_url }}'"
                 :data="{{ $courier->toJson() }}"
+                :payment-methods="{{ $paymentMethods }}"
                 v-cloak
                 inline-template>
             

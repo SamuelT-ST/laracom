@@ -84,7 +84,7 @@
                                 <div class="right-content-area">
                                     <div class="btn-wrapper">
                                         <button type="button" class="boxed-btn" @click="massUpdate"> {{ __('Aktualizovať košík') }} </button>
-                                        <button type="button" class="boxed-btn"> {{ __('Pokladňa') }} </button>
+                                        <a href="{{ route('checkout') }}" class="boxed-btn"> {{ __('Pokladňa') }} </a>
                                     </div>
                                     <div class="cart-total">
                                         <h3 class="title">{{ __('Zhrnutie') }}</h3>

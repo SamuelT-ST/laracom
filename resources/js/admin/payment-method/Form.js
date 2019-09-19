@@ -8,7 +8,6 @@ Vue.component('payment-method-form', {
                 title:  '' ,
                 description:  '' ,
                 price:  '' ,
-                
             }
         }
     }

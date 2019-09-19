@@ -21,6 +21,10 @@ Vue.component('customer-form', {
                 groups:  '' ,
                 password: '',
                 status:  0 ,
+                is_company: false,
+                company: '',
+                ico: '',
+                dic: ''
             },
         }
     }

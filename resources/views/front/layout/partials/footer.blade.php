@@ -111,30 +111,7 @@
                         </div>
                         <div class="right-content-area">
                             <ul class="payment-logo">
-                                <li>
-                                    <img src="assets/img/payment-logo/01.png" alt="payment logo">
-                                </li>
-                                <li>
-                                    <img src="assets/img/payment-logo/02.png" alt="payment logo">
-                                </li>
-                                <li>
-                                    <img src="assets/img/payment-logo/03.png" alt="payment logo">
-                                </li>
-                                <li>
-                                    <img src="assets/img/payment-logo/04.png" alt="payment logo">
-                                </li>
-                                <li>
-                                    <img src="assets/img/payment-logo/05.png" alt="payment logo">
-                                </li>
-                                <li>
-                                    <img src="assets/img/payment-logo/06.png" alt="payment logo">
-                                </li>
-                                <li>
-                                    <img src="assets/img/payment-logo/07.png" alt="payment logo">
-                                </li>
-                                <li>
-                                    <img src="assets/img/payment-logo/08.png" alt="payment logo">
-                                </li>
+
                             </ul>
                         </div>
                     </div><!-- //. copyright inner -->

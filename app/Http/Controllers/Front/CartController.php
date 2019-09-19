@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Models\PaymentMethod;
 use App\Services\CategoriesWithDiscount;
 use App\Shop\Carts\Requests\AddToCartRequest;
 use App\Shop\Carts\Repositories\Interfaces\CartRepositoryInterface;
+use App\Shop\Countries\Country;
 use App\Shop\Couriers\Repositories\Interfaces\CourierRepositoryInterface;
 use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
 use App\Shop\Products\Product;
@@ -161,5 +163,12 @@ class CartController extends Controller
         });
 
         return $this->cartRepo->getWholeCart();
+    }
+
+    public function checkout(){
+        return view('front.cart.checkout')->with([
+            'countries' => Country::all(),
+            'payments' => PaymentMethod::all()
+        ]);
     }
 }

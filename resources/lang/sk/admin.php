@@ -67,7 +67,7 @@ return [
             'status' => "Aktiívny",
         ],
     ],
-    'orders' => [
+    'order' => [
         'title' => 'Objednávky',
 
         'actions' => [
@@ -82,6 +82,26 @@ return [
             'total' => "Cena celkom",
             'status' => "Stav objednávky",
             'customer' => "Zákazník",
+            'billing_address_1' => "Adresa 1",
+            'billing_address_id' => "Adresa",
+            'billing_address_2' => "Adresa 2",
+            'billing_city' => "Mesto",
+            'billing_phone' => "Telefón",
+            'billing_zip' => "PSČ",
+            'same_address' => "Fakturačná adresa je rovnaká ako adresa doručenia",
+            'shipping_address_1' => "Adresa 1",
+            'shipping_address_id' => "Adresa",
+            'shipping_address_2' => "Adresa 2",
+            'shipping_city' => "Mesto",
+            'shipping_phone' => "Telefón",
+            'shipping_zip' => "PSČ",
+            'countries' => "Krajina",
+            'is_company' => "Objednávka na firmu",
+            'customer_name' => "Meno",
+            'customer_email' => "Email",
+            'customer_company' => "Firma",
+            'customer_ico' => "IČO",
+            'customer_dic' => "DIČ",
         ],
     ],
     'order-statuses' => [
