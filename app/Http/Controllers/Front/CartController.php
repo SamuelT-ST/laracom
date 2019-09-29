@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Http\Requests\Admin\Order\StoreOrder;
 use App\Models\PaymentMethod;
 use App\Services\CategoriesWithDiscount;
+use App\Shop\Cart\Requests\CartCheckoutRequest;
 use App\Shop\Carts\Requests\AddToCartRequest;
 use App\Shop\Carts\Repositories\Interfaces\CartRepositoryInterface;
 use App\Shop\Countries\Country;
+use App\Shop\Couriers\Repositories\CourierRepository;
 use App\Shop\Couriers\Repositories\Interfaces\CourierRepositoryInterface;
+use App\Shop\Orders\Repositories\OrderRepository;
 use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
 use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\Interfaces\ProductRepositoryInterface;
@@ -168,7 +172,11 @@ class CartController extends Controller
     public function checkout(){
         return view('front.cart.checkout')->with([
             'countries' => Country::all(),
-            'payments' => PaymentMethod::all()
+            'couriers' => app(CourierRepository::class)->getAvailableCouriers(),
         ]);
+    }
+    public function storeOrder(CartCheckoutRequest $order){
+
+        app(OrderRepository::class)->createOrder($order->getSanitized());
     }
 }

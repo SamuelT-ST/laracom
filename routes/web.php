@@ -108,6 +108,7 @@ Route::namespace('Front')->group(function () {
     });
     Route::post('cart/mass-update', 'CartController@massUpdate');
     Route::get('cart/checkout', 'CartController@checkout')->name('checkout');
+    Route::post('cart/checkout', 'CartController@storeOrder')->name('storeOrder');
     Route::resource('cart', 'CartController');
 //    Route::post('cart/mass-update', function(){
 //        dd('test');

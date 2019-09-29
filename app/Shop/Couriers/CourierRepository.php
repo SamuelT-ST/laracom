@@ -2,6 +2,7 @@
 
 namespace App\Shop\Couriers\Repositories;
 
+use App\Models\PaymentMethod;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Couriers\Courier;
 use App\Shop\Couriers\Exceptions\CourierInvalidArgumentException;
@@ -92,5 +93,25 @@ class CourierRepository extends BaseRepository implements CourierRepositoryInter
     public function deleteCourier()
     {
         return $this->delete();
+    }
+
+    public function getAvailableCouriers(){
+
+//        TODO dorobit validaciu rozmerov!
+
+        return Courier::with('paymentMethods')->get();
+
+    }
+
+    public function validateCourier(int $id){
+//        TODO validate if courier can be applied
+
+        return Courier::findOrFail($id);
+    }
+
+    public function validatePaymentMethod(int $id){
+//        TODO validate if paymentMethod can be applied
+
+        return PaymentMethod::findOrFail($id);
     }
 }

@@ -120,7 +120,8 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
      */
     public function associateProduct(Product $product, int $quantity = 1, array $data = [])
     {
-        $this->model->products()->attach($product, [
+        $this->model->orderProduct()->create([
+            'product_id'=>$product->id,
             'quantity' => $quantity,
             'product_name' => $product->name,
             'product_sku' => $product->sku,

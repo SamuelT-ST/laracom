@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: samueltrstensky
- * Date: 2019-07-27
- * Time: 19:42
- */
 
 namespace App\Shop\OrderProduct;
 

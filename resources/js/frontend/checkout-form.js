@@ -2,14 +2,14 @@ import { BaseForm } from 'craftable';
 
 Vue.component('checkout-form', {
     mixins: [BaseForm],
+    props: ['initialContent'],
     data: function() {
         return {
+            content: this.initialContent,
             form: {
                 reference:  '' ,
                 products: [],
-                courier:  '' ,
                 order_status:  '' ,
-                payment:  '' ,
                 discounts:  '' ,
                 total_products:  0 ,
                 tax:  0 ,
@@ -45,10 +45,54 @@ Vue.component('checkout-form', {
                 shipping_country:  '' ,
                 shipping_phone:  '' ,
 
-                same_addresses: true
+                same_addresses: true,
+
+                courier: {},
+                payment: {},
 
             },
+            selectedCouriers: [],
+            paymentMethodCheck: [],
         }
     },
-    // props: ['product', 'url']
+    computed:{
+        shippingFee(){
+            if (Object.keys(this.form.courier).length){
+                if (Object.keys(this.form.payment).length){
+                    return this.form.courier.price + this.form.payment.price
+                }  else {
+                    return this.form.courier.price
+                }
+            } else {
+                return 0;
+            }
+        },
+        totalWithShipping(){
+            return Number(this.content.total) + this.shippingFee;
+        }
+    },
+    methods: {
+        selectCourier(courier){
+            if (courier.id === this.form.courier.id) {
+                this.form.courier = {};
+                this.selectedCouriers = []
+            } else {
+                this.form.courier = courier;
+            }
+
+            this.content.shippingFee = this.shippingFee;
+
+        },
+        selectPaymentMethod(paymentMethod){
+            if (paymentMethod.id === this.form.payment.id) {
+                this.form.payment = {};
+                this.paymentMethodCheck = []
+            } else {
+                this.form.payment = paymentMethod;
+            }
+
+            this.content.shippingFee = this.shippingFee;
+
+        }
+    },
 });

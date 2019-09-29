@@ -1,7 +1,7 @@
 Vue.component('cart', {
     data: function() {
         return {
-            content: this.initialContent
+            content: this.initialContent,
         }
     },
     props: ['initialContent', 'checkoutUrl', 'updatedContent'],
@@ -27,7 +27,6 @@ Vue.component('cart', {
             axios.post('/cart/mass-update', this.content).then(response => {
                 this.content = response.data;
             })
-        }
+        },
     }
-
-    });
+});

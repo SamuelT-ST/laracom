@@ -14,7 +14,7 @@ class AddProductDiscountToOrderProductTable extends Migration
     public function up()
     {
         Schema::table('order_product', function (Blueprint $table) {
-            $table->decimal('product_discount')->after('product_price');
+            $table->decimal('product_discount')->nullable()->after('product_price');
         });
     }
 
