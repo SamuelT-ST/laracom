@@ -40,12 +40,12 @@ class OrdersController extends Controller
             $request,
 
             // set columns to query
-            ['id', 'reference', 'courier_id', 'customer_id', 'billing_address_id', 'order_status_id', 'payment_method_id', 'discounts', 'total_products', 'tax', 'total', 'total_paid', 'invoice', 'courier_id', 'label_url', 'tracking_number', 'total_shipping'],
+            ['id', 'reference', 'customer_name', 'courier_id', 'customer_id', 'billing_address_id', 'order_status_id', 'payment_method_id', 'total_products', 'tax', 'total', 'total_paid', 'invoice', 'courier_id', 'label_url', 'tracking_number', 'total_shipping'],
 
             // set columns to searchIn
             ['id', 'reference', 'payment', 'invoice', 'courier', 'label_url', 'tracking_number'],
             function (Builder $q){
-                $q->with('customer', 'orderStatus');
+                $q->with('orderStatus');
             }
         );
 

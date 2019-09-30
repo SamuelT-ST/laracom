@@ -33,10 +33,8 @@ class sendEmailNotificationToAdminMailable extends Mailable
     {
         $data = [
             'order' => $this->order,
-            'products' => $this->order->products,
-            'customer' => $this->order->customer,
+            'products' => $this->order->orderProduct,
             'courier' => $this->order->courier,
-            'address' => $this->order->address,
             'status' => $this->order->orderStatus,
             'payment' => $this->order->paymentMethod
         ];

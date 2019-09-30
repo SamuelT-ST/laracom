@@ -4,6 +4,7 @@ namespace App\Shop\Orders\Repositories;
 
 use App\Shop\Carts\Repositories\CartRepository;
 use App\Shop\Carts\ShoppingCart;
+use Brackets\AdminAuth\Models\AdminUser;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Employees\Employee;
@@ -138,7 +139,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
      */
     public function sendEmailToCustomer()
     {
-        Mail::to($this->model->customer)
+        Mail::to($this->model->customer_email)
             ->send(new SendOrderToCustomerMailable($this->findOrderById($this->model->id)));
     }
 
@@ -147,10 +148,9 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
      */
     public function sendEmailNotificationToAdmin()
     {
-        $employeeRepo = new EmployeeRepository(new Employee);
-        $employee = $employeeRepo->findEmployeeById(1);
+        $adminUser = AdminUser::first();
 
-        Mail::to($employee)
+        Mail::to($adminUser)
             ->send(new sendEmailNotificationToAdminMailable($this->findOrderById($this->model->id)));
     }
 

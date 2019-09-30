@@ -114,7 +114,7 @@
 
                         </ul>
 
-                        <product-detail-form @updated-cart="updateCart" :product="{{ $product->id }}" :url="'{{ route('cart.store') }}'" inline-template>
+                        <product-detail-form @updated-cart="updateCart" :default-attribute="{{ $defaultAttribute }}" :product="{{ $product->id }}" :url="'{{ route('cart.store') }}'" inline-template>
                             <div>
                                 <div class="pdescription">
                                     <h4 class="title">{{ __('Popis') }}</h4>

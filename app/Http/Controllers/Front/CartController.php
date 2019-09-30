@@ -103,16 +103,17 @@ class CartController extends Controller
         }
 
         $options = [];
+
         if ($request->has('productAttribute') && $request->get('productAttribute') !== null) {
 
-            $attr = $this->productAttributeRepo->findProductAttributeById($request->input('productAttribute'));
+            $attr = $this->productAttributeRepo->findProductAttributeById(intval($request->input('productAttribute')));
 
             $attr->price = is_null($attr->price) ? 0 : $attr->price;
 
             $product->price = $product->price + $attr->price;
 
-            $options['product_attribute_id'] = $request->input('productAttribute');
-            $options['combination'] = $attr->attributesValues->toArray();
+            $options['attribute'] = $attr->attributesValues->first()->attribute->name;
+            $options['value'] = $attr->attributesValues->first()->value;
         }
 
         $options['thumb_url'] = $product->getFirstMediaUrl('cover', 'thumb_200');
@@ -178,5 +179,7 @@ class CartController extends Controller
     public function storeOrder(CartCheckoutRequest $order){
 
         app(OrderRepository::class)->createOrder($order->getSanitized());
+
+        dd('test');
     }
 }

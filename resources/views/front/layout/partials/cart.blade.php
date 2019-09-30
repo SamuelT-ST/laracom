@@ -17,6 +17,7 @@
                         </div>
                         <div class="content">
                             <h4 class="title">@{{ item.name }}</h4>
+                            <small v-if="item.options.attribute">@{{ item.options.attribute }}: @{{ item.options.value }}</small>
                             <div class="price"><span class="pprice">@{{ item.price }} € </span>
                                 {{--<del class="dprice">$500.00</del>--}}
                             </div>

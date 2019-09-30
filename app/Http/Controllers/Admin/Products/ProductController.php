@@ -221,7 +221,7 @@ class ProductController extends Controller
 
             foreach ($combinations as $combination){
                 if(isset($combination['wasEdited']) && isset($combination['id'])) {
-                    $this->updateProductCombination($combination);
+                    $this->updateProductCombination($combination, $product);
                 }
                 else if(!isset($combination['id'])) {
                     $this->saveProductCombinations($combination, $product);
@@ -302,7 +302,18 @@ class ProductController extends Controller
         return redirect()->route('admin.categories.index');
     }
 
-    private function updateProductCombination($combination){
+    private function updateProductCombination($combination, $product){
+
+        $default = 0;
+        if (isset($combination['defaultPrice']) && ($combination['defaultPrice'] === true || $combination['defaultPrice'] === 1)) {
+            $product->attributes()->where('default', 1)->update([
+                'default' => 0
+            ]);
+            $default = 1;
+        }
+
+        $combination['default'] = $default;
+
         $productAttribute = ProductAttribute::find($combination['id']);
         $productAttribute->fill($combination);
         $productAttribute->save();
@@ -330,15 +341,12 @@ class ProductController extends Controller
             $sale_price = $combination->get('sale_price');
         }
 
-        $hasDefault = $product->attributes()->where('default', 1)->count();
-
         $default = 0;
-        if ($combination->has('defaultPrice')) {
-            $default = $combination->get('defaultPrice');
-        }
-
-        if ($default == 1 && $hasDefault > 0) {
-            $default = 0;
+        if (isset($combination['defaultPrice']) && ($combination['defaultPrice'] === true || $combination['defaultPrice'] === 1)) {
+            $product->attributes()->where('default', 1)->update([
+                'default' => 0
+            ]);
+            $default = 1;
         }
 
         $productAttribute = $product->attributes()->save(

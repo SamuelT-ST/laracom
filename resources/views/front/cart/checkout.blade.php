@@ -254,28 +254,30 @@
                                 @endforeach
                                 <h3> {{ __('Platba') }} </h3>
 
-                                <template v-if="form.courier" v-for="paymentMethod in form.courier.payment_methods">
-                                    <div class="credit-card-area">
-                                        <div class="left-content">
-                                            <div class="checkbox-element account">
-                                                <div class="checkbox-wrapper">
-                                                    <label class="checkbox-inner">@{{ paymentMethod.title }}
-                                                        <input @click="selectPaymentMethod(paymentMethod)" v-model="paymentMethodCheck" :value="form.payment.id" name="payment_method" type="checkbox">
-                                                        <span class="checkmark"></span>
-                                                    </label>
+                                <template v-if="form.courier">
+                                    <template v-for="paymentMethod in form.courier.payment_methods">
+                                        <div class="credit-card-area">
+                                            <div class="left-content">
+                                                <div class="checkbox-element account">
+                                                    <div class="checkbox-wrapper">
+                                                        <label class="checkbox-inner">@{{ paymentMethod.title }}
+                                                            <input @click="selectPaymentMethod(paymentMethod)" v-model="paymentMethodCheck" :value="form.payment.id" name="payment_method" type="checkbox">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="right-content">
+                                                <ul>
+                                                    <strong>@{{ paymentMethod.price }} €</strong>
+                                                </ul>
+                                            </div>
                                         </div>
-                                        <div class="right-content">
-                                            <ul>
-                                                <strong>@{{ paymentMethod.price }} €</strong>
-                                            </ul>
+                                        <div class="notify-area">
+                                            @{{ paymentMethod.description }}
+                                            {{--VSETKO SA BUDE ROBIT NA BACKENDE--}}
                                         </div>
-                                    </div>
-                                    <div class="notify-area">
-                                        @{{ paymentMethod.description }}
-                                        {{--VSETKO SA BUDE ROBIT NA BACKENDE--}}
-                                    </div>
+                                    </template>
                                 </template>
 
                                 {{--<div class="credit-card-area">--}}

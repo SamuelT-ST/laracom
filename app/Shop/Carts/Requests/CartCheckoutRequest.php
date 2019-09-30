@@ -39,11 +39,12 @@ class CartCheckoutRequest extends BaseFormRequest
             'billing_city' => ['string', 'required'],
             'billing_country' => ['array', 'required'],
             'billing_phone' => ['nullable', 'string'],
-            'shipping_address_1' => ['nullable', 'string'],
+            "same_addresses" => ['boolean'],
+            'shipping_address_1' => ['required_if:same_addresses,false', 'nullable', 'string'],
             'shipping_address_2' => ['nullable', 'string'],
-            'shipping_zip' => ['nullable', 'string'],
-            'shipping_city' => ['nullable', 'string'],
-            'shipping_country' => ['nullable', 'array'],
+            'shipping_zip' => ['required_if:same_addresses,false', 'nullable', 'string'],
+            'shipping_city' => ['required_if:same_addresses,false', 'nullable', 'string'],
+            'shipping_country' => ['required_if:same_addresses,false', 'nullable', 'array'],
             'shipping_phone' => ['nullable', 'string'],
             "shipping_customer_name" => ['nullable', 'string'],
             "shipping_customer_email" => ['nullable', 'string'],
@@ -51,7 +52,6 @@ class CartCheckoutRequest extends BaseFormRequest
             "shipping_customer_company" => ['nullable', 'string'],
             "shipping_customer_ico" => ['nullable', 'string'],
             "shipping_customer_dic" => ['nullable', 'string'],
-            "same_addresses" => ['boolean'],
         ];
     }
 
@@ -86,8 +86,29 @@ class CartCheckoutRequest extends BaseFormRequest
         } else {
             $sanitized['billing_address_id'] = null;
         }
+
+        if (!isset($sanitized['same_address']) || !$sanitized['same_address'] ){
+            $sanitized = $this->copyBillingAddress($sanitized);
+        }
+
         return collect($sanitized)->except('courier', 'customer', 'address', 'shipping_address', 'billing_address')->toArray();
 
+    }
+
+    private function copyBillingAddress($data){
+
+        $data['shipping_address_1'] = $data['billing_address_1'];
+
+        if (isset($data['billing_address_2'])){
+            $data['shipping_address_2'] = $data['billing_address_2'];
+        }
+
+        $data['shipping_zip'] = $data['billing_zip'];
+        $data['shipping_city'] = $data['billing_city'];
+        $data['shipping_country'] = $data['billing_country'];
+        $data['shipping_phone'] = $data['billing_phone'];
+
+        return $data;
     }
 
 }

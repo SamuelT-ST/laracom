@@ -56,10 +56,13 @@ class ProductController extends Controller
     {
         $product = app(CategoriesWithDiscount::class)->getSingleProductBySlug($slug);
         $productAttributes = $product->attributes;
+        $defaultAttribute = $product->attributes()->where('default', 1)->first()->id;
+
 
         return view('front.product-detail.index', compact(
             'product',
-            'productAttributes'
+            'productAttributes',
+            'defaultAttribute'
         ));
     }
 }

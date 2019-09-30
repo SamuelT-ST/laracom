@@ -2,10 +2,10 @@ Vue.component('product-detail-form', {
     data: function() {
         return {
             quantity: 1,
-            productAttribute: null
+            productAttribute: this.defaultAttribute
         }
     },
-    props: ['product', 'url'],
+    props: ['product', 'url', 'defaultAttribute'],
 
     methods: {
         addToCart(){

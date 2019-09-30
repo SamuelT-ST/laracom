@@ -1,3 +1,20 @@
+<div v-if="form.customer" class="form-group row align-items-center">
+    <label for="shipping_address_id" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.shipping_address_id') }}</label>
+    <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
+        <multiselect
+                v-if="customerState !== 'new'"
+                v-model="form.shipping_address"
+                :options="availableAddresses"
+                :multiple="false"
+                :taggable="false"
+                label="address_1"
+                @select="loadShoppingAddress"
+                track-by="id"
+                placeholder="{{ __('Select shipping_address') }}">
+        </multiselect>
+
+    </div>
+</div>
 
 <div class="form-group row align-items-center" :class="{'has-danger': errors.has('shipping_customer_name'), 'has-success': this.fields.shipping_customer_name && this.fields.shipping_customer_name.valid }">
     <label for="shipping_customer_name" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.shipping_customer_name') }}</label>

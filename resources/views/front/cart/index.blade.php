@@ -50,6 +50,7 @@
                                                 </div>
                                                 <div class="content">
                                                     <h4 class="title">@{{ item.name }}</h4>
+                                                    <small>@{{ item.options.attribute }}: @{{ item.options.value }}</small>
                                                 </div>
                                             </div><!-- //. product detials -->
                                         </td>

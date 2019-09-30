@@ -62,14 +62,14 @@
                                 <tr v-for="(item, index) in collection">
                                     <td>@{{ item.id }}</td>
                                     <td>@{{ item.reference }}</td>
-                                    <td>@{{ item.customer.name }}</td>
+                                    <td>@{{ item.customer_name }}</td>
                                     <td><div class="badge badge-primary" :style="'background-color: '+item.order_status.color"> @{{ item.order_status.name }}</div></td>
-                                    <td>@{{ item.payment }}</td>
+                                    <td>@{{ item.payment.title }}</td>
                                     <td>@{{ item.total_products }}</td>
                                     <td>@{{ item.tax }}</td>
                                     <td>@{{ item.total }}</td>
                                     <td>@{{ item.total_paid }}</td>
-                                    <td>@{{ item.courier }}</td>
+                                    <td>@{{ item.courier.name }}</td>
                                     <td>@{{ item.total_shipping }}</td>
                                     
                                     <td>

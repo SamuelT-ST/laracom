@@ -1,17 +1,19 @@
-<div class="form-group row align-items-center">
-    <label for="billing_address_id" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.billing_address_id') }}</label>
-    <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <multiselect
-                v-if="customerState !== 'new'"
-                v-model="form.billing_address"
-                :options="availableAddresses"
-                :multiple="false"
-                :taggable="false"
-                label="address_1"
-                @select="loadBillingAddress"
-                track-by="id"
-                placeholder="{{ __('Select billing_address') }}">
-        </multiselect>
+<div v-if="form.customer">
+    <div class="form-group row align-items-center">
+        <label for="billing_address_id" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.billing_address_id') }}</label>
+        <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
+            <multiselect
+                    v-if="customerState !== 'new'"
+                    v-model="form.billing_address"
+                    :options="availableAddresses"
+                    :multiple="false"
+                    :taggable="false"
+                    label="address_1"
+                    @select="loadBillingAddress"
+                    track-by="id"
+                    placeholder="{{ __('Select billing_address') }}">
+            </multiselect>
+        </div>
     </div>
 </div>
 
