@@ -235,5 +235,24 @@ return [
         ],
     ],
 
+    'product-group' => [
+        'title' => 'Product Groups',
+
+        'actions' => [
+            'index' => 'Product Groups',
+            'create' => 'New Product Group',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'name' => "Name",
+            'description' => "Description",
+            'discount' => "Discount",
+            'status' => "Status",
+            
+        ],
+    ],
+
     // Do not delete me :) I'm used for auto-generation
 ];

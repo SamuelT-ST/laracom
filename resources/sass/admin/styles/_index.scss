@@ -41,3 +41,7 @@ ol.breadcrumb span{
   width: 150px !important;
   height: 150px !important;
 }
+
+input.form-control[type=number] {
+  padding-right: 0 !important;
+}

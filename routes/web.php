@@ -188,3 +188,14 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
     Route::post('/admin/couriers/{courier}',                    'Admin\Couriers\CouriersController@update')->name('admin/couriers/update');
     Route::delete('/admin/couriers/{courier}',                  'Admin\Couriers\CouriersController@destroy')->name('admin/couriers/destroy');
 });
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/product-groups',                         'Admin\ProductGroups\ProductGroupsController@index');
+    Route::get('/admin/product-groups/create',                  'Admin\ProductGroups\ProductGroupsController@create');
+    Route::post('/admin/product-groups',                        'Admin\ProductGroups\ProductGroupsController@store');
+    Route::get('/admin/product-groups/{productGroup}/edit',     'Admin\ProductGroups\ProductGroupsController@edit')->name('admin/product-groups/edit');
+    Route::post('/admin/product-groups/bulk-destroy',           'Admin\ProductGroups\ProductGroupsController@bulkDestroy')->name('admin/product-groups/bulk-destroy');
+    Route::post('/admin/product-groups/{productGroup}',         'Admin\ProductGroups\ProductGroupsController@update')->name('admin/product-groups/update');
+    Route::delete('/admin/product-groups/{productGroup}',       'Admin\ProductGroups\ProductGroupsController@destroy')->name('admin/product-groups/destroy');
+});

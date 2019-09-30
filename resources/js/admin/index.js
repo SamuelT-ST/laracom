@@ -6,3 +6,4 @@ import './order';
 import './payment-method';
 import './setting';
 import './courier';
+import './product-group';

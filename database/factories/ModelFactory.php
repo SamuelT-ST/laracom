@@ -99,3 +99,17 @@ $factory->define(App\Models\Courier::class, function (Faker\Generator $faker) {
     ];
 });
 
+/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\ProductGroup::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->firstName,
+        'description' => $faker->text(),
+        'discount' => $faker->sentence,
+        'status' => $faker->boolean(),
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
+});
+
