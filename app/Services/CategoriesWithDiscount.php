@@ -7,6 +7,7 @@ use App\Models\Discounts\Discount;
 use App\Shop\CustomerGroups\CustomerGroup;
 use App\Shop\Customers\Customer;
 use App\Shop\Products\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -46,10 +47,11 @@ class CategoriesWithDiscount
     }
 
     public function getForCategory($category) {
-        $categories = DB::table('categorizables')
-            ->where('category_id', $category);
 
-        $this->query->with('attributes')->joinSub($categories, 'cat', 'cat.categorizable_id', '=', 'products.id');
+
+        $this->query->whereHas('categories', function (Builder $query) use ($category){
+            $query->where('id', $category);
+        });
 
         return $this;
     }

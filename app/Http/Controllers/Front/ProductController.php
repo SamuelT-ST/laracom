@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Services\CategoriesWithDiscount;
+use App\Shop\ProductGroups\ProductGroup;
 use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
@@ -56,13 +57,28 @@ class ProductController extends Controller
     {
         $product = app(CategoriesWithDiscount::class)->getSingleProductBySlug($slug);
         $productAttributes = $product->attributes;
-        $defaultAttribute = $product->attributes()->where('default', 1)->first()->id;
+
+//        dd($product->toArray());
 
 
         return view('front.product-detail.index', compact(
             'product',
             'productAttributes',
             'defaultAttribute'
+        ));
+    }
+
+    public function showProductGroup(string $slug){
+
+        $productGroup = ProductGroup::with('categories', 'products')->where('slug', $slug)->first();
+
+        $products = $productGroup->products->map(function ($product){
+            return collect(app(CategoriesWithDiscount::class)->getSingleProductById($product->id))->put('pivot', $product->pivot);
+        });
+
+        return view('front.product-group.index', compact(
+            'productGroup',
+            'products'
         ));
     }
 }

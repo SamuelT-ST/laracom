@@ -114,7 +114,7 @@
 
                         </ul>
 
-                        <product-detail-form @updated-cart="updateCart" :default-attribute="{{ $defaultAttribute }}" :product="{{ $product->id }}" :url="'{{ route('cart.store') }}'" inline-template>
+                        <product-detail-form @updated-cart="updateCart" :default-attribute="{{ $product->default_attribute_id }}" :product="{{ $product }}" :url="'{{ route('cart.store') }}'" inline-template>
                             <div>
                                 <div class="pdescription">
                                     <h4 class="title">{{ __('Popis') }}</h4>
@@ -160,7 +160,7 @@
                             {{--</li>--}}
                         </ul>
                     </div>
-                    <div class="tab-content" >
+                    <div class="tab-content">
                         <div class="tab-pane fade show active" id="item_review" role="tabpanel" aria-labelledby="item-review-tab">
                             <div class="item_review_content">
                                 <h4 class="title">Technical Specifications</h4>

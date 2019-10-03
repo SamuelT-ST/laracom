@@ -22,6 +22,7 @@ class CreateProductProductGroupTable extends Migration
             $table->integer('position')->nullable();
             $table->integer('from_dimensions')->nullable();
             $table->integer('to_dimensions')->nullable();
+            $table->string('slug');
         });
     }
 

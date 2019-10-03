@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers\Admin\ProductGroups;
 
 use App\Http\Controllers\Controller;
+use App\Shop\Categories\Category;
 use App\Shop\ProductGroups\ProductGroup;
 use App\Shop\ProductGroups\Repositories\ProductGroupRepository;
 use App\Shop\ProductGroups\Requests\DestroyProductGroup;
@@ -56,7 +57,7 @@ class ProductGroupsController extends Controller
     {
         $this->authorize('admin.product-group.create');
 
-        return view('admin.product-group.create');
+        return view('admin.product-group.create')->with(['categories' => Category::whereNull('parent_id')->get()]);
     }
 
     /**
@@ -70,10 +71,13 @@ class ProductGroupsController extends Controller
         // Sanitize input
         $sanitized = $request->validated();
 
+        $sanitized['slug'] = str_slug($sanitized['name']);
+
         DB::transaction(function() use ($request, $sanitized){
             // Store the ProductGroup
             $productGroup = ProductGroup::create($sanitized);
             $productGroup->products()->sync($request->prepareToSync());
+            $productGroup->categories()->sync($sanitized['categories']);
         });
 
         if ($request->ajax()) {
@@ -106,12 +110,20 @@ class ProductGroupsController extends Controller
      */
     public function edit(ProductGroup $productGroup)
     {
+
+        $cover = $productGroup->getThumbs200ForCollection('cover');
+        $images = $productGroup->getThumbs200ForCollection('images');
+
         $this->authorize('admin.product-group.edit', $productGroup);
 
         $productGroup = app(ProductGroupRepository::class, ['productGroup'=>$productGroup])->prepareEditData();
 
         return view('admin.product-group.edit', [
             'productGroup' => $productGroup,
+            'cover' => $cover,
+            'images' => $images,
+            'categories' => Category::whereNull('parent_id')->get()
+
         ]);
     }
 
@@ -127,11 +139,14 @@ class ProductGroupsController extends Controller
         // Sanitize input
         $sanitized = $request->validated();
 
+        $sanitized['slug'] = str_slug($sanitized['name']);
+
         DB::transaction(function() use ($request, $sanitized, $productGroup){
             // Store the ProductGroup
             $productGroup->update($sanitized);
             $productGroup->products()->sync([]);
             $productGroup->products()->sync($request->prepareToSync());
+            $productGroup->categories()->sync($sanitized['categories']);
         });
 
         if ($request->ajax()) {

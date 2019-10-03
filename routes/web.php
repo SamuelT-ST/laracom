@@ -116,6 +116,7 @@ Route::namespace('Front')->group(function () {
     Route::get("category/{hierarchy}", 'CategoryController@getCategory')->where('hierarchy','^[a-zA-Z0-9-_\/]+$')->name('front.category.slug');
     Route::get("search", 'ProductController@search')->name('search.product');
     Route::get("{product}", 'ProductController@show')->name('front.get.product');
+    Route::get("product-group/{slug}", 'ProductController@showProductGroup')->name('front.product-group');
 
 });
 

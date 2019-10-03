@@ -10,12 +10,14 @@ Vue.component('product-group-form', {
                 description: '',
                 discount: '',
                 status: false,
-                products: []
+                products: [],
+                categories: []
             },
             newProduct: '',
             fromDimensions: '',
             toDimensions: '',
-            position: ''
+            position: '',
+            mediaCollections: ['cover', 'images']
         }
     },
     methods: {
@@ -38,11 +40,9 @@ Vue.component('product-group-form', {
             this.position = ''
         },
 
-        editProduct(product){
-            let pivot = product.pivot;
-            console.log(pivot);
-
-        }
+        deleteProduct(index){
+            this.form.products.splice(index,1);
+        },
     }
 
 });

@@ -1,18 +1,17 @@
-Vue.component('product-detail-form', {
+Vue.component('product-group', {
     data: function() {
         return {
             quantity: 1,
-            productAttribute: this.defaultAttribute
         }
     },
-    props: ['product', 'url', 'defaultAttribute'],
+    props: ['availableProducts'],
 
     methods: {
         addToCart(){
 
             let data = {
                 quantity: this.quantity,
-                product: this.product.id,
+                product: this.product,
                 productAttribute: this.productAttribute
             };
 
@@ -22,6 +21,16 @@ Vue.component('product-detail-form', {
             }, error => {
                 this.$notify({ type: 'error', title: 'Error!', text: 'An error has occured.'});
             });
+        },
+        updateCart(data){
+            this.$emit('updated-cart', data);
+        }
+    },
+    computed: {
+        suitableProducts() {
+            return this.availableProducts.filter(item =>{
+                return item.pivot.from_dimensions < this.quantity && item.pivot.to_dimensions >= this.quantity;
+            })
         }
     }
 

@@ -7,6 +7,7 @@ import './frontend/category';
 import './frontend/product-detail-form';
 import './frontend/cart';
 import './frontend/checkout-form';
+import './frontend/product-group';
 import VueCookie from 'vue-cookie';
 import VeeValidate from 'vee-validate';
 

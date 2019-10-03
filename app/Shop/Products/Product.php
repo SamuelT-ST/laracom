@@ -86,7 +86,7 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
      */
     protected $hidden = [];
 
-    protected $appends = ['resource_url', 'product_thumb', 'front_url'];
+    protected $appends = ['resource_url', 'product_thumb', 'front_url', 'default_attribute_id'];
 
     protected $with = ['categories', 'media'];
 
@@ -96,6 +96,13 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
 
     public function getFrontUrlAttribute() {
         return url('/'.$this->slug);
+    }
+
+    public function getDefaultAttributeIdAttribute() {
+
+        $defaultAttribute = $this->attributes()->where('default', 1)->first();
+
+        return $defaultAttribute ? $defaultAttribute->id : null;
     }
 
     public function getProductThumbAttribute() {

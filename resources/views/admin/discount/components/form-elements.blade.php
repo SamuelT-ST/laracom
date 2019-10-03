@@ -44,7 +44,7 @@
                 v-model="form.categories"
                 :options="categories"
                 :multiple="true"
-                label="name"
+                label="slug"
                 track-by="id"
                 placeholder="{{ __('Select category') }}">
         </multiselect>

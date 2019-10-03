@@ -28,7 +28,8 @@ class StoreProductGroup extends FormRequest
             'description' => ['nullable', 'string'],
             'discount' => ['nullable', 'string'],
             'status' => ['required', 'boolean'],
-            'products' => ['required', 'array']
+            'products' => ['required', 'array'],
+            'categories' => ['required', 'array']
         ];
     }
 
