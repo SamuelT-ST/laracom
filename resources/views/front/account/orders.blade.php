@@ -40,8 +40,8 @@
         {{--</div>--}}
         <div class="row">
             <div class="col-lg-12">
+                @if(count($statuses))
                 <div class="order-track-tab-nav"><!-- order track tab nav -->
-                    @if(count($statuses))
                     <div class="left-content">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
 
@@ -62,11 +62,7 @@
                             <li><a href="#"><i class="fas fa-arrows-alt-v"></i></a></li>
                         </ul>
                     </div>
-                    @else
-                    <h3>
-                        {{ __('Zatiaľ nemáte žiadnu objednávku') }}
-                    </h3>
-                    @endif
+
                 </div><!-- //.order track tab nav -->
                 <div class="order-track-tab-content mx-3"><!-- order track tab content -->
                     <div class="tab-content" id="myTabContent">
@@ -91,6 +87,11 @@
                         @endforeach
                     </div>
                 </div><!-- //.order track tab content -->
+                @else
+                    <h3>
+                        {{ __('Zatiaľ nemáte žiadnu objednávku') }}
+                    </h3>
+                @endif
             </div>
         </div>
     </div>
