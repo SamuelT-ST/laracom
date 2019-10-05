@@ -13,10 +13,11 @@
                 <template v-for="(item, index) in content.cartItems">
                     <div class="single-product-item"><!-- single product item -->
                         <div class="thumb">
-                            <img style="width: 86px" :src="item.options.thumb_url ? item.options.thumb_url : '/images/camera.png'" alt="recent review">
+                            <a :href="item.options.front_url"><img style="width: 86px" :src="item.options.thumb_url ? item.options.thumb_url : '/images/camera.png'" alt="recent review"></a>
                         </div>
                         <div class="content">
-                            <h4 class="title">@{{ item.name }}</h4>
+                            <a :href="item.options.front_url"><h4 class="title">@{{ item.name }}</h4></a>
+                            <small v-if="item.options.size"><strong>{{ __('Dĺžka') }}: @{{ item.options.size }} m</strong></small><br>
                             <small v-if="item.options.attribute">@{{ item.options.attribute }}: @{{ item.options.value }}</small>
                             <div class="price"><span class="pprice">@{{ item.price }} € </span>
                                 {{--<del class="dprice">$500.00</del>--}}

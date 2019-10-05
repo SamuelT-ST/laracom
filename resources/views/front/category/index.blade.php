@@ -59,28 +59,28 @@
                         <div class="right-content-area"><!-- right content area -->
                             <div class="top-content"><!-- top content -->
                                 <div class="left-conent">
-                                    <span class="cat">Cloths</span>
+                                    <span class="cat">{{ $category->name }}</span>
                                 </div>
                                 <div class="right-content">
                                     <ul>
                                         <li>
-                                            <div class="form-element has-icon">
-                                                <select class="selectpicker input-field select">
-                                                    <option value="0">Show</option>
-                                                    <option value="2">Hide</option>
-                                                    <option value="1">Show</option>
-                                                </select>
-                                                <div class="the-icon">
-                                                    <i class="fas fa-angle-down"></i>
-                                                </div>
-                                            </div>
+                                            {{--<div class="form-element has-icon">--}}
+                                                {{--<select class="selectpicker input-field select">--}}
+                                                    {{--<option value="0">Show</option>--}}
+                                                    {{--<option value="2">Hide</option>--}}
+                                                    {{--<option value="1">Show</option>--}}
+                                                {{--</select>--}}
+                                                {{--<div class="the-icon">--}}
+                                                    {{--<i class="fas fa-angle-down"></i>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
                                         </li>
                                         <li>
                                             <div class="form-element has-icon">
                                                 <select class="selectpicker input-field select">
-                                                    <option value="0">short by</option>
-                                                    <option value="2">Price</option>
-                                                    <option value="1">Ratings</option>
+                                                    <option value="0">{{ __('Zoradiť') }}</option>
+                                                    <option value="pricedesc">{{ __('Ceny vzostupne') }}</option>
+                                                    <option value="priceasc">{{ __('Ceny zostupne') }}</option>
                                                 </select>
                                                 <div class="the-icon">
                                                     <i class="fas fa-angle-down"></i>

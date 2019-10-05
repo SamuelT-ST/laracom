@@ -27,7 +27,8 @@ class CreateProductRequest extends BaseFormRequest
             'width' => ['numeric', 'nullable'],
             'combinations' => ['array', 'nullable'],
             'wholesale_price' => ['numeric', 'required'],
-            'featureValues' => ['array']
+            'featureValues' => ['array'],
+            'has_size' => ['boolean', 'required']
         ];
     }
 }

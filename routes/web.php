@@ -107,6 +107,7 @@ Route::namespace('Front')->group(function () {
         Route::resource('customer.address', 'CustomerAddressController');
     });
     Route::post('cart/mass-update', 'CartController@massUpdate');
+    Route::post('cart/store-group', 'CartController@storeGroup')->name('store-group');
     Route::get('cart/checkout', 'CartController@checkout')->name('checkout');
     Route::post('cart/checkout', 'CartController@storeOrder')->name('storeOrder');
     Route::resource('cart', 'CartController');

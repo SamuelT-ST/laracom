@@ -3,6 +3,7 @@
 namespace App\Shop\Products;
 
 use App\Models\Discounts\Discount;
+use App\Services\CategoriesWithDiscount;
 use App\Shop\Brands\Brand;
 use App\Shop\Features\FeatureValue;
 use App\Shop\ProductAttributes\ProductAttribute;
@@ -77,6 +78,7 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
         'distance_unit',
         'wholesale_price',
         'slug',
+        'has_size',
     ];
 
     /**
@@ -89,6 +91,9 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     protected $appends = ['resource_url', 'product_thumb', 'front_url', 'default_attribute_id'];
 
     protected $with = ['categories', 'media'];
+
+    public const TAX_RATE = 20;
+    public const CURRENCY = '€';
 
     public function getResourceUrlAttribute() {
         return url('/admin/products/'.$this->id);
@@ -139,10 +144,15 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
      */
     public function getBuyablePrice($options = null)
     {
-        if (!is_null($this->sale_price)){
-            return $this->sale_price;
+        $price = app(CategoriesWithDiscount::class)->getSingleProductById($this->id)->discounted_price;
+
+        $finalPrice = $price ? $price : $this->price;
+
+        if (isset($options['size']) && $this->has_size){
+            return $finalPrice * $options['size'];
+        } else {
+            return $finalPrice;
         }
-        return $this->price;
     }
 
     public function getPriceBeforeDiscount(){

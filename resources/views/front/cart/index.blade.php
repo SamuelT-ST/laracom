@@ -46,10 +46,11 @@
                                                     <i class="fas fa-times" @click="removeItem(index)"></i>
                                                 </div>
                                                 <div class="thumb">
-                                                    <img style="max-width: 150px" :src="item.options.thumb_url ? item.options.thumb_url : '/images/camera.png'" alt="cart image">
+                                                    <a :href="item.options.front_url"><img style="max-width: 150px" :src="item.options.thumb_url ? item.options.thumb_url : '/images/camera.png'" alt="cart image"></a>
                                                 </div>
                                                 <div class="content">
-                                                    <h4 class="title">@{{ item.name }}</h4>
+                                                    <a :href="item.options.front_url"><h4 class="title">@{{ item.name }}</h4></a>
+                                                    <small v-if="item.options.size"><strong>{{ __('Dĺžka') }}: @{{ item.options.size }} m</strong></small><br>
                                                     <small>@{{ item.options.attribute }}: @{{ item.options.value }}</small>
                                                 </div>
                                             </div><!-- //. product detials -->

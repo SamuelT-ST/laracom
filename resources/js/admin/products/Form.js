@@ -34,6 +34,7 @@ Vue.component('product-form', {
                 width: '',
                 height: '',
                 distance_unit: '',
+                has_size: false,
                 weight: '',
                 mass_unit: '',
                 sale_price: '',

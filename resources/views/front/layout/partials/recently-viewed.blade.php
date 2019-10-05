@@ -18,18 +18,17 @@
     {{--</div><!-- //. top content -->--}}
     <div class="bottom-content"><!-- bottom content -->
         <div class="recent-reviews"><!-- recent reviews -->
-            <h4 class="title">{{ __('Váš účet') }}</h4>
+            <h4>{{ __('Váš účet') }}</h4><br>
             @guest
 
             <h5 class="title">{{ __('Nie ste prihlásený, prosím prihláste sa alebo sa zaregistrujte.') }}</h5>
 
                 <div class="right-contnet-area">
                     <div class="top-content">
-                        <h4 class="title">Account Login</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                        <h4 class="title">{{ __('Prihlásenie') }}</h4>
                     </div>
                     <div class="bottom-content">
-                        <form action="{{ route('login') }}" method="post" class="login-form">
+                        <form action="{{ route('login') }}" method="post" class="login-form right-login">
                             {{ csrf_field() }}
                             <div class="form-element">
                                 <input type="email" name="email" class="input-field" placeholder="Enter Username or Email">
@@ -54,7 +53,7 @@
             {{--</a>--}}
 
             @else
-                <h5> {{ getCustomer()->name }} </h5>
+                <h5> {{ getCustomer()->name }} </h5><br>
                 <div class="user-menu"><!-- single review item -->
 
                     <ul class="user-menu-links">

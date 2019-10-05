@@ -8,15 +8,12 @@
                         <div class="single-new-collection-item">
                             <div class="thumb">
                                 <img :src="item.product_thumb" alt="new collcetion image">
-                                <product-detail-form @updated-cart="updateCart" :product="item" :url="'{{ route('cart.store') }}'" inline-template>
-                                    <div class="hover">
-                                        <a href="#" class="addtocart" @click.prevent="addToCart">{{ __('Do košíka') }}</a>
-                                    </div>
-                                </product-detail-form>
                             </div>
                             <div class="content">
                                 <span class="category">@{{ item.categories.name }}</span>
                                 <a :href="item.front_url"><h4 class="title">@{{ item.name }}</h4></a>
+
+                                @include('front.product-group.partials.combinations')
 
                                 <div class="price">
                                     <span class="sprice">@{{ item.discounted_price ? item.discounted_price : item.price }}</span>

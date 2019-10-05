@@ -25,7 +25,8 @@
 
 <product-group
         inline-template
-        @update-cart="updateCart"
+        @updated-cart="updateCart"
+        :url="'{{ route('store-group') }}'"
         :available-products="{{ $products }}">
 
     <!-- product details content area  start -->
@@ -80,9 +81,27 @@
                             @endforeach
                             <h3 class="title">{{ $productGroup->name }}</h3>
 
+                            <div class="price-area">
+                                <div class="left">
+                                    <span class="sprice">@{{ calculatedPrice }}</span>
+
+                                    <span v-if="atLeastOneDiscount" class="dprice"><del>@{{ calculatedOldPrice }}</del></span>
+                                </div>
+                                {{--<div class="right">--}}
+                                {{--<a href="#" class="size">size chart</a>--}}
+                                {{--</div>--}}
+                            </div>
+
                             <div class="pdescription">
                                 <h4 class="title">{{ __('Popis') }}</h4>
                                 <p>{!! $productGroup->description !!}</p>
+                                <div class="mt-4">
+                                    <h4 class="title">{{ __('Dĺžka v m') }}</h4>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="number" v-model="size" />
+                                </div>
+
                             </div>
                             <div class="paction">
                                 <div class="qty">
@@ -113,9 +132,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" id="item-review-tab" data-toggle="tab" href="#item_review" role="tab" aria-controls="item_review" aria-selected="true">{{ __('Produkty v balíku') }}</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="descr-tab" data-toggle="tab" href="#descr" role="tab" aria-controls="descr" aria-selected="false">{{ __('Popis') }}</a>
-                                </li>
+                                {{--<li class="nav-item">--}}
+                                    {{--<a class="nav-link" id="descr-tab" data-toggle="tab" href="#descr" role="tab" aria-controls="descr" aria-selected="false">{{ __('Popis') }}</a>--}}
+                                {{--</li>--}}
                                 {{--<li class="nav-item">--}}
                                 {{--<a class="nav-link" id="method-tab" data-toggle="tab" href="#method" role="tab" aria-controls="method" aria-selected="false">Features</a>--}}
                                 {{--</li>--}}

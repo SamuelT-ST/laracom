@@ -65,7 +65,9 @@ return [
             'value' => 'Hodnota',
             'salePrice' => 'Zľava',
             'wholesale_price' => 'Nákupná cena',
-            'defaultPrice' => 'Základný variant'
+            'defaultPrice' => 'Základný variant',
+            'distance_unit' => 'Jednotka',
+            'has_size' => 'Vypočítať cenu podľa mernej jednotky'
         ],
     ],
     'address'=>[
@@ -174,6 +176,13 @@ return [
             'customer_company' => "Firma",
             'customer_ico' => "IČO",
             'customer_dic' => "DIČ",
+            'customer_phone' => "Telefón",
+            'shipping_customer_name' => "Meno",
+            'shipping_customer_email' => "Email",
+            'shipping_customer_company' => "Firma",
+            'shipping_customer_ico' => "IČO",
+            'shipping_customer_dic' => "DIČ",
+            'shipping_customer_phone' => "Telefón",
         ],
     ],
 

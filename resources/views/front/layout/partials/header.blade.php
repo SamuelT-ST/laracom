@@ -2,7 +2,7 @@
 <nav class="navbar navbar-area navbar-expand-lg navbar-light bg-wite home-5">
     <div class="container nav-container">
         <div class="logo-wrapper navbar-brand ">
-            <a href="index.html" class="logo main-logo">
+            <a href="/" class="logo main-logo">
                 <img style="width: 200px" class="logo img-responsive" src="https://lumo.sk/img/Logo_Lumo.png" alt="LUMO Slovakia s.r.o. ">
             </a>
         </div>

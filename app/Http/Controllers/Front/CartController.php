@@ -6,6 +6,7 @@ use App\Http\Requests\Admin\Order\StoreOrder;
 use App\Models\PaymentMethod;
 use App\Services\CategoriesWithDiscount;
 use App\Shop\Cart\Requests\CartCheckoutRequest;
+use App\Shop\Carts\Requests\AddGroupToCartRequest;
 use App\Shop\Carts\Requests\AddToCartRequest;
 use App\Shop\Carts\Repositories\Interfaces\CartRepositoryInterface;
 use App\Shop\Countries\Country;
@@ -116,7 +117,12 @@ class CartController extends Controller
             $options['value'] = $attr->attributesValues->first()->value;
         }
 
+        if ($request->has('size')){
+            $options['size'] = $request->get('size');
+        }
+
         $options['thumb_url'] = $product->getFirstMediaUrl('cover', 'thumb_200');
+        $options['front_url'] = $product->front_url;
 
         $this->cartRepo->addToCart($product, $request->input('quantity'), $options);
 
@@ -126,6 +132,62 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')
             ->with('message', 'Add to cart successful');
+    }
+
+    /**
+     * @param AddGroupToCartRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Support\Collection
+     */
+
+    public function storeGroup(AddGroupToCartRequest $request){
+
+        $sanitized = $request->validated();
+
+        $request->getProductsIds()->each(function ($productId) use (&$product, $sanitized, $request, &$options){
+            $product = app(CategoriesWithDiscount::class)->getSingleProductById($productId);
+
+            if ($product->attributes()->count() > 0) {
+                $productAttr = $product->attributes()->where('default', 1)->first();
+
+                if (!is_null($productAttr) && $productAttr->price !== 0 && isset($productAttr->sale_price)) {
+                    $product->price = $productAttr->price;
+
+                    if (!is_null($productAttr) && $productAttr->price !== 0 && !is_null($productAttr->sale_price)) {
+                        $product->price = $productAttr->sale_price;
+                    }
+                }
+            }
+
+            if (isset($sanitized['productAttributes'])){
+                $productAttributes = $request->mapAttributes();
+
+                if (!is_null($productAttributes[$product->id])){
+                    $attr = $this->productAttributeRepo->findProductAttributeById(intval($productAttributes[$product->id]));
+
+                    $attr->price = is_null($attr->price) ? 0 : $attr->price;
+
+                    $product->price = $product->price + $attr->price;
+
+                    $options['attribute'] = $attr->attributesValues->first()->attribute->name;
+                    $options['value'] = $attr->attributesValues->first()->value;
+
+                }
+
+            }
+            $options['thumb_url'] = $product->getFirstMediaUrl('cover', 'thumb_200');
+            $options['size'] = $request->get('size');
+            $options['front_url'] = $product->front_url;
+            $this->cartRepo->addToCart($product, $sanitized['quantity'], $options);
+
+        });
+
+        if ($request->ajax()){
+            return $this->cartRepo->getWholeCart();
+        }
+
+        return redirect()->route('cart.index')
+            ->with('message', 'Add to cart successful');
+
     }
 
     /**

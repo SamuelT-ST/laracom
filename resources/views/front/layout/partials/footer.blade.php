@@ -7,9 +7,9 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-widget about">
                         <div class="widget-body">
-                            <a href="index.html" class="footer-logo">
-                                <img src="assets/img/logo.png" alt="footer logo">
-                            </a>
+                            {{--<a href="/" class="logo main-logo">--}}
+                                {{--<img style="width: 200px" class="logo img-responsive" src="https://lumo.sk/img/Logo_Lumo.png" alt="LUMO Slovakia s.r.o. ">--}}
+                            {{--</a>--}}
                             <ul class="contact-info-list">
                                 <li>
                                     <div class="single-contact-info">
@@ -17,7 +17,7 @@
                                             <i class="fas fa-map-marker-alt"></i>
                                         </div>
                                         <div class="content">
-                                            <span class="details">198 West 21th Street, Suite 721, New York NY 10010</span>
+                                            <span class="details">{{ __('LUMO Slovakia s.r.o. Vajnorská 98/A 831 04 Bratislava') }}</span>
                                         </div>
                                     </div>
                                 </li>
@@ -27,8 +27,8 @@
                                             <i class="fas fa-envelope"></i>
                                         </div>
                                         <div class="content">
-                                            <span class="details">youremail@yourdomain.com</span>
-                                            <span class="details">example@yourdomain.com</span>
+                                            <span class="details">{{ __('Pošlite nám email:') }}</span>
+                                            <span class="details">{{ __('info@lumo.sk') }}</span>
                                         </div>
                                     </div>
                                 </li>
@@ -38,8 +38,8 @@
                                             <i class="fas fa-phone"></i>
                                         </div>
                                         <div class="content">
-                                            <span class="details">+88 (0) 101 0000 000</span>
-                                            <span class="details">+99 (989) 101 0000 000</span>
+                                            <span class="details">{{ __('Zavolajte nám:') }}</span>
+                                            <span class="details">{{ __('1111 11 11 11') }}</span>
                                         </div>
                                     </div>
                                 </li>
@@ -50,16 +50,13 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-widget">
                         <div class="widget-title">
-                            <h4 class="title">Shopping Guide</h4>
+                            <h4 class="title">{{ __('Kategórie') }}</h4>
                         </div>
                         <div class="widget-body">
                             <ul class="page-list">
-                                <li><a href="blog.html">--  Blog</a></li>
-                                <li><a href="faq.html">--  Faq</a></li>
-                                <li><a href="#">--  Payment</a></li>
-                                <li><a href="track-orders.html">--  Shipment</a></li>
-                                <li><a href="#">--  Where is my order</a></li>
-                                <li><a href="#">--  Return policy</a></li>
+                                @foreach(App\Shop\Categories\Category::whereParentId(null)->get() as $category)
+                                    <li><a href="{{ $category->front_url }}">--  {{ $category->name }}</a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -67,16 +64,13 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-widget">
                         <div class="widget-title">
-                            <h4 class="title">Style Adviser</h4>
+                            <h4 class="title">{{ __('Články a tipy') }}</h4>
                         </div>
                         <div class="widget-body">
                             <ul class="page-list">
-                                <li><a href="signup.html">--  Your Account</a></li>
-                                <li><a href="#">--  Information</a></li>
-                                <li><a href="#">--  Address</a></li>
-                                <li><a href="#">--  Discount</a></li>
-                                <li><a href="#">--  Order History</a></li>
-                                <li><a href="track-orders.html">--   Order Tracking</a></li>
+                                @foreach(App\Shop\Categories\Category::whereParentId(null)->get() as $category)
+                                    <li><a href="{{ $category->front_url }}">--  {{ $category->name }}</a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -84,7 +78,7 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-widget">
                         <div class="widget-title">
-                            <h4 class="title">Information</h4>
+                            <h4 class="title">{{ __('Informácie') }}</h4>
                         </div>
                         <div class="widget-body">
                             <ul class="page-list">
@@ -107,7 +101,7 @@
                 <div class="col-lg-12">
                     <div class="copyright-inner"><!-- copyright inner -->
                         <div class="left-content-area">
-                            <span class="copyright-text">Copyright by@Bigenza - 2018</span>
+                            <span class="copyright-text">Copyright Lumo.sk - 2019</span>
                         </div>
                         <div class="right-content-area">
                             <ul class="payment-logo">

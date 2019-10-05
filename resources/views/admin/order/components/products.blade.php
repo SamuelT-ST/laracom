@@ -7,6 +7,7 @@
         {{--<th scope="col">{{__('Image')}}}</th>--}}
         <th scope="col">{{__('Name')}}</th>
         <th scope="col">{{__('Quantity')}}</th>
+        <th scope="col">{{__('Size')}}</th>
         <th scope="col">{{__('Price')}}</th>
         <th scope="col">{{__('Price with tax')}}</th>
         <th scope="col">{{__('Discount')}}</th>
@@ -20,8 +21,9 @@
             <th scope="row">@{{ product.id }}</th>
             <td>@{{ product.sku }}</td>
             <td><strong>@{{ product.name }}</strong></td>
-            <td><input style="width: 50px" type="number" @input="updateProduct"  v-model="product.chosenQuantity"> </td>
-            <td><input style="width: 50px" type="number" @input="updateProduct" v-model="product.price"></td>
+            <td><input style="width: 50px" type="number" @input="updateProduct"  v-model="product.chosenQuantity"> @{{product.distance_unit}} </td>
+            <td><input style="width: 50px" type="number" @input="updateProduct"  v-model="product.size"> </td>
+            <td><input v-if="product.has_size" style="width: 50px" type="number" @input="updateProduct" v-model="product.price"></td>
             <td>@{{ (Number(product.price) * 1.2).toFixed(2) }}</td>
             <td><input style="width: 50px" type="text" @input="updateProduct" v-model="product.chosenDiscount"></td>
             <td>@{{ ((product.chosenQuantity * Number(product.price)) / 100 * (100 - Number(product.chosenDiscount) )).toFixed(2) }}

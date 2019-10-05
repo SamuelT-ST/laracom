@@ -199,12 +199,22 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         $items->each(function ($item) {
             $productRepo = new ProductRepository(new Product);
             $product = $productRepo->find($item->id);
+
+            if ($item->options->has('size')){
+                $size = $item->options->size;
+            } else {
+                $size = null;
+            }
+
             if ($item->options->has('product_attribute_id')) {
                 $this->associateProduct($product, $item->qty, [
-                    'product_attribute_id' => $item->options->product_attribute_id
+                    'product_attribute_id' => $item->options->product_attribute_id,
+                    'size' => $size
                 ]);
             } else {
-                $this->associateProduct($product, $item->qty);
+                $this->associateProduct($product, $item->qty, [
+                    'size' => $size
+                ]);
             }
         });
     }

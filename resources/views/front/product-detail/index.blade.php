@@ -8,12 +8,15 @@
             <div class="col-lg-12">
                 <div class="breadcrumb-inner"><!-- breadcrumb inner -->
                     <div class="left-content-area"><!-- left content area -->
-                        <h1 class="title">Product Details</h1>
+                        <h1 class="title">{{ __('Detaily produktu') }}</h1>
                     </div><!-- //. left content area -->
                     <div class="right-content-area">
                         <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li>Product Details</li>
+                            <li><a href="{{ url('/') }}">{{ __('Domov') }}</a></li>
+                            @foreach(collect($product->categories)->reverse() as $categoryPath)
+                                <li><a href="{{$categoryPath->front_url}}">{{ $categoryPath->name }}</a></li>
+                            @endforeach
+                            <li>{{ $product->name }}</li>
                         </ul>
                     </div>
                 </div><!-- //. breadcrumb inner -->
@@ -83,6 +86,7 @@
                         {{--<span class="orders">Orders (200+)</span>--}}
                     {{--</div>--}}
                     {{--{{ dd($product) }}--}}
+                    <product-detail-form :tax-rate="{{ \App\Shop\Products\Product::TAX_RATE }}" @updated-cart="updateCart" :default-attribute="{{ $product->default_attribute_id }}" :product="{{ $product }}" :url="'{{ route('cart.store') }}'" inline-template>
                     <div class="bottom-content">
                         @foreach($product->categories as $category)
                         <span class="cat">{{ $category->name }}</span>
@@ -90,18 +94,19 @@
                         <h3 class="title">{{ $product->name }}</h3>
                         <div class="price-area">
                             <div class="left">
-                                <span class="sprice">{{ $product->discounted_price ? $product->discounted_price : $product->price }}</span>
+                                <span class="sprice">@{{ calculatedPrice }} {{ \App\Shop\Products\Product::CURRENCY }}</span>
 
                                 @if($product->discounted_price)
-                                    <span class="dprice"><del>{{ $product->price }}</del></span>
+                                    <span class="dprice"><del>@{{ calculatedOldPrice }} {{ \App\Shop\Products\Product::CURRENCY }}</del></span>
                                 @endif
-                            </div>
+                            </div><br>
+                            <h6>@{{ calculatedPriceWithDph }} {{ \App\Shop\Products\Product::CURRENCY }} {{ __('bez DPH') }}</h6>
                             {{--<div class="right">--}}
                                 {{--<a href="#" class="size">size chart</a>--}}
                             {{--</div>--}}
                         </div>
                         <ul class="product-spec">
-                            <li>Brands:  <span class="right">Hewlett-Packard </span></li>
+                            {{--<li>Brands:  <span class="right">Hewlett-Packard </span></li>--}}
                             <li>{{ __('Kód') }}: <span class="right">{{ $product->sku }}</span></li>
                             {{--<li>Reward Points:  <span class="right">100 </span></li>--}}
                             <li>{{ __('Stav: ') }}:
@@ -113,13 +118,22 @@
                             </li>
 
                         </ul>
-
-                        <product-detail-form @updated-cart="updateCart" :default-attribute="{{ $product->default_attribute_id }}" :product="{{ $product }}" :url="'{{ route('cart.store') }}'" inline-template>
                             <div>
                                 <div class="pdescription">
                                     <h4 class="title">{{ __('Popis') }}</h4>
                                     <p>{!! $product->description !!}</p>
                                     @include('front.product-detail.partials.combinations')
+
+                                    @if($product->has_size)
+                                        <div class="mt-4">
+                                            <h4 class="title">{{ __('Dĺžka v') }} {{ $product->distance_unit }}</h4>
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" type="number" v-model="size" />
+                                        </div>
+                                    @endif
+
+
                                 </div>
                                 <div class="paction">
                                     <div class="qty">
@@ -139,8 +153,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </product-detail-form>
-                    </div>
+                        </div>
+                    </product-detail-form>
                 </div><!-- //. right content area -->
             </div>
         </div>
@@ -238,109 +252,6 @@
 </div>
 <!-- product details content area end -->
 <!-- recently added start -->
-<div class="recently-added-area product-details">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="recently-added-nav-menu"><!-- recently added nav menu -->
-                    <ul>
-                        <li>recently added</li>
-                    </ul>
-                </div><!-- //.recently added nav menu -->
-            </div>
-            <div class="col-lg-12">
-                <div class="recently-added-carousel" id="recently-added-carousel"><!-- recently added carousel -->
-                    <div class="single-new-collection-item">
-                        <div class="thumb">
-                            <img src="assets/img/new-collections/09.jpg" alt="product image">
-                            <div class="hover">
-                                <a href="#" class="addtocart">Add to cart</a>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <a href="#" class="category">accesories</a>
-                            <h4 class="title">Milo Hoverboard</h4>
-                            <div class="price"><span class="sprice">$7.00</span> <del class="dprice">$42.00</del></div>
-                        </div>
-                    </div>
-                    <div class="single-new-collection-item">
-                        <div class="thumb">
-                            <img src="assets/img/new-collections/10.jpg" alt="product image">
-                            <div class="hover">
-                                <a href="#" class="addtocart">Add to cart</a>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <a href="#" class="category">Bike</a>
-                            <h4 class="title">Dart Moto Bike</h4>
-                            <div class="price"><span class="sprice">$30.00</span> <del class="dprice">$45.00</del></div>
-                        </div>
-                    </div>
-                    <div class="single-new-collection-item">
-                        <div class="thumb">
-                            <img src="assets/img/new-collections/11.jpg" alt="product image">
-                            <div class="hover">
-                                <a href="#" class="addtocart">Add to cart</a>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <a href="#" class="category">cycle</a>
-                            <h4 class="title">Minimal Cycle</h4>
-                            <div class="price"><span class="sprice">$70.00</span> <del class="dprice">$120.00</del></div>
-                        </div>
-                    </div>
-                    <div class="single-new-collection-item">
-                        <div class="thumb">
-                            <img src="assets/img/new-collections/12.jpg" alt="product image">
-                            <div class="hover">
-                                <a href="#" class="addtocart">Add to cart</a>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <a href="#" class="category">hat</a>
-                            <h4 class="title">Red Yello Hat</h4>
-                            <div class="price"><span class="sprice">$89.00</span> <del class="dprice">$156.00</del></div>
-                        </div>
-                    </div>
-                    <div class="single-new-collection-item">
-                        <div class="thumb">
-                            <img src="assets/img/new-collections/03.jpg" alt="product image">
-                            <div class="hover">
-                                <a href="#" class="addtocart">Add to cart</a>
-                            </div>
-                        </div>
-                        <div class="content">
-                            <a href="#" class="category">cycle</a>
-                            <h4 class="title">Minimal Cycle</h4>
-                            <div class="price"><span class="sprice">$70.00</span> <del class="dprice">$90.00</del></div>
-                        </div>
-                    </div>
-                </div><!-- //. recently added carousel -->
-            </div>
-        </div>
-    </div>
-</div>
+@include('front.layout.partials.recently-added', ['categoryId' => $product->categories()->first()->id])
 <!-- recently added end -->
-
 @endsection
-
-{{--@section('bottom-scripts')--}}
-    {{--<script>--}}
-        {{--$('.addtocart').on('click', function(){--}}
-            {{--$.ajax({--}}
-                {{--method: "POST",--}}
-                {{--url: "/cart",--}}
-                {{--data: {--}}
-                    {{--product: $('.addtocart').data('product-id'),--}}
-                    {{--quantity: $('.qttotal').text(),--}}
-                    {{--productAttribute: $('.attribute-select').val(),--}}
-                    {{--_token: "{{ csrf_token() }}",--}}
-                {{--}--}}
-            {{--}).done(() => {--}}
-                {{--console.log('addedToCart');--}}
-            {{--}).fail((response) => {--}}
-                {{--console.log('fail');--}}
-                {{--});--}}
-            {{--});--}}
-    {{--</script>--}}
-{{--@endsection--}}

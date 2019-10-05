@@ -20,7 +20,7 @@ class CategoriesWithDiscount
 
         $guestId = CustomerGroup::where('title', 'Guest')->first()->id;
 
-        $customerGroups = Auth::user() instanceof Customer ? Auth::user()->groups()->pluck('id') : [$guestId];
+        $customerGroups = Auth::user() instanceof Customer && Auth::user()->groups()->count() ? Auth::user()->groups()->pluck('id') : [$guestId];
 
 
         $discountsWithGroupAndCategory = Discount::selectRaw('discounts.percentage, discounts.from_margin, discounts.id, category_id, customer_group_id')

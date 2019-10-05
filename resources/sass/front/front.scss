@@ -18,6 +18,7 @@
 
 .user-menu {
   color: white;
+  text-align: center;
 
   li {
     list-style: none;
@@ -29,4 +30,15 @@
     }
   }
 
+}
+
+.right-login{
+  input{
+    margin-bottom: 6px;
+    height: 50px;
+  }
+}
+
+.recent-reviews {
+  text-align: center;
 }

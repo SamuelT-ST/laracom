@@ -29,6 +29,7 @@ class UpdateProductRequest extends BaseFormRequest
             'weight' => ['numeric', 'nullable'],
             'width' => ['numeric', 'nullable'],
             'combinations' => ['array', 'nullable'],
+            'has_size' => ['boolean', 'required']
         ];
     }
 }

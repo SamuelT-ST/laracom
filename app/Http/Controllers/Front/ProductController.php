@@ -70,10 +70,12 @@ class ProductController extends Controller
 
     public function showProductGroup(string $slug){
 
-        $productGroup = ProductGroup::with('categories', 'products')->where('slug', $slug)->first();
+        $productGroup = ProductGroup::with('categories', 'products', 'products.attributes', 'products.attributes.attributesValues', 'products.attributes.attributesValues.attribute')->where('slug', $slug)->first();
 
         $products = $productGroup->products->map(function ($product){
-            return collect(app(CategoriesWithDiscount::class)->getSingleProductById($product->id))->put('pivot', $product->pivot);
+            return collect(app(CategoriesWithDiscount::class)->getSingleProductById($product->id))
+                ->put('pivot', $product->pivot)
+                ->put('attributes', $product->attributes);
         });
 
         return view('front.product-group.index', compact(

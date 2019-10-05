@@ -21,7 +21,8 @@ class OrderProduct extends Model
         'product_sku',
         'product_description',
         'product_price',
-        'product_discount'
+        'product_discount',
+        'size'
     ];
 
     public function product(){

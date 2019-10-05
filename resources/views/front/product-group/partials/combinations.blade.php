@@ -1,16 +1,15 @@
-@if(count($product->attributes))
-
-<div class="mt-4">
-        <h4 class="title">{{ __('Vyberte si kombináciu') }}</h4>
-</div>
-<div class="form-group">
-        <select class="form-control attribute-select" v-model="productAttribute">
-        @foreach($product->attributes as $attribute)
-            @foreach($attribute->attributesValues as $attributeValue)
-                <option value="{{ $attribute->id }}">{{ $attributeValue->attribute->name}}: {{ $attributeValue->value }}</option>
-                {{ $attributeValue->attribute->name}}: {{ $attributeValue->value }}
-            @endforeach
-        @endforeach
-        </select>
-</div>
-@endif
+<template v-if="item.attributes.length">
+        <div class="mb-2">
+                <small>{{ __('Vyberte si kombináciu') }}</small>
+        </div>
+        <div class="form-group mx-4">
+                <select class="form-control attribute-select" @change="chooseAttribute($event, item.id)">
+                <template v-for="attribute in item.attributes">
+                        <template v-for="attributeValue in attribute.attributes_values">
+                        <option :value="attribute.id">@{{ attributeValue.attribute.name}}: @{{ attributeValue.value }}</option>
+                        @{{ attributeValue.attribute.name}}: @{{ attributeValue.value }}
+                        </template>
+                </template>
+                </select>
+        </div>
+</template>
