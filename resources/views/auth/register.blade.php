@@ -8,12 +8,12 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-inner"><!-- breadcrumb inner -->
                         <div class="left-content-area"><!-- left content area -->
-                            <h1 class="title">Signup</h1>
+                            <h1 class="title">{{ __('Registrácia') }}</h1>
                         </div><!-- //. left content area -->
                         <div class="right-content-area">
                             <ul>
-                                <li><a href="index.html">Home</a></li>
-                                <li>Signup</li>
+                                <li><a href="/">{{ __('Domov') }}</a></li>
+                                <li>{{ __('Registrácia') }}</li>
                             </ul>
                         </div>
                     </div><!-- //. breadcrumb inner -->

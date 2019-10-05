@@ -63,3 +63,11 @@
   margin-bottom: 20px;
 }
 
+.recent-reviews a.link {
+  color: white;
+}
+
+.recent-reviews a.link:hover {
+  color: #dee5e6;
+}
+

@@ -37,8 +37,10 @@
                                 <input type="password" name="password" class="input-field" placeholder="Enter Password">
                             </div>
                             <div class="btn-wrapper">
-                                <button type="submit" class="submit-btn">Login</button>
-                                <a href="#" class="link">Forget password?</a>
+                                <button type="submit" class="submit-btn mb-3">Login</button><br>
+
+                                <a href="{{ route('register') }}" class="link">{{ __('Ešte nemáte účet?') }}</a><br>
+                                <a href="#" class="link">{{ __('Zabudli ste heslo?') }}</a>
                             </div>
                         </form>
                     </div>
