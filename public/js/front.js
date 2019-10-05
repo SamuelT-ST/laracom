@@ -86498,15 +86498,15 @@ Vue.component('product-detail-form', {
         _this.$emit('updated-cart', response.data);
 
         _this.$notify({
-          type: 'success',
-          title: 'Item added',
-          text: 'Item successfully added'
+          type: 'info',
+          title: 'Položka pridaná',
+          text: 'Produkt úspešne pridaný do košíka'
         });
       }, function (error) {
         _this.$notify({
           type: 'error',
           title: 'Error!',
-          text: 'An error has occured.'
+          text: 'Nastala chyba'
         });
       });
     }

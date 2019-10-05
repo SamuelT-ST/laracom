@@ -39,9 +39,9 @@ Vue.component('product-detail-form', {
 
             axios.post(this.url, data).then(response => {
                 this.$emit('updated-cart', response.data);
-                this.$notify({ type: 'success', title: 'Item added', text: 'Item successfully added'});
+                this.$notify({ type: 'info', title: 'Položka pridaná', text: 'Produkt úspešne pridaný do košíka'});
             }, error => {
-                this.$notify({ type: 'error', title: 'Error!', text: 'An error has occured.'});
+                this.$notify({ type: 'error', title: 'Error!', text: 'Nastala chyba'});
             });
         }
     }
