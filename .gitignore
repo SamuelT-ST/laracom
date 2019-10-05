@@ -1,9 +1,10 @@
 /node_modules/
 /public/hot
 /public/storage
-/public/fonts
+/public/uploads
+/public/vendor
+/public/media
 /public/img
-/public/images
 /public/fonts/vendor
 /storage/*.key
 /vendor
@@ -23,7 +24,4 @@ Envoy.blade.php
 /coverage
 storage/app/public/storage
 \.php_cs\.cache
-public/css
-public/js
 storage
-/public
