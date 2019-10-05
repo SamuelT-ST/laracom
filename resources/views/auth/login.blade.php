@@ -70,6 +70,7 @@
                                             </div>
                                         </form>
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div><!-- //.login page wrapper -->
@@ -77,5 +78,6 @@
             </div>
         </div>
     </div>
+
     <!-- login page content area end -->
 @endsection

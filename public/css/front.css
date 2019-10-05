@@ -55,3 +55,11 @@
   width: 200px;
 }
 
+.recent-reviews .form-element input {
+  font-size: 14px;
+  font-family: "Rubik", sans-serif;
+  border-radius: 30px;
+  border: 2px solid #f0f0f0;
+  margin-bottom: 20px;
+}
+
