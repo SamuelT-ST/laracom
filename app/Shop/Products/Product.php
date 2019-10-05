@@ -225,6 +225,6 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     }
 
     public function getProductThumb() {
-        return $this->getFirstMediaUrl('cover', 'product_detail_thumb') ? $this->getFirstMediaUrl('cover', 'product_detail_thumb') : asset('images/camera.png');
+        return $this->getFirstMediaUrl('cover', 'product_detail') ? $this->getFirstMediaUrl('cover', 'product_detail') : asset('images/camera.png');
     }
 }
