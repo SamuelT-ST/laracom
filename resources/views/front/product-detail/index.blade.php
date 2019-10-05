@@ -51,7 +51,7 @@
                     </div>
                     <ul class="owl-thumbs product-deails-thumb" data-slider-id="1">
                         <li class="owl-thumb-item">
-                            <img src="{{ $product->getProductThumb() }}" alt="product details thumb">
+                            <img src="{{ $product->getMiniProductThumb() }}" alt="product details thumb">
                         </li>
                         @foreach($product->getMedia('images') as $media)
                         <li class="owl-thumb-item">
