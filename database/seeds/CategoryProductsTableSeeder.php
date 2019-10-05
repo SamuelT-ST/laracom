@@ -17,9 +17,9 @@ class CategoryProductsTableSeeder extends Seeder
                 $faker = Faker::create();
 
                 $file = $faker->image();
-//                $file2 = UploadedFile::fake()->image(rand(1,10000).'.png', 600, 600);
+                $file2 = $faker->image();
                 $product->addMedia($file)->toMediaCollection('cover', 'media');
-//                $product->addMedia($file2)->toMediaCollection('images', 'media');
+                $product->addMedia($file2)->toMediaCollection('images', 'media');
                 $category->entries(Product::class)->save($product);
             });
         });
