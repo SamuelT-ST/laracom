@@ -96,7 +96,7 @@
                                     <span class="dprice"><del>@{{ calculatedOldPrice }} {{ \App\Shop\Products\Product::CURRENCY }}</del></span>
                                 @endif
                             </div><br>
-                            <h6>@{{ calculatedPriceWithDph }} {{ \App\Shop\Products\Product::CURRENCY }} {{ __('bez DPH') }}</h6>
+                            <h6>@{{ calculatedPriceWithDph }} {{ \App\Shop\Products\Product::CURRENCY }} {{ __('s DPH') }}</h6>
                             {{--<div class="right">--}}
                                 {{--<a href="#" class="size">size chart</a>--}}
                             {{--</div>--}}
