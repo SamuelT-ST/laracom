@@ -9,7 +9,7 @@
             </product-detail-form>
         </div>
         <div class="content">
-            <span class="category">@{{ item.categories.name }}</span>
+            <span v-for="category in item.categories" class="category">@{{ category.name }}</span>
             <a :href="item.front_url"><h4 class="title">@{{ item.name }}</h4></a>
 
             <div class="price">
