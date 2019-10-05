@@ -198,7 +198,7 @@
                                 <ul class="order-list">
                                     <li>
                                         <div class="single-order-list heading">
-                                            Product <span class="right">Total</span>
+                                            {{ __('Produkt') }} <span class="right">{{ __('Celkom') }}</span>
                                         </div>
                                     </li>
                                     <li v-for="(item, index) in content.cartItems" class="name">
@@ -208,23 +208,23 @@
                                     </li>
                                     <li>
                                         <div class="single-order-list title-bold">
-                                            Subtotal <span class="right normal">@{{ content.subtotal }} €</span>
+                                            {{ __('Produkty celkom') }} <span class="right normal">@{{ content.subtotal }} €</span>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="single-order-list title-bold">
-                                            Tax <span class="right normal">@{{ content.tax }} €</span>
+                                            {{ __('Daň') }} <span class="right normal">@{{ content.tax }} €</span>
                                         </div>
                                     </li>
                                     <li class="shipping">
                                         <div class="single-order-list title-bold">
-                                            Shipping
+                                            {{ __('Poštovné') }}
                                             <span class="right normal">@{{ content.shippingFee }} €</span>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="single-order-list title-bold">
-                                            Total <span class="right normal">@{{ totalWithShipping }} €</span>
+                                            {{ __('Celkom') }} <span class="right normal">@{{ totalWithShipping }} €</span>
                                         </div>
                                     </li>
                                 </ul>
@@ -299,14 +299,14 @@
                                 {{--</div>--}}
                                 <div class="checkbox-element account">
                                     <div class="checkbox-wrapper">
-                                        <label class="checkbox-inner">I’ve read and accept the <a href="#" class="base-color">terms & conditions *</a>
+                                        <label class="checkbox-inner">{{ __('Súhlasím s ') }} <a href="#" class="base-color">{{ __('obchodnými podmienkami') }} *</a>
                                             <input type="checkbox">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="btn-wrapper">
-                                    <button type="submit" class="submit-btn"> place your order </button>
+                                    <button type="submit" class="submit-btn"> {{ __('Objednávka s povinnosťou platby') }} </button>
                                 </div>
                             </div>
                         </div>
