@@ -52,6 +52,12 @@ Vue.component('category-listing', {
 
     methods: {
 
+        sort(e){
+            this.orderBy.column = 'discounted_price';
+            this.orderBy.direction = e.target.value;
+            this.loadData();
+        },
+
         updateCart(data) {
             this.$emit('updated-cart', data)
         },

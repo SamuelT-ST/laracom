@@ -14,34 +14,10 @@ class SettingsTableSeeder extends Seeder
                 'image' => true
             ],
             [
-                'option' => 'FrontPage Banner Header',
-                'option_slug' => str_slug('FrontPage Banner Header'),
-                'value' => '',
-                'image' => false
-            ],
-            [
-                'option' => 'FrontPage Banner Text',
-                'option_slug' => str_slug('FrontPage Banner Text'),
-                'value' => '',
-                'image' => false
-            ],
-            [
-                'option' => 'FrontPage Banner Link',
-                'option_slug' => str_slug('FrontPage Banner Link'),
-                'value' => '',
-                'image' => false
-            ],
-            [
                 'option' => 'Banner 1',
                 'option_slug' => str_slug('Banner 1'),
                 'value' => '',
                 'image' => true
-            ],
-            [
-                'option' => 'Banner 1 Link',
-                'option_slug' => str_slug('Banner 1 Link'),
-                'value' => '',
-                'image' => false
             ],
             [
                 'option' => 'Banner 2',
@@ -50,8 +26,20 @@ class SettingsTableSeeder extends Seeder
                 'image' => true
             ],
             [
-                'option' => 'Banner 2 Link',
-                'option_slug' => str_slug('Banner 2 Link'),
+                'option' => 'Video preview',
+                'option_slug' => str_slug('Video preview'),
+                'value' => '',
+                'image' => false
+            ],
+            [
+                'option' => 'Bottom banner 1',
+                'option_slug' => str_slug('Bottom banner 1'),
+                'value' => '',
+                'image' => false
+            ],
+            [
+                'option' => 'Bottom banner 2',
+                'option_slug' => str_slug('Bottom banner 2'),
                 'value' => '',
                 'image' => false
             ],

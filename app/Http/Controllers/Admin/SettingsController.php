@@ -65,6 +65,8 @@ class SettingsController extends Controller
         // Sanitize input
         $sanitized = $request->validated();
 
+        $sanitized['option_slug'] = str_slug($sanitized['option']);
+
         // Store the Setting
         $setting = Setting::create($sanitized);
 

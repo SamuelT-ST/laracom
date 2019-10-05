@@ -1,16 +1,18 @@
 <?php
 
 /** @var  \Illuminate\Database\Eloquent\Factory $factory */
-$factory->define(App\Models\Discount::class, function (Faker\Generator $faker) {
+
+use App\Models\Discounts\Discount;
+use App\Shop\Posts\Post;
+
+$factory->define(Discount::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->firstName,
+        'name' => $faker->word,
         'description' => $faker->sentence,
         'percentage' => $faker->randomNumber(5),
         'from_margin' => $faker->boolean(),
         'created_at' => $faker->dateTime,
         'updated_at' => $faker->dateTime,
-        
-        
     ];
 });
 
@@ -61,11 +63,9 @@ $factory->define(App\Models\PaymentMethod::class, function (Faker\Generator $fak
     return [
         'title' => $faker->sentence,
         'description' => $faker->sentence,
-        'price' => $faker->randomNumber(5),
+        'price' => $faker->numberBetween(1, 10),
         'created_at' => $faker->dateTime,
         'updated_at' => $faker->dateTime,
-        
-        
     ];
 });
 
@@ -108,8 +108,22 @@ $factory->define(App\Models\ProductGroup::class, function (Faker\Generator $fake
         'status' => $faker->boolean(),
         'created_at' => $faker->dateTime,
         'updated_at' => $faker->dateTime,
-        
-        
+    ];
+});
+
+/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(Post::class, function (Faker\Generator $faker) {
+
+    $title = $faker->word;
+
+    return [
+        'title' => $title,
+        'slug' => str_slug($title),
+        'perex' => $faker->text(),
+        'body' => $faker->paragraphs(4, true),
+        'enabled' => $faker->boolean(),
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
     ];
 });
 

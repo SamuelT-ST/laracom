@@ -12,6 +12,7 @@ use App\Shop\Carts\Repositories\Interfaces\CartRepositoryInterface;
 use App\Shop\Countries\Country;
 use App\Shop\Couriers\Repositories\CourierRepository;
 use App\Shop\Couriers\Repositories\Interfaces\CourierRepositoryInterface;
+use App\Shop\Orders\Order;
 use App\Shop\Orders\Repositories\OrderRepository;
 use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
 use App\Shop\Products\Product;
@@ -240,8 +241,13 @@ class CartController extends Controller
     }
     public function storeOrder(CartCheckoutRequest $order){
 
-        app(OrderRepository::class)->createOrder($order->getSanitized());
+        $order = app(OrderRepository::class)->createOrder($order->getSanitized());
 
-        dd('test');
+        return ['redirect' => route('front.order.thankyou', $order->id)];
+
+    }
+
+    public function thankYou(Order $order){
+        return view('front.cart.thankyou')->with(['order'=> $order]);
     }
 }

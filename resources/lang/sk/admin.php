@@ -3,85 +3,175 @@
 return [
     'attributes'=>[
         'actions' => [
-            'index' => 'Atribúty',
-            'create' => 'Nový atribút'
+            'index' => 'Attributes',
+            'create' => 'Create'
         ],
         'columns'=> [
-            'name' => 'Názov'
+            'name' => 'Name'
         ],
     ],
+    'order-statuses' => [
+        'columns' => [
+            'name' => 'Názov',
+            'color' => 'Farba'
+        ],
+        'actions' => [
+            'create' => 'Vytvoriť nový stav objednávky'
+        ]
+    ],
     'customers' => [
-        'title' => 'Zákazníci',
+        'columns' => [
+            'name' => 'Meno',
+            'email' => 'Email',
+            'groups' => 'Skupina',
+            'status' => 'Status',
+            'is_company' => 'Firma',
+            'company' => 'Firma',
+            'select_groups' => 'Skupina',
+            'ico' => 'IČO',
+            'dic' => 'DIČ',
+            'password' => 'Heslo',
+            'password_repeat' => 'Heslo znovu'
+        ],
+        'actions' => [
+            'create' => 'Vytvoriť nového zákazníka'
+        ]
+    ],
+    'category' => [
+        'actions' => [
+            'create' => 'Vytvoriť kategóriu'
+        ],
+        'columns' => [
+            'parent' => 'Rodičovská kategória',
+            'name' => 'Názov',
+            'description' => 'Popis',
+            'status' => 'Aktívna',
+            'id' => 'ID',
+            'slug' => 'Slug',
+        ]
+    ],
+    'products'=>[
+        'actions' =>[
+            'index' => 'Produkty',
+            'createAttribute' => 'Vytvoriť kombináciu',
+            'create' => 'Vytvoriť produkt',
+            'combinations' => 'Kombinácie',
+            'categories' => 'Kategórie'
+        ],
+        'columns' => [
+            'sku' => 'SKU',
+            'width' => "Śírka",
+            'height' => "Výška",
+            'length' => "Hĺbka",
+            'name' => 'Názov',
+            'description' => 'Popis',
+            'quantity' => 'Množstvo',
+            'price' => 'Cena',
+            'status' => 'Aktívny',
+            'feature' => 'Vlastnosť',
+            'value' => 'Hodnota',
+            'salePrice' => 'Zľava',
+            'wholesale_price' => 'Nákupná cena',
+            'defaultPrice' => 'Základný variant',
+            'distance_unit' => 'Jednotka',
+            'has_size' => 'Vypočítať cenu podľa mernej jednotky'
+        ],
+    ],
+    'address'=>[
+        'actions' => [
+            'index' => 'Adresy',
+            'create' => 'Nová adresa000',
+            'edit' => 'Upraviť :name',
+        ],
+        'columns'=>[
+            'address_1'=>'Adresa 1',
+            'address_2'=>'Adresa 2',
+            'countries'=>'Krajina',
+            'city'=>'Mesto',
+            'phone'=>'Telefón',
+            'zip'=>'PSČ',
+            'alias' => 'Alias',
+            'groups' => 'Zákazník',
+            'customer' => 'Zákazník'
+        ]
+    ],
+    'discount' => [
+        'title' => 'Zľavy',
 
         'actions' => [
-            'index' => 'Zákazníci',
-            'create' => 'Nový zákazník',
+            'index' => 'Zľavy',
+            'create' => 'Nová Zľava',
             'edit' => 'Upraviť :name',
         ],
 
         'columns' => [
             'id' => "ID",
             'name' => "Meno",
+            'description' => "Popis",
+            'percentage' => "Zľava v percentách",
+            'from_margin' => "Z pridanej hodnoty",
+            'customer_groups' => "Zákaznícke skupiny",
+            'category' => "Kategórie",
+
+        ],
+    ],
+
+    'admin-user' => [
+        'title' => 'Užívatelia',
+
+        'actions' => [
+            'index' => 'Užívatelia',
+            'create' => 'Nový Užívateľ',
+            'edit' => 'Upraviť :name',
+            'edit_profile' => 'Upraviť Profil',
+            'edit_password' => 'Upraviť Heslo',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'first_name' => "Meno",
+            'last_name' => "Priezvisko",
             'email' => "Email",
-            'status' => "Aktívny",
-            'groups' => "Zákaznícke skupiny",
-            'enabled' => "Enabled",
             'password' => "Heslo",
             'password_repeat' => "Zopakuj heslo",
-            'select_groups' => "Vyberte skupiny"
+            'activated' => "Aktivovaný",
+            'forbidden' => "Blokovaný",
+            'language' => "Jazyk",
+
+            //Belongs to many relations
+            'roles' => "Role",
 
         ],
     ],
-    'customerGroups' => [
-        'title' => 'Zákaznícke skupiny',
 
-        'actions' => [
-            'index' => 'Zákaznícke skupiny',
-            'create' => 'Nová skupina',
-            'edit' => 'Upraviť :name',
-        ],
-
-        'columns' => [
-            'title' => "Názov skupiny",
-        ],
-    ],
-    'address' => [
-        'title' => 'Adresy',
-
-        'actions' => [
-            'index' => 'Adresy',
-            'create' => 'Nová adresa',
-            'edit' => 'Upraviť :name',
-        ],
-
-        'columns' => [
-            'alias' => "Alias",
-            'address_1' => "Adresa",
-            'address_2' => "Adresa",
-            'zip' => "Zip",
-            'city' => "Mesto",
-            'customer' => "Zákazník",
-            'groups' => "Zákazník",
-            'phone' => "Telefón",
-            'countries' => "Krajina",
-            'status' => "Aktiívny",
-        ],
-    ],
     'order' => [
         'title' => 'Objednávky',
 
         'actions' => [
             'index' => 'Objednávky',
-            'create' => 'Nová objednávka',
-            'edit' => 'Upraviť :name',
+            'create' => 'Nová Objednávka',
+            'edit' => 'Uprav :name',
+            'new_customer' => 'Pridať nového zákazníka'
         ],
 
         'columns' => [
-            'date' => "Dátum",
-            'courier' => "Spôsob dodania",
-            'total' => "Cena celkom",
-            'status' => "Stav objednávky",
-            'customer' => "Zákazník",
+            'id' => "ID",
+            'reference' => "Referenčné číslo",
+            'courier_id' => "Doručenie",
+            'customer_id' => "Zákazník",
+            'address_id' => "Adresa",
+            'order_status_id' => "Stav objednávky",
+            'payment' => "Platba",
+            'discounts' => "Zľava",
+            'total_products' => "Produkty celkom",
+            'tax' => "Daň",
+            'total' => "Celkom",
+            'total_paid' => "Celkom zaplatené",
+            'invoice' => "Faktúra",
+            'courier' => "Doručenie",
+            'label_url' => "Label url",
+            'tracking_number' => "Číslo zásielky",
+            'total_shipping' => "Celkom doručenie",
             'billing_address_1' => "Adresa 1",
             'billing_address_id' => "Adresa",
             'billing_address_2' => "Adresa 2",
@@ -102,98 +192,113 @@ return [
             'customer_company' => "Firma",
             'customer_ico' => "IČO",
             'customer_dic' => "DIČ",
+            'customer_phone' => "Telefón",
+            'shipping_customer_name' => "Meno",
+            'shipping_customer_email' => "Email",
+            'shipping_customer_company' => "Firma",
+            'shipping_customer_ico' => "IČO",
+            'shipping_customer_dic' => "DIČ",
+            'shipping_customer_phone' => "Telefón",
         ],
     ],
-    'order-statuses' => [
-        'title' => 'Stavy objednávok',
+
+    'payment-method' => [
+        'title' => 'Platobné metódy',
 
         'actions' => [
-            'index' => 'Stavy objednávok',
-            'create' => 'Nový stav',
-            'edit' => 'Upraviť :name',
-        ],
-
-        'columns' => [
-            'name' => "Názov",
-            'color' => "Farba",
-        ],
-    ],
-    'products' => [
-        'title' => 'Produkty',
-
-        'actions' => [
-            'index' => 'Produkty',
-            'create' => 'Nový produkt',
-            'edit' => 'Upraviť :name',
+            'index' => 'Platobné metódy',
+            'create' => 'Nová platobná metóda',
+            'edit' => 'Uprav :name',
         ],
 
         'columns' => [
             'id' => "ID",
-            'name' => "Meno",
-            'email' => "Email",
-            'width' => "Śírka",
-            'height' => "Výška",
-            'length' => "Hĺbka",
-            'status' => "Aktívny",
-            'groups' => "Zákaznícke skupiny",
-            'enabled' => "Enabled",
-            'password' => "Heslo",
-            'password_repeat' => "Zopakuj heslo",
-            'select_groups' => "Vyberte skupiny"
+            'title' => "Názov",
+            'description' => "Popis",
+            'price' => "Cena",
 
         ],
     ],
-    'attributes' => [
-        'title' => 'Atribúty',
+
+    'setting' => [
+        'title' => 'Nastavenia',
 
         'actions' => [
-            'index' => 'Atribúty',
-            'create' => 'Nový atribút',
-            'edit' => 'Upraviť :name',
-        ],
-
-        'columns' => [
-            'name' => "Meno"
-        ],
-    ],
-
-    'category' => [
-        'title' => 'Kategórie',
-
-        'actions' => [
-            'index' => 'Kategórie',
-            'create' => 'Nová kategória',
-            'edit' => 'Upraviť :name',
+            'index' => 'Nastavenia',
+            'create' => 'Nové Nastavenie',
+            'edit' => 'Uprav :name',
         ],
 
         'columns' => [
             'id' => "ID",
-            'name' => "Meno",
-            'slug' => "Slug",
-            'description' => "Popis",
-            'parent' => "Rodičovská kategória",
-            'status' => "Aktívna",
+            'option' => "Nastavenie",
+            'value' => "Hodnota",
 
         ],
     ],
 
-    'couriers' => [
-        'title' => 'Spôsoby doručenia',
+    'courier' => [
+        'title' => 'Couriers',
 
         'actions' => [
-            'index' => 'Spôsoby doručenia',
-            'create' => 'Nový spôsob doručenia',
-            'edit' => 'Upraviť :name',
+            'index' => 'Couriers',
+            'create' => 'New Courier',
+            'edit' => 'Edit :name',
         ],
 
         'columns' => [
-            'name' => "Meno",
-            'description' => "Popis",
+            'id' => "ID",
+            'name' => "Name",
+            'description' => "Description",
+            'from_width' => "From width",
+            'from_height' => "From height",
+            'from_length' => "From length",
             'url' => "Url",
-            'is_free' => "Zadarmo",
-            'cost' => "Cena",
-            'status' => "Aktívny"
+            'price' => "Price",
+            'status' => "Status",
+            
+        ],
+    ],
+
+    'product-group' => [
+        'title' => 'Skupiny produktov',
+
+        'actions' => [
+            'index' => 'Skupiny produktov',
+            'create' => 'Nová skupina produktov',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'name' => "Názov",
+            'description' => "Popis",
+            'discount' => "Zľava",
+            'status' => "Stav",
+            "from_dimensions" => 'Od rozmerov',
+            "to_dimensions" => 'Do rozmerov',
+            "position" => 'Poradie',
+        ],
+    ],
+
+    'post' => [
+        'title' => 'Články',
+
+        'actions' => [
+            'index' => 'Články',
+            'create' => 'Nový článok',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'title' => "Názov",
+            'perex' => "Náhľad",
+            'body' => "Obsah",
+            'enabled' => "Status",
 
         ],
     ],
+
+    // Do not delete me :) I'm used for auto-generation
 ];

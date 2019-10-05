@@ -76,11 +76,11 @@
                                             {{--</div>--}}
                                         </li>
                                         <li>
-                                            <div class="form-element has-icon">
-                                                <select class="selectpicker input-field select">
-                                                    <option value="0">{{ __('Zoradiť') }}</option>
-                                                    <option value="pricedesc">{{ __('Ceny vzostupne') }}</option>
-                                                    <option value="priceasc">{{ __('Ceny zostupne') }}</option>
+                                            <div class="form-element has-icon select-style">
+                                                <select @change="sort" class=" input-field select">
+                                                    <option value="0">{{ __('Zoradiť podľa') }}</option>
+                                                    <option @click="sort" value="desc">{{ __('Cena vzostupne') }}</option>
+                                                    <option value="asc">{{ __('Cena zostupne') }}</option>
                                                 </select>
                                                 <div class="the-icon">
                                                     <i class="fas fa-angle-down"></i>

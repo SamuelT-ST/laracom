@@ -16,8 +16,7 @@ use App\Shop\Products\Product;
 use Illuminate\Http\UploadedFile;
 
 $factory->define(Product::class, function (Faker\Generator $faker) {
-    $product = $faker->unique()->sentence;
-    $file = UploadedFile::fake()->image('product.png', 600, 600);
+    $product = $faker->word;
 
     return [
         'sku' => $this->faker->numberBetween(1111111, 999999),
@@ -28,6 +27,8 @@ $factory->define(Product::class, function (Faker\Generator $faker) {
         'price' => 5.00,
         'status' => 1,
         'weight' => 5,
+        'distance_unit' => $faker->randomElement(['m', 'ks']),
+        'has_size' => $faker->boolean,
         'mass_unit' => config('shop.weight', 'gms')
     ];
 });

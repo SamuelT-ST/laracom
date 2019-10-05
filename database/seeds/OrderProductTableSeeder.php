@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Order;
+use App\Shop\Orders\Order;
 use App\Shop\Products\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +27,9 @@ class OrderProductTableSeeder extends Seeder
             'product_name' => $product->name,
             'product_sku' => $product->sku,
             'product_description' => $product->description,
-            'product_price' => $product->price,
-            'product_discount' => 10
+            'product_price' => $product->price * 10,
+            'product_discount' => 10,
+            'size' => 10
         ]);
     }
 

@@ -245,21 +245,42 @@ return [
     ],
 
     'product-group' => [
-        'title' => 'Product Groups',
+        'title' => 'Skupiny produktov',
 
         'actions' => [
-            'index' => 'Product Groups',
-            'create' => 'New Product Group',
-            'edit' => 'Edit :name',
+            'index' => 'Skupiny produktov',
+            'create' => 'Nová skupina produktov',
+            'edit' => 'Upraviť :name',
         ],
 
         'columns' => [
             'id' => "ID",
-            'name' => "Name",
-            'description' => "Description",
-            'discount' => "Discount",
-            'status' => "Status",
-            
+            'name' => "Názov",
+            'description' => "Popis",
+            'discount' => "Zľava",
+            'status' => "Stav",
+            "from_dimensions" => 'Od rozmerov',
+            "to_dimensions" => 'Do rozmerov',
+            "position" => 'Poradie',
+        ],
+    ],
+
+    'post' => [
+        'title' => 'Články',
+
+        'actions' => [
+            'index' => 'Články',
+            'create' => 'Nový článok',
+            'edit' => 'Upraviť :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'title' => "Názov",
+            'perex' => "Náhľad",
+            'body' => "Obsah",
+            'enabled' => "Status",
+
         ],
     ],
 

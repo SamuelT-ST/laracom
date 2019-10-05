@@ -4,7 +4,7 @@
             <img :src="item.product_thumb" alt="new collcetion image">
             <product-detail-form @updated-cart="updateCart" :product="item" :url="'{{ route('cart.store') }}'" inline-template>
                 <div class="hover">
-                    <a href="#" class="addtocart" @click.prevent="addToCart">Add To Cart</a>
+                    <a href="#" class="addtocart" @click.prevent="addToCart">{{ __('Do košíka') }}</a>
                 </div>
             </product-detail-form>
         </div>

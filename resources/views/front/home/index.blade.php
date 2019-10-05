@@ -7,11 +7,11 @@
         <div class="row">
             <div class="col-lg-7">
                 <div class="header-inner "><!-- header inner -->
-                    {{--<span class="subtitle ">SPRING - SUMMER 2018</span>--}}
-                    <h1 class="title ">{{ trans('home.banner1.title') }}</h1>
-                    <p class="wow fadeInDown">{{ trans('home.banner1.value') }}</p>
+                    <span class="subtitle ">{{ trans('home.frontpage-banner.subtitle') }}</span>
+                    <h1 class="title ">{{ trans('home.frontpage-banner.title') }}</h1>
+                    <p class="wow fadeInDown">{{ trans('home.frontpage-banner.value') }}</p>
                     <div class="btn-wrapper wow fadeInDown">
-                        {!! trans('home.banner1.button') !!}
+                        <a href="{{ trans('home.frontpage-banner.button_url') }}" class="boxed-btn">{{ trans('home.banner1.button_text') }}</a>
                     </div>
                 </div><!-- //. header inner -->
             </div>
@@ -30,8 +30,8 @@
                         <img src="{{ $settings['banner-1']->getFirstMediaUrl('image') }}" alt="promotional images">
                         <div class="hover">
                             <div class="hover-inner">
-                                <span class="subtitle wow fadeInDown">{{ trans('home.banner2.title') }}</span>
-                                <h2 class="title wow fadeIn">{{ trans('home.banner2.value') }}</h2>
+                                <span class="subtitle wow fadeInDown">{{ trans('home.banner-1.title') }}</span>
+                                <h2 class="title wow fadeIn">{{ trans('home.banner-1.value') }}</h2>
                             </div>
                         </div>
                     </div>
@@ -43,10 +43,9 @@
                         <img src="{{ $settings['banner-2']->getFirstMediaUrl('image') }}" alt="promotional images">
                         <div class="hover">
                             <div class="hover-inner">
-                                <h2 class="title ">{{ trans('home.banner3.title') }}</h2>
+                                <h2 class="title ">{{ trans('home.banner-2.title') }}</h2>
                                 <div class="btn-wrapper wow fadeIn">
-                                    {{--<a href="category.html" class="boxed-btn">go shop</a>--}}
-                                    {!! trans('home.banner2.link') !!}
+                                    <a href="{{ trans('home.banner-2.button_url') }}" class="boxed-btn">{{ trans('home.banner-2.button_text') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -67,16 +66,16 @@
                 <div class="best-seller-two-filter-menu home-5">
                     <ul class="nav nav-tabs"  role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="bestseller-tab_2" data-toggle="tab" href="#bestseller_2" role="tab" aria-controls="bestseller_2" aria-selected="true">best sellers</a>
+                            <a class="nav-link active" id="bestseller-tab_2" data-toggle="tab" href="#bestseller_2" role="tab" aria-controls="bestseller_2" aria-selected="true">{{ __('Najpredávanejšie') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="newflower-tab_2" data-toggle="tab" href="#newflower_2" role="tab" aria-controls="newflower_2" aria-selected="false">new flower</a>
+                            <a class="nav-link" id="newflower-tab_2" data-toggle="tab" href="#newflower_2" role="tab" aria-controls="newflower_2" aria-selected="false">{{ __('Novinky') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="topseller-tab_2" data-toggle="tab" href="#topseller_2" role="tab" aria-controls="topseller_2" aria-selected="false">top sellers</a>
+                            <a class="nav-link" id="topseller-tab_2" data-toggle="tab" href="#topseller_2" role="tab" aria-controls="topseller_2" aria-selected="false">{{ __('Výpredaj') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="specialflower-tab_2" data-toggle="tab" href="#specialflower_2" role="tab" aria-controls="specialflower_2" aria-selected="false">special flower</a>
+                            <a class="nav-link" id="specialflower-tab_2" data-toggle="tab" href="#specialflower_2" role="tab" aria-controls="specialflower_2" aria-selected="false">{{ __('Špeciálne') }}</a>
                         </li>
                     </ul>
                 </div>
@@ -89,22 +88,22 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="bestseller_2" role="tabpanel" aria-labelledby="bestseller-tab_2">
                             <div class="row">
-                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(2)->getProducts(15)])
+                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(trans('home.category.bestsellers'))->getProducts(15)])
                             </div>
                         </div>
                         <div class="tab-pane fade" id="newflower_2" role="tabpanel" aria-labelledby="newflower-tab_2">
                             <div class="row">
-                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(3)->getProducts(15)])
+                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(trans('home.category.new'))->getProducts(15)])
                             </div>
                         </div>
                         <div class="tab-pane fade" id="topseller_2" role="tabpanel" aria-labelledby="topseller-tab_2">
                             <div class="row">
-                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(4)->getProducts(15)])
+                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(trans('home.category.discount'))->getProducts(15)])
                             </div>
                         </div>
                         <div class="tab-pane fade" id="specialflower_2" role="tabpanel" aria-labelledby="specialflower-tab_2">
                             <div class="row">
-                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(5)->getProducts(15)])
+                                @include('front.home.partials.product', ['products' => app(\App\Services\CategoriesWithDiscount::class)->getForCategory(trans('home.category.special'))->getProducts(15)])
                             </div>
                         </div>
                     </div>
@@ -122,14 +121,14 @@
             <div class="col-lg-12">
                 <div class="surprise-inner"><!-- surprise inner -->
                     <div class="video-thumb">
-                        <img src="assets/img/surprise-image.jpg" alt="surprise image">
+                        <img src="{{ $settings['video-preview']->getFirstMediaUrl('image') }}" alt="{{ $settings['video-preview']['value'] }}">
                         <div class="hover">
-                            <a href="https://www.youtube.com/watch?v=ivbq60GlBWs" class="video-play-btn mfp-iframe"><i class="fas fa-play"></i></a>
+                            <a href="{{ $settings['video-preview']['value'] }}" class="video-play-btn mfp-iframe"><i class="fas fa-play"></i></a>
                         </div>
                     </div>
                     <div class="content-area">
-                        <div class="heart"><i class="fas fa-heart"></i></div>
-                        <h3 class="title">Suprise Your Valentine! Let Us Arrange A Smile</h3>
+                        <div class="heart"><i class="fas fa-lightbulb"></i></div>
+                        <h3 class="title">{{ __('Potešte svoju polovičku kvalitným svetlom!') }}</h3>
                     </div>
                 </div><!-- //.surprise inner -->
             </div>
@@ -138,534 +137,6 @@
 </div>
 <!-- surprise area end -->
 <!-- filter area home four start -->
-<div class="filter-ara-home-five-two">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="best-seller-two-filter-menu home-5">
-                    <ul class="nav nav-tabs"  role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="bestseller-tab_3" data-toggle="tab" href="#bestseller_3" role="tab" aria-controls="bestseller_3" aria-selected="true">best sellers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="newflower-tab_3" data-toggle="tab" href="#newflower_3" role="tab" aria-controls="newflower_3" aria-selected="false">new flower</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="topseller-tab_3" data-toggle="tab" href="#topseller_3" role="tab" aria-controls="topseller_3" aria-selected="false">top sellers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="specialflower-tab_3" data-toggle="tab" href="#specialflower_3" role="tab" aria-controls="specialflower_3" aria-selected="false">special flower</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="filter-area-menu-home-masonry-six"><!-- filter area menu home masonry -->
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="bestseller_3" role="tabpanel" aria-labelledby="bestseller-tab_3">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/01.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">Sportswear</span>
-                                            <a href="#"><h4 class="title">Black Tshirt Brock</h4></a>
-                                            <div class="price"><span class="sprice">$23.00</span> <del class="dprice">$55.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/02.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">shoe</span>
-                                            <a href="#"><h4 class="title">Footwear Dark</h4></a>
-                                            <div class="price"><span class="sprice">$50.00</span> <del class="dprice">$80.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/03.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">accesories</span>
-                                            <a href="#"><h4 class="title">Milo Hoverboard</h4></a>
-                                            <div class="price"><span class="sprice">$78.00</span> <del class="dprice">$99.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/04.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">shoe</span>
-                                            <a href="#"><h4 class="title">Lobina Perak Shoe</h4></a>
-                                            <div class="price"><span class="sprice">$78.00</span> <del class="dprice">$120.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/05.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">hat</span>
-                                            <a href="#"><h4 class="title">Red Yello Hat</h4></a>
-                                            <div class="price"><span class="sprice">$10.00</span> <del class="dprice">$50.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/06.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">cycle</span>
-                                            <a href="#"><h4 class="title">Minimal Cycle</h4></a>
-                                            <div class="price"><span class="sprice">$700.00</span> <del class="dprice">$1500.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/07.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">bike</span>
-                                            <a href="#"><h4 class="title">Dart Moto Bike</h4></a>
-                                            <div class="price"><span class="sprice">$90.00</span> <del class="dprice">$1200.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/08.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">electric</span>
-                                            <a href="#"><h4 class="title">Minimal Screw</h4></a>
-                                            <div class="price"><span class="sprice">$37.00</span> <del class="dprice">$80.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="newflower_3" role="tabpanel" aria-labelledby="newflower-tab_3">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/01.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">Sportswear</span>
-                                            <a href="#"><h4 class="title">Black Tshirt Brock</h4></a>
-                                            <div class="price"><span class="sprice">$23.00</span> <del class="dprice">$55.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/02.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">shoe</span>
-                                            <a href="#"><h4 class="title">Footwear Dark</h4></a>
-                                            <div class="price"><span class="sprice">$50.00</span> <del class="dprice">$80.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/03.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">accesories</span>
-                                            <a href="#"><h4 class="title">Milo Hoverboard</h4></a>
-                                            <div class="price"><span class="sprice">$78.00</span> <del class="dprice">$99.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/04.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">shoe</span>
-                                            <a href="#"><h4 class="title">Lobina Perak Shoe</h4></a>
-                                            <div class="price"><span class="sprice">$78.00</span> <del class="dprice">$120.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/05.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">hat</span>
-                                            <a href="#"><h4 class="title">Red Yello Hat</h4></a>
-                                            <div class="price"><span class="sprice">$10.00</span> <del class="dprice">$50.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/06.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">cycle</span>
-                                            <a href="#"><h4 class="title">Minimal Cycle</h4></a>
-                                            <div class="price"><span class="sprice">$700.00</span> <del class="dprice">$1500.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/07.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">bike</span>
-                                            <a href="#"><h4 class="title">Dart Moto Bike</h4></a>
-                                            <div class="price"><span class="sprice">$90.00</span> <del class="dprice">$1200.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/08.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">electric</span>
-                                            <a href="#"><h4 class="title">Minimal Screw</h4></a>
-                                            <div class="price"><span class="sprice">$37.00</span> <del class="dprice">$80.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="topseller_3" role="tabpanel" aria-labelledby="topseller-tab_3">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/01.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">Sportswear</span>
-                                            <a href="#"><h4 class="title">Black Tshirt Brock</h4></a>
-                                            <div class="price"><span class="sprice">$23.00</span> <del class="dprice">$55.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/02.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">shoe</span>
-                                            <a href="#"><h4 class="title">Footwear Dark</h4></a>
-                                            <div class="price"><span class="sprice">$50.00</span> <del class="dprice">$80.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/03.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">accesories</span>
-                                            <a href="#"><h4 class="title">Milo Hoverboard</h4></a>
-                                            <div class="price"><span class="sprice">$78.00</span> <del class="dprice">$99.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/04.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">shoe</span>
-                                            <a href="#"><h4 class="title">Lobina Perak Shoe</h4></a>
-                                            <div class="price"><span class="sprice">$78.00</span> <del class="dprice">$120.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/05.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">hat</span>
-                                            <a href="#"><h4 class="title">Red Yello Hat</h4></a>
-                                            <div class="price"><span class="sprice">$10.00</span> <del class="dprice">$50.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/06.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">cycle</span>
-                                            <a href="#"><h4 class="title">Minimal Cycle</h4></a>
-                                            <div class="price"><span class="sprice">$700.00</span> <del class="dprice">$1500.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/07.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">bike</span>
-                                            <a href="#"><h4 class="title">Dart Moto Bike</h4></a>
-                                            <div class="price"><span class="sprice">$90.00</span> <del class="dprice">$1200.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/08.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">electric</span>
-                                            <a href="#"><h4 class="title">Minimal Screw</h4></a>
-                                            <div class="price"><span class="sprice">$37.00</span> <del class="dprice">$80.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="specialflower_3" role="tabpanel" aria-labelledby="specialflower-tab_3">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/01.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">Sportswear</span>
-                                            <a href="#"><h4 class="title">Black Tshirt Brock</h4></a>
-                                            <div class="price"><span class="sprice">$23.00</span> <del class="dprice">$55.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/02.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">shoe</span>
-                                            <a href="#"><h4 class="title">Footwear Dark</h4></a>
-                                            <div class="price"><span class="sprice">$50.00</span> <del class="dprice">$80.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/03.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">accesories</span>
-                                            <a href="#"><h4 class="title">Milo Hoverboard</h4></a>
-                                            <div class="price"><span class="sprice">$78.00</span> <del class="dprice">$99.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/04.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">shoe</span>
-                                            <a href="#"><h4 class="title">Lobina Perak Shoe</h4></a>
-                                            <div class="price"><span class="sprice">$78.00</span> <del class="dprice">$120.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/05.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">hat</span>
-                                            <a href="#"><h4 class="title">Red Yello Hat</h4></a>
-                                            <div class="price"><span class="sprice">$10.00</span> <del class="dprice">$50.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/06.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">cycle</span>
-                                            <a href="#"><h4 class="title">Minimal Cycle</h4></a>
-                                            <div class="price"><span class="sprice">$700.00</span> <del class="dprice">$1500.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/07.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">bike</span>
-                                            <a href="#"><h4 class="title">Dart Moto Bike</h4></a>
-                                            <div class="price"><span class="sprice">$90.00</span> <del class="dprice">$1200.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <div class="single-new-collection-item"><!-- single new collections -->
-                                        <div class="thumb">
-                                            <img src="assets/img/flower/08.jpg" alt="new collcetion image">
-                                            <div class="hover">
-                                                <a href="#" class="addtocart">Add To Cart</a>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <span class="category">electric</span>
-                                            <a href="#"><h4 class="title">Minimal Screw</h4></a>
-                                            <div class="price"><span class="sprice">$37.00</span> <del class="dprice">$80.00</del></div>
-                                        </div>
-                                    </div><!-- //. single new collections  -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- //.filter area menu home masonry -->
-            </div>
-        </div>
-    </div>
-</div>
 <!-- filter area home four end -->
 
 <!-- banner area home 5 start  -->
@@ -674,12 +145,12 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="banner-image"><!-- banner image -->
-                    <img src="assets/img/banner-add/02-big.jpg" alt="banner image">
+                    <img src="{{ $settings['bottom-banner-1']->getFirstMediaUrl('image') }}" alt="{{ $settings['bottom-banner-1']['value'] }}">
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="banner-image"><!-- //.banner image -->
-                    <img src="assets/img/banner-add/02-bg.jpg" alt="banner image">
+                    <img src="{{ $settings['bottom-banner-2']->getFirstMediaUrl('image') }}" alt="{{ $settings['bottom-banner-2']['value'] }}">
                 </div>
             </div>
         </div>

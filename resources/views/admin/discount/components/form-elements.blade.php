@@ -38,13 +38,13 @@
 </div>
 
 <div class="form-group row align-items-center">
-    <label for="percentage" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.discount.columns.customer_groups') }}</label>
+    <label for="percentage" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.discount.columns.category') }}</label>
     <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
         <multiselect
                 v-model="form.categories"
                 :options="categories"
                 :multiple="true"
-                label="slug"
+                label="name"
                 track-by="id"
                 placeholder="{{ __('Select category') }}">
         </multiselect>

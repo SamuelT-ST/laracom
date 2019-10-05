@@ -20,8 +20,13 @@ class CategoryController extends Controller
         // create and AdminListing instance for a specific model and
         $data = app(FrontListing::class)
             ->attachQuery(app(CategoriesWithDiscount::class)->getForCategory($category->id)->getBuilder())
-            ->attachPagination($request->input('page', 1), $request->input('per_page', $request->cookie('per_page', 3)))
-            ->getResults();
+            ->attachPagination($request->input('page', 1), $request->input('per_page', $request->cookie('per_page', 3)));
+
+        if ($request->has('orderBy')){
+            $data = $data->attachOrdering($request->get('orderBy'), $request->get('orderDirection'));
+        }
+
+        $data = $data->getResults();
 
         if ($request->ajax()) {
             return ['data' => $data];

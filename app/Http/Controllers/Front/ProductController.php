@@ -55,8 +55,13 @@ class ProductController extends Controller
      */
     public function show(string $slug)
     {
-        $product = app(CategoriesWithDiscount::class)->getSingleProductBySlug($slug);
-        $productAttributes = $product->attributes;
+
+        try {
+            $product = app(CategoriesWithDiscount::class)->getSingleProductBySlug($slug);
+            $productAttributes = $product->attributes;
+        } catch (\Exception $e){
+            abort(404);
+        }
 
 //        dd($product->toArray());
 

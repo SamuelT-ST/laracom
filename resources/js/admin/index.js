@@ -7,3 +7,4 @@ import './payment-method';
 import './setting';
 import './courier';
 import './product-group';
+import './post';

@@ -21,7 +21,7 @@ class CreateCouriersTable extends Migration
             $table->integer('from_height')->nullable();
             $table->integer('from_length')->nullable();
             $table->string('url')->nullable();
-            $table->integer('price')->nullable();
+            $table->decimal('price')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

@@ -16,8 +16,8 @@ class CreateOrderProductProductAttributesTable extends Migration
         Schema::create('order_product_product_attribute', function (Blueprint $table) {
             $table->integer('product_attribute_id');
             $table->integer('order_product_id');
-            $table->integer('price');
-            $table->integer('discount')->nullable();
+            $table->decimal('price');
+            $table->decimal('discount')->nullable();
         });
     }
 

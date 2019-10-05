@@ -46,6 +46,8 @@ class CategoryController extends Controller
             }
         );
 
+//        dd($data);
+
         $breadcrumbs = collect(app('rinvex.categories.category')->ancestorsOf($parentId)->toFlatTree());
 
         if ($request->ajax()) {

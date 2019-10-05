@@ -33,11 +33,9 @@
             <div class="col-lg-6">
                 <div class="left-content-area"><!-- left content area -->
                     <div class="product-details-slider" id="product-details-slider" data-slider-id="1">
-                        @if($product->getFirstMediaUrl('cover'))
                         <div class="single-product-thumb">
-                            <img src="{{ $product->getFirstMediaUrl('cover', 'product_detail') }}" alt="product details image">
+                            <img src="{{ $product->getProductThumbAttribute() }}" alt="product details image">
                         </div>
-                        @endif
                         @foreach($product->getMedia('images') as $media)
                         <div class="single-product-thumb">
                             <img src="{{ $media->getUrl('product_detail') }}" alt="product details image">
@@ -52,11 +50,9 @@
                         @endforeach
                     </div>
                     <ul class="owl-thumbs product-deails-thumb" data-slider-id="1">
-                        @if($product->getFirstMediaUrl('cover'))
                         <li class="owl-thumb-item">
-                            <img src="{{ $product->getFirstMediaUrl('cover', 'product_detail_thumb') }}" alt="product details thumb">
+                            <img src="{{ $product->getProductThumb() }}" alt="product details thumb">
                         </li>
-                        @endif
                         @foreach($product->getMedia('images') as $media)
                         <li class="owl-thumb-item">
                             <img src="{{ $media->getUrl('product_detail_thumb') }}" alt="product details thumb">
@@ -86,7 +82,7 @@
                         {{--<span class="orders">Orders (200+)</span>--}}
                     {{--</div>--}}
                     {{--{{ dd($product) }}--}}
-                    <product-detail-form :tax-rate="{{ \App\Shop\Products\Product::TAX_RATE }}" @updated-cart="updateCart" :default-attribute="{{ $product->default_attribute_id }}" :product="{{ $product }}" :url="'{{ route('cart.store') }}'" inline-template>
+                    <product-detail-form :tax-rate="{{ \App\Shop\Products\Product::TAX_RATE }}" @updated-cart="updateCart" :default-attribute="{{ is_null($product->default_attribute_id) ? 'null' : $product->default_attribute_id }}" :product="{{ $product }}" :url="'{{ route('cart.store') }}'" inline-template>
                     <div class="bottom-content">
                         @foreach($product->categories as $category)
                         <span class="cat">{{ $category->name }}</span>

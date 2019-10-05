@@ -57,9 +57,9 @@
                 <div class="user-menu"><!-- single review item -->
 
                     <ul class="user-menu-links">
-                        <li><a href="category.html">{{ __('Profil') }}</a></li>
-                        <li><a href="category.html">{{ __('Adresy') }}</a></li>
-                        <li><a href="category.html">{{ __('Objednávky') }}</a></li>
+                        <li><a href="{{ route('front.account.orders') }}">{{ __('Profil') }}</a></li>
+                        <li><a href="{{ route('front.account.orders') }}">{{ __('Adresy') }}</a></li>
+                        <li><a href="{{ route('front.account.orders') }}">{{ __('Objednávky') }}</a></li>
                         <li><a href="{{ route('logout') }}">{{ __('Odhlásiť sa') }}</a></li>
                     </ul>
 

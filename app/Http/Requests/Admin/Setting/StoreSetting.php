@@ -26,7 +26,6 @@ class StoreSetting extends FormRequest
         return [
             'option' => ['required', 'string'],
             'value' => ['required', 'string'],
-            
         ];
     }
 }

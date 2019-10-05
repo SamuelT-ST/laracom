@@ -15,7 +15,7 @@ class Setting extends Model implements HasMediaCollections, HasMediaConversions
     protected $fillable = [
         "option",
         "value",
-    
+        "option_slug"
     ];
     
     protected $hidden = [

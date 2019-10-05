@@ -14,7 +14,7 @@ class AddColumnsInProductAttributesTable extends Migration
     public function up()
     {
         Schema::table('product_attributes', function (Blueprint $table) {
-            $table->string('sale_price')->nullable()->after('price');
+            $table->decimal('sale_price')->nullable()->after('price');
             $table->tinyInteger('default')->default(0)->after('sale_price');
         });
     }

@@ -11,6 +11,9 @@
 |
 */
 
+use App\Models\PaymentMethod;
+use App\Shop\Categories\Category;
+use App\Shop\Products\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +22,13 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/test', function(){
-    dd(Auth::guard('web')->user());
+
+    dd(
+        Category::all()->each(function (Category $category) {
+            $products = factory(Product::class, 6)->raw();
+            $category->entries(Product::class)->insert($products);
+        })
+    );
 })->name('dashboard');
 
 
@@ -118,6 +127,9 @@ Route::namespace('Front')->group(function () {
     Route::get("search", 'ProductController@search')->name('search.product');
     Route::get("{product}", 'ProductController@show')->name('front.get.product');
     Route::get("product-group/{slug}", 'ProductController@showProductGroup')->name('front.product-group');
+    Route::get("posts/{slug}", 'PostsController@show')->name('front.post');
+    Route::get("account/orders", 'AccountsController@index')->name('front.account.orders');
+    Route::get("order/thankyou/{order}", 'CartController@thankYou')->name('front.order.thankyou');
 
 });
 
@@ -200,4 +212,15 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
     Route::post('/admin/product-groups/bulk-destroy',           'Admin\ProductGroups\ProductGroupsController@bulkDestroy')->name('admin/product-groups/bulk-destroy');
     Route::post('/admin/product-groups/{productGroup}',         'Admin\ProductGroups\ProductGroupsController@update')->name('admin/product-groups/update');
     Route::delete('/admin/product-groups/{productGroup}',       'Admin\ProductGroups\ProductGroupsController@destroy')->name('admin/product-groups/destroy');
+});
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/posts',                                  'Admin\Posts\PostsController@index');
+    Route::get('/admin/posts/create',                           'Admin\Posts\PostsController@create');
+    Route::post('/admin/posts',                                 'Admin\Posts\PostsController@store');
+    Route::get('/admin/posts/{post}/edit',                      'Admin\Posts\PostsController@edit')->name('admin/posts/edit');
+    Route::post('/admin/posts/bulk-destroy',                    'Admin\Posts\PostsController@bulkDestroy')->name('admin/posts/bulk-destroy');
+    Route::post('/admin/posts/{post}',                          'Admin\Posts\PostsController@update')->name('admin/posts/update');
+    Route::delete('/admin/posts/{post}',                        'Admin\Posts\PostsController@destroy')->name('admin/posts/destroy');
 });

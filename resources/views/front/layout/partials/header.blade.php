@@ -19,7 +19,7 @@
                                 <div class="row">
                                     <div class="col-lg-3 col-sm-12">
                                         <div class="mega-menu-columns">
-                                            <h6 class="title">{{ __('Subcategories') }}</h6>
+                                            <h6 class="title">{{ __('Podkategórie') }}</h6>
                                             <ul class="menga-menu-page-links">
                                                 @foreach($category->children as $child)
                                                 <li><a href="{{ $child->front_url }}">{{ $child->name }}</a></li>
@@ -29,28 +29,23 @@
                                     </div>
                                     <div class="col-lg-3 col-sm-12">
                                         <div class="mega-menu-columns">
-                                            <h6 class="title">Other Pages</h6>
+                                            <h6 class="title">{{ __('Články o kategórii') }}</h6>
                                             <ul class="menga-menu-page-links">
-                                                <li><a href="product_upload.html">Product Upload</a></li>
-                                                <li><a href="offers.html">Offer</a></li>
-                                                <li><a href="invoice.html">Invoice</a></li>
-                                                <li><a href="vendor-list.html">Vendor List</a></li>
-                                                <li><a href="partners.html">Partners</a></li>
-                                                <li><a href="404.html">404 Page</a></li>
+                                                @foreach($category->entries(\App\Shop\Posts\Post::class)->get() as $post)
+                                                <li><a href="{{ $post->front_url }}">{{ $post->title }}</a></li>
+                                                @endforeach
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-12">
                                         <div class="mega-menu-columns">
-                                            <h6 class="title">{{ __('Information') }}</h6>
-                                            <div class="card">
-                                                {{ $category->description }}
-                                            </div>
+                                            <h6 class="title">{{ __('Informácie') }}</h6>
+                                            {{ $category->description }}
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-sm-12">
                                         <a href="product-details.html">
-                                            <img src="{{ $category->getFirstMediaUrl('cover') }}" alt="product image">
+                                            <img src="{{ $category->getCategoryThumb() }}" alt="product image">
                                         </a>
                                     </div>
                                 </div>

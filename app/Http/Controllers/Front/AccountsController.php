@@ -8,6 +8,8 @@ use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Shop\Orders\Order;
 use App\Shop\Orders\Transformers\OrderTransformable;
+use App\Shop\OrderStatuses\OrderStatus;
+use Illuminate\Support\Facades\Auth;
 
 class AccountsController extends Controller
 {
@@ -39,21 +41,34 @@ class AccountsController extends Controller
 
     public function index()
     {
-        $customer = $this->customerRepo->findCustomerById(auth()->user()->id);
+//        $customer = $this->customerRepo->findCustomerById(auth()->user()->id);
 
-        $customerRepo = new CustomerRepository($customer);
-        $orders = $customerRepo->findOrders(['*'], 'created_at');
+//        $customerRepo = new CustomerRepository($customer);
+//        $orders = $customerRepo->findOrders(['*'], 'created_at');
 
-        $orders->transform(function (Order $order) {
-            return $this->transformOrder($order);
-        });
+//        $orders->transform(function (Order $order) {
+//            return $this->transformOrder($order);
+//        });
 
-        $addresses = $customerRepo->findAddresses();
+//        $addresses = $customerRepo->findAddresses();
 
-        return view('front.accounts', [
-            'customer' => $customer,
-            'orders' => $this->customerRepo->paginateArrayResults($orders->toArray(), 15),
-            'addresses' => $addresses
+        if (!Auth::user()){
+            abort(404);
+        }
+
+        $statuses = OrderStatus::with('orders')->whereHas('orders', function ($q){
+            $q->where('customer_id', auth()->user()->id);
+        })->get();
+
+//        dd($statuses);
+
+        return view('front.account.orders', [
+//            'customer' => $customer,
+//            'orders' => $this->customerRepo->paginateArrayResults($orders->toArray(), 15),
+//            'addresses' => $addresses,
+            'statuses' => OrderStatus::with('orders')->whereHas('orders', function ($q){
+                $q->where('customer_id', auth()->user()->id);
+            })->get(),
         ]);
     }
 }

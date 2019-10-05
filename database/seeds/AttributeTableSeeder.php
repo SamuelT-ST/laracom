@@ -8,36 +8,46 @@ class AttributeTableSeeder extends Seeder
 {
     public function run()
     {
-        $sizeAttr = factory(Attribute::class)->create(['name' => 'Size']);
+        $sizeAttr = factory(Attribute::class)->create(['name' => 'Farba svetla']);
         factory(AttributeValue::class)->create([
-            'value' => 'small',
+            'value' => 'teplá biela',
             'attribute_id' => $sizeAttr->id
         ]);
 
         factory(AttributeValue::class)->create([
-            'value' => 'medium',
+            'value' => 'studená biela',
             'attribute_id' => $sizeAttr->id
         ]);
 
         factory(AttributeValue::class)->create([
-            'value' => 'large',
+            'value' => 'denná biela',
             'attribute_id' => $sizeAttr->id
         ]);
 
-        $colorAttr = factory(Attribute::class)->create(['name' => 'Color']);
+        $colorAttr = factory(Attribute::class)->create(['name' => 'Počet prijímačov']);
 
         factory(AttributeValue::class)->create([
-            'value' => 'red',
+            'value' => 'Bez prijímača',
             'attribute_id' => $colorAttr->id
         ]);
 
         factory(AttributeValue::class)->create([
-            'value' => 'yellow',
+            'value' => '1 prijímač',
             'attribute_id' => $colorAttr->id
         ]);
 
         factory(AttributeValue::class)->create([
-            'value' => 'blue',
+            'value' => '2 prijímače',
+            'attribute_id' => $colorAttr->id
+        ]);
+
+        factory(AttributeValue::class)->create([
+            'value' => '3 prijímače',
+            'attribute_id' => $colorAttr->id
+        ]);
+
+        factory(AttributeValue::class)->create([
+            'value' => '4 prijímače',
             'attribute_id' => $colorAttr->id
         ]);
     }

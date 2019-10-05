@@ -3,6 +3,7 @@
 namespace App\Shop\Carts\Repositories;
 
 use App\Shop\Couriers\Repositories\CourierRepository;
+use Illuminate\Support\Facades\Session;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Carts\Exceptions\ProductInCartNotFoundException;
 use App\Shop\Carts\Repositories\Interfaces\CartRepositoryInterface;
@@ -178,7 +179,8 @@ class CartRepository extends BaseRepository implements CartRepositoryInterface
     }
 
     public function getWholeCart() : Collection {
-        $courier = app(CourierRepository::class)->findCourierById(request()->session()->get('courierId', 1));
+
+        $courier = app(CourierRepository::class)->findCourierById(Session::get('courierId', 1));
         $shippingFee = $this->getShippingFee($courier);
 
         return collect([
