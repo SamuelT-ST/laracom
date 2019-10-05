@@ -7,11 +7,11 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb-inner"><!-- breadcrumb inner -->
                         <div class="left-content-area"><!-- left content area -->
-                            <h1 class="title">Cart</h1>
+                            <h1 class="title">{{ __('Košík') }}</h1>
                         </div><!-- //. left content area -->
                         <div class="right-content-area">
                             <ul>
-                                <li><a href="index.html">Home</a></li>
+                                <li><a href="index.html">{{ __('Domov') }}</a></li>
                                 <li>{{ __('Košík') }}</li>
                             </ul>
                         </div>
