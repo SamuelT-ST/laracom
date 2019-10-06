@@ -5,14 +5,14 @@
         <th scope="col">#</th>
         <th scope="col">{{__('SKU')}}</th>
         {{--<th scope="col">{{__('Image')}}}</th>--}}
-        <th scope="col">{{__('Name')}}</th>
-        <th scope="col">{{__('Quantity')}}</th>
-        <th scope="col">{{__('Size')}}</th>
-        <th scope="col">{{__('Price')}}</th>
-        <th scope="col">{{__('Price with tax')}}</th>
-        <th scope="col">{{__('Discount')}}</th>
-        <th scope="col">{{__('Total Price (tax)')}}</th>
-        <th scope="col">{{__('Actions')}}</th>
+        <th scope="col">{{__('Meno')}}</th>
+        <th scope="col">{{__('Množstvo')}}</th>
+        <th scope="col">{{__('Veľkosť')}}</th>
+        <th scope="col">{{__('Cena')}}</th>
+        <th scope="col">{{__('Cena s daňou')}}</th>
+        <th scope="col">{{__('Zľavy')}}</th>
+        <th scope="col">{{__('Cena celkom (daň)')}}</th>
+        <th scope="col">{{__('Akcie')}}</th>
     </tr>
     </thead>
     <tbody>
@@ -64,11 +64,11 @@
                             @input="associateAttribute(product)"
                             select-label=""
                             :hide-selected="true"
-                            placeholder="{{ __('Attribute and value') }}">
+                            placeholder="{{ __('Atribút a hodnota') }}">
 
                     </multiselect>
                 </td>
-                <td colspan="6"></td>
+                <td colspan="7"></td>
             </tr>
         </template>
     </template>
@@ -86,7 +86,7 @@
                     @select="addProduct"
                     select-label=""
                     :reset-after="true"
-                    placeholder="{{ __('Name, SKU, Description') }}">
+                    placeholder="{{ __('Názov, SKU, Popis') }}">
 
             </multiselect>
         </td>
@@ -94,8 +94,8 @@
     </tr>
     <tr>
         <th scope="row"></th>
-        <td colspan="5"></td>
-        <td style="vertical-align: middle">{{__('Products total')}}</td>
+        <td colspan="6"></td>
+        <td style="vertical-align: middle">{{__('Produkty celkom')}}</td>
         <td colspan="2">
             <input type="text" v-model="totalPrice ? totalPrice : form.total_products" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('total_products'), 'form-control-success': this.fields.total_products && this.fields.total_products.valid}" id="total_products" name="total_products" placeholder="{{ trans('admin.order.columns.total_products') }}">
             <div v-if="errors.has('total_products')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('total_products') }}</div>
@@ -103,8 +103,8 @@
     </tr>
     <tr>
         <th scope="row"></th>
-        <td colspan="5"></td>
-        <td style="vertical-align: middle">{{__('Tax')}}</td>
+        <td colspan="6"></td>
+        <td style="vertical-align: middle">{{__('Daň')}}</td>
         <td colspan="2">
             <input type="text" :value="totalTax != 0 ? totalTax : form.tax" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('tax'), 'form-control-success': this.fields.tax && this.fields.tax.valid}" id="tax" name="tax" placeholder="{{ trans('admin.order.columns.tax') }}">
             <div v-if="errors.has('tax')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('tax') }}</div>
@@ -112,8 +112,8 @@
     </tr>
     <tr>
         <th scope="row"></th>
-        <td colspan="5"></td>
-        <td style="vertical-align: middle">{{__('Total')}}</td>
+        <td colspan="6"></td>
+        <td style="vertical-align: middle">{{__('Celkom')}}</td>
         <td colspan="2">
             <input type="text" :value="total != 0 ? total : form.total" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('total'), 'form-control-success': this.fields.total && this.fields.total.valid}" id="total" name="total" placeholder="{{ trans('admin.order.columns.total') }}">
             <div v-if="errors.has('total')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('total') }}</div>
@@ -121,8 +121,8 @@
     </tr>
     <tr>
         <th scope="row"></th>
-        <td colspan="5"></td>
-        <td style="vertical-align: middle">{{__('Total paid')}}</td>
+        <td colspan="6"></td>
+        <td style="vertical-align: middle">{{__('Celkom zaplatené')}}</td>
         <td colspan="2">
             <input type="text" v-model="form.total_paid" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('total_paid'), 'form-control-success': this.fields.total_paid && this.fields.total_paid.valid}" id="total_paid" name="total_paid" placeholder="{{ trans('admin.order.columns.total_paid') }}">
             <div v-if="errors.has('total_paid')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('total_paid') }}</div>

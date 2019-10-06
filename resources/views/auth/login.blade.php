@@ -66,7 +66,8 @@
                                             </div>
                                             <div class="btn-wrapper">
                                                 <button type="submit" class="submit-btn">{{ __('Prihlásiť sa') }}</button>
-                                                <a href="#" class="link">{{ __('Zabudli ste heslo?') }}</a>
+                                                <a href="#" class="link">{{ __('Zabudli ste heslo?') }}</a><br>
+                                                <a href="{{ __('/register') }}" class="link">{{ __('Nemáte účet?') }}</a>
                                             </div>
                                         </form>
                                     </div>

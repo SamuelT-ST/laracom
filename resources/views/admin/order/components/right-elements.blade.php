@@ -20,7 +20,7 @@
                     :multiple="false"
                     label="name"
                     track-by="id"
-                    placeholder="{{ __('Select order status') }}">
+                    placeholder="{{ __('Stav objednávky') }}">
             </multiselect>
 
         </div>
@@ -35,7 +35,7 @@
                     :multiple="false"
                     label="title"
                     track-by="id"
-                    placeholder="{{ __('Select order payment method') }}">
+                    placeholder="{{ __('Platobná metóda') }}">
             </multiselect>
         </div>
     </div>
@@ -57,7 +57,7 @@
                     :multiple="false"
                     label="name"
                     track-by="id"
-                    placeholder="{{ __('Select order courier') }}">
+                    placeholder="{{ __('Doručenie') }}">
             </multiselect>
         </div>
     </div>

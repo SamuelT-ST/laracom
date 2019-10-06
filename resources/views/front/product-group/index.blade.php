@@ -8,12 +8,15 @@
             <div class="col-lg-12">
                 <div class="breadcrumb-inner"><!-- breadcrumb inner -->
                     <div class="left-content-area"><!-- left content area -->
-                        <h1 class="title">Product Details</h1>
+                        <h1 class="title">{{ __('Detaily produktu') }}</h1>
                     </div><!-- //. left content area -->
                     <div class="right-content-area">
                         <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li>Product Details</li>
+                            <li><a href="/">{{ __('Domov') }}</a></li>
+                            @foreach(collect($productGroup->categories)->reverse() as $categoryPath)
+                                <li><a href="{{$categoryPath->front_url}}">{{ $categoryPath->name }}</a></li>
+                            @endforeach
+                            <li>{{ $productGroup->name }}</li>
                         </ul>
                     </div>
                 </div><!-- //. breadcrumb inner -->
@@ -83,9 +86,9 @@
 
                             <div class="price-area">
                                 <div class="left">
-                                    <span class="sprice">@{{ calculatedPrice }}</span>
+                                    <span class="sprice">@{{ calculatedPrice }} {{ \App\Shop\Products\Product::CURRENCY }}</span>
 
-                                    <span v-if="atLeastOneDiscount" class="dprice"><del>@{{ calculatedOldPrice }}</del></span>
+                                    <span v-if="atLeastOneDiscount" class="dprice"><del>@{{ calculatedOldPrice }} {{ \App\Shop\Products\Product::CURRENCY }}</del></span>
                                 </div>
                                 {{--<div class="right">--}}
                                 {{--<a href="#" class="size">size chart</a>--}}
