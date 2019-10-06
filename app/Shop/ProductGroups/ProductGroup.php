@@ -22,7 +22,7 @@ class ProductGroup extends Model implements HasMediaCollections, HasMediaConvers
         "description",
         "discount",
         "status",
-    
+        "slug"
     ];
     
     protected $hidden = [
