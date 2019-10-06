@@ -105,7 +105,7 @@
                             {{--<li>Brands:  <span class="right">Hewlett-Packard </span></li>--}}
                             <li>{{ __('Kód') }}: <span class="right">{{ $product->sku }}</span></li>
                             {{--<li>Reward Points:  <span class="right">100 </span></li>--}}
-                            <li>{{ __('Stav: ') }}:
+                            <li>{{ __('Stav') }}:
                                 @if($product->quantity > 0)
                                 <span class="right base-color">{{ __('Na sklade') }} </span>
                                 @else
@@ -173,7 +173,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="item_review" role="tabpanel" aria-labelledby="item-review-tab">
                             <div class="item_review_content">
-                                <h4 class="title">Technical Specifications</h4>
+                                <h4 class="title">{{ __('Vlastnosti produktu') }}</h4>
                                 <ul class="product-specification"><!-- product specification -->
                                     @if($product->featureValues)
                                         @foreach($product->featureValues as $featureValue)
