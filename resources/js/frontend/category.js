@@ -55,6 +55,12 @@ Vue.component('category-listing', {
         sort(e){
             this.orderBy.column = 'discounted_price';
             this.orderBy.direction = e.target.value;
+
+            if (e.target.value === 'id'){
+                this.orderBy.column = 'id';
+                this.orderBy.direction = 'desc';
+            }
+
             this.loadData();
         },
 

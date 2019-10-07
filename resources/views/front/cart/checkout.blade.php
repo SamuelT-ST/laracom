@@ -11,9 +11,11 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
+                            @guest
                             <div class="notification-area"><!-- notification area -->
                                 {{ __('Už ste u nás nakupovali?') }} <a href="{{ route('login') }}">{{ __('Prihláste sa!') }}</a>
                             </div><!-- //.notification area -->
+                            @endguest
                             {{--<div class="notification-area"><!-- notification area -->--}}
                                 {{--Have a coupon? <a href="#">Click here to enter your code</a>--}}
                             {{--</div><!-- //.notification area -->--}}
@@ -96,6 +98,7 @@
                                             </div>
 
                                             <div class="col-lg-12">
+                                                @guest
                                                 <div class="checkbox-element account">
                                                     <div class="checkbox-wrapper">
                                                         <label class="checkbox-inner">{{ __('Vytvoriť účet?') }}
@@ -104,6 +107,7 @@
                                                         </label>
                                                     </div>
                                                 </div>
+                                                @endguest
                                                 <div class="shipping-details"><!-- shipping details -->
                                                     <h3 class="title">{{ __('Dodacie údaje') }}</h3>
                                                     <div class="checkbox-element">
@@ -235,7 +239,7 @@
                                             <div class="checkbox-element account">
                                                 <div class="checkbox-wrapper">
                                                     <label class="checkbox-inner">{{ $courier->name }}
-                                                        <input @click="selectCourier({{ $courier }})" value="{{ $courier->id }}" v-model="selectedCouriers" name="courier" type="checkbox">
+                                                        <input v-key="{{ $courier->id }}" @click="selectCourier({{ $courier }})" value="{{ $courier->id }}" v-model="selectedCouriers" name="courier" type="checkbox">
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </div>
@@ -247,7 +251,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="notify-area">
+                                    <div v-if="form.courier.id === {{ $courier->id }}" class="notify-area">
                                         {{ $courier->description }}
                                         {{--VSETKO SA BUDE ROBIT NA BACKENDE--}}
                                     </div>
@@ -261,7 +265,7 @@
                                                 <div class="checkbox-element account">
                                                     <div class="checkbox-wrapper">
                                                         <label class="checkbox-inner">@{{ paymentMethod.title }}
-                                                            <input @click="selectPaymentMethod(paymentMethod)" v-model="paymentMethodCheck" :value="form.payment.id" name="payment_method" type="checkbox">
+                                                            <input v-key="paymentMethod.id" @click="selectPaymentMethod(paymentMethod)" v-model="paymentMethodCheck" :value="paymentMethod.id" name="paymentMethod" type="checkbox">
                                                             <span class="checkmark"></span>
                                                         </label>
                                                     </div>
@@ -273,7 +277,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <div class="notify-area">
+                                        <div v-if="form.payment.id === paymentMethod.id" class="notify-area">
                                             @{{ paymentMethod.description }}
                                             {{--VSETKO SA BUDE ROBIT NA BACKENDE--}}
                                         </div>

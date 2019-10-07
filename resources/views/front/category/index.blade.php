@@ -78,8 +78,8 @@
                                         <li>
                                             <div class="form-element has-icon select-style">
                                                 <select @change="sort" class=" input-field select">
-                                                    <option value="0">{{ __('Zoradiť podľa') }}</option>
-                                                    <option @click="sort" value="desc">{{ __('Cena vzostupne') }}</option>
+                                                    <option value="id">{{ __('Zoradiť podľa') }}</option>
+                                                    <option value="desc">{{ __('Cena vzostupne') }}</option>
                                                     <option value="asc">{{ __('Cena zostupne') }}</option>
                                                 </select>
                                                 <div class="the-icon">

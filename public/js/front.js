@@ -86180,6 +86180,12 @@ Vue.component('category-listing', {
     sort: function sort(e) {
       this.orderBy.column = 'discounted_price';
       this.orderBy.direction = e.target.value;
+
+      if (e.target.value === 'id') {
+        this.orderBy.column = 'id';
+        this.orderBy.direction = 'desc';
+      }
+
       this.loadData();
     },
     updateCart: function updateCart(data) {
@@ -86300,7 +86306,7 @@ Vue.component('checkout-form', {
     shippingFee: function shippingFee() {
       if (Object.keys(this.form.courier).length) {
         if (Object.keys(this.form.payment).length) {
-          return this.form.courier.price + this.form.payment.price;
+          return Number(this.form.courier.price) + Number(this.form.payment.price);
         } else {
           return this.form.courier.price;
         }
@@ -86309,7 +86315,7 @@ Vue.component('checkout-form', {
       }
     },
     totalWithShipping: function totalWithShipping() {
-      return Number(this.content.total) + this.shippingFee;
+      return Number(this.content.total) + Number(this.shippingFee);
     }
   },
   methods: {
@@ -86318,7 +86324,10 @@ Vue.component('checkout-form', {
         this.form.courier = {};
         this.selectedCouriers = [];
       } else {
+        this.selectedCouriers = [];
+        this.form.courier = {};
         this.form.courier = courier;
+        this.selectedCouriers.push(courier.id);
       }
 
       this.content.shippingFee = this.shippingFee;
@@ -86328,7 +86337,10 @@ Vue.component('checkout-form', {
         this.form.payment = {};
         this.paymentMethodCheck = [];
       } else {
+        this.paymentMethodCheck = [];
+        this.form.payment = {};
         this.form.payment = paymentMethod;
+        this.paymentMethodCheck.push(paymentMethod.id);
       }
 
       this.content.shippingFee = this.shippingFee;
