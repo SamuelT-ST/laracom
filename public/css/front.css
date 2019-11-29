@@ -71,3 +71,33 @@
   color: #dee5e6;
 }
 
+.multiselect.input-field {
+  width: 82.3% !important;
+}
+
+.multiselect__tags {
+  min-height: 60px !important;
+  font-size: 16px !important;
+  padding: 16px 40px 0 8px !important;
+}
+
+.multiselect__option {
+  font-size: 16px !important;
+}
+
+.multiselect__select {
+  display: none !important;
+}
+
+.multiselect__content-wrapper {
+  width: 89.2% !important;
+}
+
+input[type=text]:focus {
+  border: 0;
+}
+
+.multiselect__option--highlight {
+  background: #2a9cf5 !important;
+}
+

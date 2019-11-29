@@ -2,10 +2,9 @@
 
 namespace App\Shop\Products;
 
-use App\Models\Discounts\Discount;
 use App\Services\CategoriesWithDiscount;
 use App\Shop\Brands\Brand;
-use App\Shop\Features\FeatureValue;
+use App\Shop\FeatureValues\FeatureValue;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\ProductImages\ProductImage;
 use Brackets\Media\HasMedia\HasMediaCollections;
@@ -14,7 +13,6 @@ use Brackets\Media\HasMedia\HasMediaThumbsTrait;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Nicolaslopezj\Searchable\SearchableTrait;
 use Rinvex\Categories\Traits\Categorizable;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;

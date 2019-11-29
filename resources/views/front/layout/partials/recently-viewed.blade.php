@@ -1,12 +1,30 @@
 <!-- navbar area end -->
 <div class="body-overlay" id="body-overlay"></div>
 <div class="search-popup" id="search-popup">
-    <form action="index.html" class="search-popup-form">
-        <div class="form-element">
-            <input type="text"  class="input-field" placeholder="Search.....">
-        </div>
-        <button type="submit" class="submit-btn"><i class="fas fa-search"></i></button>
-    </form>
+    <product-search
+            :search-url="'{{ route('search.product') }}'"
+            inline-template>
+        <form action="/search" class="search-popup-form">
+            <div class="form-element">
+
+                    <multiselect
+                            v-model="chosen"
+                            :options="availableLoaded"
+                            label="name"
+                            select-label=""
+                            {{--:custom-label="customLabel"--}}
+                            @search-change="asyncFind"
+                            :preserve-search="true"
+                            open-direction="bottom"
+                            :internal-search="false"
+                            @select="selectProduct"
+                            name="q"
+                            class="input-field"
+                            placeholder="{{ __('Zadajte frázu') }}"></multiselect>
+            </div>
+            <button type="submit" class="submit-btn"><i class="fas fa-search"></i></button>
+        </form>
+    </product-search>
 </div>
 <!-- slide sidebar area start -->
 <div class="slide-sidebar-area" id="slide-sidebar-area">

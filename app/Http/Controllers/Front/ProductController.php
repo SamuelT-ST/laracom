@@ -8,6 +8,7 @@ use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Shop\Products\Transformations\ProductTransformable;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -28,12 +29,13 @@ class ProductController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Request $request
+     * @return \Illuminate\Support\Collection
      */
-    public function search()
+    public function search(Request $request)
     {
-        if (request()->has('q') && request()->input('q') != '') {
-            $list = $this->productRepo->searchProduct(request()->input('q'));
+        if ($request->has('q') && $request->input('q') != '') {
+            $list = $this->productRepo->searchProduct($request->input('q'));
         } else {
             $list = $this->productRepo->listProducts();
         }
@@ -41,6 +43,10 @@ class ProductController extends Controller
         $products = $list->where('status', 1)->map(function (Product $item) {
             return $this->transformProduct($item);
         });
+
+        if($request->ajax()){
+            return $products;
+        }
 
         return view('front.products.product-search', [
             'products' => $this->productRepo->paginateArrayResults($products->all(), 10)

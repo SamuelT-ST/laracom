@@ -121,8 +121,8 @@ Vue.component('product-form', {
                             is_number: false
                         };
 
-                        axios.post('/admin/features/create/', data).then(response => {
-                            self.availableFeaturesNew.push(response.data);
+                        axios.post('/admin/features/', data).then(response => {
+                            self.availableFeaturesNew.push(response.data.model);
                             self.form.featureValues[id].feature = self.availableFeaturesNew[self.availableFeaturesNew.length-1];
                         });
                     }
@@ -136,8 +136,8 @@ Vue.component('product-form', {
                             is_number: true
                         };
 
-                        axios.post('/admin/features/create/', data).then(response => {
-                            self.availableFeaturesNew.push(response.data);
+                        axios.post('/admin/features', data).then(response => {
+                            self.availableFeaturesNew.push(response.data.model);
                             self.form.featureValues[id].feature = self.availableFeaturesNew[self.availableFeaturesNew.length-1];
                         });
                     }
@@ -152,18 +152,16 @@ Vue.component('product-form', {
                 value: value
             };
 
-            axios.post('/admin/features/createValue', data).then(response => {
+            axios.post('/admin/features/' + id + '/feature-values', data).then(response => {
                 let index = _.findIndex(this.form.featureValues, (o) => { return o.feature.id === id; });
-                console.log(index);
-                this.form.featureValues[index].availableValues.push(response.data);
+                this.form.featureValues[index].availableValues.push(response.data.model);
                 this.form.featureValues[index].chosenValue = this.form.featureValues[index].availableValues[this.form.featureValues[index].availableValues.length-1];
             }).catch(error => {
                 this.$notify({ type: 'error', title: 'Error', text: error.response.data.errors.value[0]});
             });
         },
         fillValues(id, index){
-            console.log(id);
-            axios.get('/admin/features/loadFeatureValues/'+id).then(response => {
+            axios.get('/admin/loadFeatureValues/'+id).then(response => {
                 if (response.data.length > 0 ) this.form.featureValues[index].availableValues = response.data;
             });
         },

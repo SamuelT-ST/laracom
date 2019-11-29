@@ -21,16 +21,6 @@ use Illuminate\Support\Facades\Route;
  * Admin routes
  */
 
-Route::get('/test', function(){
-
-    dd(
-        Category::all()->each(function (Category $category) {
-            $products = factory(Product::class, 6)->raw();
-            $category->entries(Product::class)->insert($products);
-        })
-    );
-})->name('dashboard');
-
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin'], 'as' => 'admin.' ], function () {
 
@@ -184,13 +174,6 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
     Route::delete('/admin/settings/{setting}',                  'Admin\SettingsController@destroy')->name('admin/settings/destroy');
 });
 
-/* Auto-generated admin routes */
-Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
-    Route::post('/admin/features/create',                        'Admin\Features\FeaturesController@create');
-    Route::post('/admin/features/createValue',                        'Admin\Features\FeaturesController@createValue');
-    Route::get('/admin/features/loadFeatureValues/{feature}',             'Admin\Features\FeaturesController@loadFeatureValues');
-});
-
 
 /* Auto-generated admin routes */
 Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
@@ -223,4 +206,40 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
     Route::post('/admin/posts/bulk-destroy',                    'Admin\Posts\PostsController@bulkDestroy')->name('admin/posts/bulk-destroy');
     Route::post('/admin/posts/{post}',                          'Admin\Posts\PostsController@update')->name('admin/posts/update');
     Route::delete('/admin/posts/{post}',                        'Admin\Posts\PostsController@destroy')->name('admin/posts/destroy');
+});
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/features/{feature}/feature-values',                         'Admin\FeatureValues\FeatureValuesController@index')->name('admin/feature-values/index');
+    Route::get('/admin/features/{feature}/feature-values/create',                  'Admin\FeatureValues\FeatureValuesController@create')->name('admin/feature-values/create');
+    Route::post('/admin/features/{feature}/feature-values',                        'Admin\FeatureValues\FeatureValuesController@store')->name('admin/feature-values/store');
+    Route::get('/admin/features/{feature}/feature-values/{featureValue}/edit',     'Admin\FeatureValues\FeatureValuesController@edit')->name('admin/feature-values/edit');
+    Route::post('/admin/feature-values/bulk-destroy',           'Admin\FeatureValues\FeatureValuesController@bulkDestroy')->name('admin/feature-values/bulk-destroy');
+    Route::post('/admin/features/{feature}/feature-values/{featureValue}',         'Admin\FeatureValues\FeatureValuesController@update')->name('admin/feature-values/update');
+    Route::delete('/admin/features/{feature}/feature-values/{featureValue}',       'Admin\FeatureValues\FeatureValuesController@destroy')->name('admin/feature-values/destroy');
+});
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/features',                               'Admin\Features\FeaturesController@index');
+    Route::get('/admin/loadFeatureValues/{feature}',            'Admin\Features\FeaturesController@loadFeatureValues');
+    Route::get('/admin/features/create',                        'Admin\Features\FeaturesController@create');
+    Route::post('/admin/features',                              'Admin\Features\FeaturesController@store');
+    Route::get('/admin/features/{feature}/edit',                'Admin\Features\FeaturesController@edit')->name('admin/features/edit');
+    Route::post('/admin/features/bulk-destroy',                 'Admin\Features\FeaturesController@bulkDestroy')->name('admin/features/bulk-destroy');
+    Route::post('/admin/features/{feature}',                    'Admin\Features\FeaturesController@update')->name('admin/features/update');
+    Route::delete('/admin/features/{feature}',                  'Admin\Features\FeaturesController@destroy')->name('admin/features/destroy');
+});
+
+
+
+/* Auto-generated admin routes */
+Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(function () {
+    Route::get('/admin/filters',                                'Admin\Filters\FiltersController@index');
+    Route::get('/admin/filters/create',                         'Admin\Filters\FiltersController@create');
+    Route::post('/admin/filters',                               'Admin\Filters\FiltersController@store');
+    Route::get('/admin/filters/{filter}/edit',                  'Admin\Filters\FiltersController@edit')->name('admin/filters/edit');
+    Route::post('/admin/filters/bulk-destroy',                  'Admin\Filters\FiltersController@bulkDestroy')->name('admin/filters/bulk-destroy');
+    Route::post('/admin/filters/{filter}',                      'Admin\Filters\FiltersController@update')->name('admin/filters/update');
+    Route::delete('/admin/filters/{filter}',                    'Admin\Filters\FiltersController@destroy')->name('admin/filters/destroy');
 });

@@ -56,6 +56,22 @@ class CategoriesWithDiscount
         return $this;
     }
 
+    public function getMinPrice(){
+
+        $smallestPrice = $this->query->min('products.price');
+        $smallestDiscountedPrice = $this->query->orderBy('discounted_price', 'asc')->first()->discounted_price;
+
+        if ($smallestPrice < $smallestDiscountedPrice || is_null($smallestDiscountedPrice)){
+            return $smallestPrice;
+        } else {
+            return $smallestDiscountedPrice;
+        }
+    }
+
+    public function getMaxPrice(){
+        return $this->query->orderBy('products.price', 'desc')->first()->price;
+    }
+
     public function getProducts($limit = null) {
 
         if($limit){

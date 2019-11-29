@@ -8,3 +8,6 @@ import './setting';
 import './courier';
 import './product-group';
 import './post';
+import './feature';
+import './feature-value';
+import './filter';

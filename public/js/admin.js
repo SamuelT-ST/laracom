@@ -112075,6 +112075,181 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/admin/feature-value/Form.js":
+/*!**************************************************!*\
+  !*** ./resources/js/admin/feature-value/Form.js ***!
+  \**************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app_components_Form_AppForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app-components/Form/AppForm */ "./resources/js/admin/app-components/Form/AppForm.js");
+
+Vue.component('feature-value-form', {
+  mixins: [_app_components_Form_AppForm__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  data: function data() {
+    return {
+      form: {
+        value: ''
+      }
+    };
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/admin/feature-value/Listing.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/admin/feature-value/Listing.js ***!
+  \*****************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app-components/Listing/AppListing */ "./resources/js/admin/app-components/Listing/AppListing.js");
+
+Vue.component('feature-value-listing', {
+  mixins: [_app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__["default"]]
+});
+
+/***/ }),
+
+/***/ "./resources/js/admin/feature-value/index.js":
+/*!***************************************************!*\
+  !*** ./resources/js/admin/feature-value/index.js ***!
+  \***************************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Listing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Listing */ "./resources/js/admin/feature-value/Listing.js");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/admin/feature-value/Form.js");
+
+
+
+/***/ }),
+
+/***/ "./resources/js/admin/feature/Form.js":
+/*!********************************************!*\
+  !*** ./resources/js/admin/feature/Form.js ***!
+  \********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app_components_Form_AppForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app-components/Form/AppForm */ "./resources/js/admin/app-components/Form/AppForm.js");
+
+Vue.component('feature-form', {
+  mixins: [_app_components_Form_AppForm__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  data: function data() {
+    return {
+      form: {
+        title: '',
+        is_number: false
+      }
+    };
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/admin/feature/Listing.js":
+/*!***********************************************!*\
+  !*** ./resources/js/admin/feature/Listing.js ***!
+  \***********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app-components/Listing/AppListing */ "./resources/js/admin/app-components/Listing/AppListing.js");
+
+Vue.component('feature-listing', {
+  mixins: [_app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__["default"]]
+});
+
+/***/ }),
+
+/***/ "./resources/js/admin/feature/index.js":
+/*!*********************************************!*\
+  !*** ./resources/js/admin/feature/index.js ***!
+  \*********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Listing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Listing */ "./resources/js/admin/feature/Listing.js");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/admin/feature/Form.js");
+
+
+
+/***/ }),
+
+/***/ "./resources/js/admin/filter/Form.js":
+/*!*******************************************!*\
+  !*** ./resources/js/admin/filter/Form.js ***!
+  \*******************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app_components_Form_AppForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app-components/Form/AppForm */ "./resources/js/admin/app-components/Form/AppForm.js");
+
+Vue.component('filter-form', {
+  mixins: [_app_components_Form_AppForm__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  props: ['features'],
+  data: function data() {
+    return {
+      form: {
+        feature: '',
+        filter_type: '',
+        categories: []
+      }
+    };
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/admin/filter/Listing.js":
+/*!**********************************************!*\
+  !*** ./resources/js/admin/filter/Listing.js ***!
+  \**********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app-components/Listing/AppListing */ "./resources/js/admin/app-components/Listing/AppListing.js");
+
+Vue.component('filter-listing', {
+  mixins: [_app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__["default"]]
+});
+
+/***/ }),
+
+/***/ "./resources/js/admin/filter/index.js":
+/*!********************************************!*\
+  !*** ./resources/js/admin/filter/index.js ***!
+  \********************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Listing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Listing */ "./resources/js/admin/filter/Listing.js");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/admin/filter/Form.js");
+
+
+
+/***/ }),
+
 /***/ "./resources/js/admin/index.js":
 /*!*************************************!*\
   !*** ./resources/js/admin/index.js ***!
@@ -112094,6 +112269,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _courier__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./courier */ "./resources/js/admin/courier/index.js");
 /* harmony import */ var _product_group__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./product-group */ "./resources/js/admin/product-group/index.js");
 /* harmony import */ var _post__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./post */ "./resources/js/admin/post/index.js");
+/* harmony import */ var _feature__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./feature */ "./resources/js/admin/feature/index.js");
+/* harmony import */ var _feature_value__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./feature-value */ "./resources/js/admin/feature-value/index.js");
+/* harmony import */ var _filter__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./filter */ "./resources/js/admin/filter/index.js");
+
+
+
 
 
 
@@ -112873,8 +113054,8 @@ Vue.component('product-form', {
               title: value,
               is_number: false
             };
-            axios.post('/admin/features/create/', data).then(function (response) {
-              self.availableFeaturesNew.push(response.data);
+            axios.post('/admin/features/', data).then(function (response) {
+              self.availableFeaturesNew.push(response.data.model);
               self.form.featureValues[id].feature = self.availableFeaturesNew[self.availableFeaturesNew.length - 1];
             });
           }
@@ -112886,8 +113067,8 @@ Vue.component('product-form', {
               title: value,
               is_number: true
             };
-            axios.post('/admin/features/create/', data).then(function (response) {
-              self.availableFeaturesNew.push(response.data);
+            axios.post('/admin/features', data).then(function (response) {
+              self.availableFeaturesNew.push(response.data.model);
               self.form.featureValues[id].feature = self.availableFeaturesNew[self.availableFeaturesNew.length - 1];
             });
           }
@@ -112901,14 +113082,12 @@ Vue.component('product-form', {
         featureId: id,
         value: value
       };
-      axios.post('/admin/features/createValue', data).then(function (response) {
+      axios.post('/admin/features/' + id + '/feature-values', data).then(function (response) {
         var index = _.findIndex(_this.form.featureValues, function (o) {
           return o.feature.id === id;
         });
 
-        console.log(index);
-
-        _this.form.featureValues[index].availableValues.push(response.data);
+        _this.form.featureValues[index].availableValues.push(response.data.model);
 
         _this.form.featureValues[index].chosenValue = _this.form.featureValues[index].availableValues[_this.form.featureValues[index].availableValues.length - 1];
       })["catch"](function (error) {
@@ -112922,8 +113101,7 @@ Vue.component('product-form', {
     fillValues: function fillValues(id, index) {
       var _this2 = this;
 
-      console.log(id);
-      axios.get('/admin/features/loadFeatureValues/' + id).then(function (response) {
+      axios.get('/admin/loadFeatureValues/' + id).then(function (response) {
         if (response.data.length > 0) _this2.form.featureValues[index].availableValues = response.data;
       });
     },

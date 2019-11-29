@@ -16,9 +16,9 @@ class CreateFeatureValuesTable extends Migration
         Schema::create('feature_values', function (Blueprint $table) {
             $table->increments('id');
             $table->string('value_string')->nullable();
-            $table->integer('value_integer')->nullable(
-
-            );
+            $table->integer('value_integer')->nullable();
+            $table->integer('feature_id');
+            $table->foreign('feature_id')->references('id')->on('features')->onDelete('cascade');
         });
     }
 

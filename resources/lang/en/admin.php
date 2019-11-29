@@ -284,5 +284,56 @@ return [
         ],
     ],
 
+    'feature' => [
+        'title' => 'Features',
+
+        'actions' => [
+            'index' => 'Features',
+            'create' => 'New Feature',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'title' => "Title",
+            'is_number' => "Is number",
+            
+        ],
+    ],
+
+    'feature-value' => [
+        'title' => 'Feature Values',
+
+        'actions' => [
+            'index' => 'Feature Values',
+            'create' => 'New Feature Value',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'value_string' => "Value string",
+            'value_integer' => "Value integer",
+            
+        ],
+    ],
+
+    'filter' => [
+        'title' => 'Filters',
+
+        'actions' => [
+            'index' => 'Filters',
+            'create' => 'New Filter',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => "ID",
+            'feature_id' => "Feature",
+            'filter_type' => "Filter type",
+            
+        ],
+    ],
+
     // Do not delete me :) I'm used for auto-generation
 ];

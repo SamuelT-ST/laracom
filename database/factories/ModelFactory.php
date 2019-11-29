@@ -127,3 +127,35 @@ $factory->define(Post::class, function (Faker\Generator $faker) {
     ];
 });
 
+/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\Feature::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->sentence,
+        'is_number' => $faker->boolean(),
+        
+        
+    ];
+});
+
+/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\FeatureValue::class, function (Faker\Generator $faker) {
+    return [
+        'value_string' => $faker->sentence,
+        'value_integer' => $faker->randomNumber(5),
+        
+        
+    ];
+});
+
+/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\Filter::class, function (Faker\Generator $faker) {
+    return [
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        'feature_id' => $faker->randomNumber(5),
+        'filter_type' => $faker->sentence,
+        
+        
+    ];
+});
+

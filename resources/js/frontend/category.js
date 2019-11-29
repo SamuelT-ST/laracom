@@ -1,6 +1,7 @@
-import moment from 'moment';
 import 'moment-timezone';
 import Pagination from './components/Pagination';
+import 'vue-range-component/dist/vue-range-slider.css'
+import VueRangeSlider from 'vue-range-component'
 
 Vue.component('category-listing', {
     data: function() {
@@ -21,9 +22,11 @@ Vue.component('category-listing', {
                 column: 'id',
                 direction: 'asc',
             },
-            filters: {},
+            filters: this.filterTemplate,
             search: '',
             collection: null,
+            initialMinPrice: '',
+            initialMaxPrice: ''
         }
     },
     props: {
@@ -37,9 +40,11 @@ Vue.component('category-listing', {
                 return null;
             }
         },
+        'filterTemplate': {}
     },
     components: {
         'pagination': Pagination,
+        'vue-range-slider': VueRangeSlider,
     },
 
     created: function() {
@@ -48,6 +53,9 @@ Vue.component('category-listing', {
         } else {
             this.loadData();
         }
+
+        this.initialMaxPrice = this.filters['price'][1];
+        this.initialMinPrice = this.filters['price'][0];
     },
 
     methods: {
@@ -75,6 +83,7 @@ Vue.component('category-listing', {
                     page: this.pagination.state.current_page,
                     orderBy: this.orderBy.column,
                     orderDirection: this.orderBy.direction,
+                    filters: this.filters
                 }
             };
 
@@ -87,16 +96,6 @@ Vue.component('category-listing', {
             axios.get(this.url, options).then(response => this.populateCurrentStateAndData(response.data.data), error => {
                 // TODO handle error
             });
-        },
-
-        filter(column, value) {
-            if (value == '') {
-                delete this.filters[column];
-            } else {
-                this.filters[column] = value;
-            }
-            // when we change filter, we must reset pagination, because the total items count may has changed
-            this.loadData(true);
         },
 
         populateCurrentStateAndData(object) {

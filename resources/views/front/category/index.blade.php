@@ -5,6 +5,7 @@
             :data="{{ $data->toJson() }}"
             :url="'{{ url('category/'.$category->slug) }}'"
             @updated-cart="updateCart"
+            :filter-template="{{ $filterTemplate->toJson() }}"
             inline-template>
         <div>
         <section class="breadcrumb-area breadcrumb-bg extra">

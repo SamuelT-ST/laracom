@@ -2,6 +2,7 @@
 
 namespace App\Shop\Features;
 
+use App\Shop\FeatureValues\FeatureValue;
 use Illuminate\Database\Eloquent\Model;
 
 class Feature extends Model
@@ -10,7 +11,23 @@ class Feature extends Model
 
     public $timestamps = false;
 
-    public function featureValues(){
-        return $this->belongsToMany(FeatureValue::class);
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/features/'.$this->getKey());
     }
+
+    public function featureValues(){
+        return $this->hasMany(FeatureValue::class);
+    }
+
+    public function minValue(){
+        return $this->featureValues()->min('value_integer');
+    }
+
+    public function maxValue(){
+        return $this->featureValues()->max('value_integer');
+    }
+
 }
