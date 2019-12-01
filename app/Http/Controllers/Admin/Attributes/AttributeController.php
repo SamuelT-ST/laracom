@@ -3,36 +3,39 @@
 namespace App\Http\Controllers\Admin\Attributes;
 
 use App\Http\Controllers\Controller;
-use App\Shop\Attributes\Exceptions\AttributeNotFoundException;
-use App\Shop\Attributes\Exceptions\CreateAttributeErrorException;
-use App\Shop\Attributes\Exceptions\UpdateAttributeErrorException;
-use App\Shop\Attributes\Repositories\AttributeRepository;
-use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
+use App\Shop\Attributes\Attribute;
 use App\Shop\Attributes\Requests\CreateAttributeRequest;
 use App\Shop\Attributes\Requests\UpdateAttributeRequest;
+use App\Shop\Attributes\Requests\IndexAttribute;
+use Brackets\AdminListing\Facades\AdminListing;
+use Illuminate\Http\Request;
 
 class AttributeController extends Controller
 {
-    private $attributeRepo;
-
     /**
-     * AttributeController constructor.
-     * @param AttributeRepositoryInterface $attributeRepository
-     */
-    public function __construct(AttributeRepositoryInterface $attributeRepository)
-    {
-        $this->attributeRepo = $attributeRepository;
-    }
-
-    /**
+     * @param IndexAttribute $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(IndexAttribute $request)
     {
-        $results = $this->attributeRepo->listAttributes();
-        $attributes = $this->attributeRepo->paginateArrayResults($results->all());
 
-        return view('admin.attributes.list', compact('attributes'));
+        // create and AdminListing instance for a specific model and
+        $data = AdminListing::create(Attribute::class)->processRequestAndGet(
+        // pass the request with params
+            $request,
+
+            // set columns to query
+            ['id', 'name'],
+
+            // set columns to searchIn
+            ['name']
+        );
+
+        if ($request->ajax()) {
+            return ['data' => $data];
+        }
+
+        return view('admin.attributes.list', compact('data'));
     }
 
     /**
@@ -49,76 +52,71 @@ class AttributeController extends Controller
      */
     public function store(CreateAttributeRequest $request)
     {
-        $attribute = $this->attributeRepo->createAttribute($request->except('_token'));
-        $request->session()->flash('message', 'Create attribute successful!');
+        $attribute = Attribute::create($request->validated());
+
+        if ($request->ajax()) {
+            return ['redirect' => url('admin/attributes'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
 
         return redirect()->route('admin.attributes.edit', $attribute->id);
     }
 
     /**
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Request $request
+     * @param Attribute $attribute
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Support\Collection|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(Request $request, Attribute $attribute)
     {
-        try {
-            $attribute = $this->attributeRepo->findAttributeById($id);
-            $attributeRepo = new AttributeRepository($attribute);
 
-            return view('admin.attributes.show', [
-                'attribute' => $attribute,
-                'values' => $attributeRepo->listAttributeValues()
-            ]);
-        } catch (AttributeNotFoundException $e) {
-            request()->session()->flash('error', 'The attribute you are looking for is not found.');
-
-            return redirect()->route('admin.attributes.index');
+        if ($request->ajax()) {
+            return response()->json($attribute->values);
         }
+
+        return view('admin.attributes.show', [
+            'attribute' => $attribute,
+            'values' => $attribute->values
+        ]);
     }
 
     /**
-     * @param int $id
+     * @param Attribute $attribute
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Attribute $attribute)
     {
-        $attribute = $this->attributeRepo->findAttributeById($id);
-
         return view('admin.attributes.edit', compact('attribute'));
     }
 
     /**
      * @param UpdateAttributeRequest $request
-     * @param $id
+     * @param Attribute $attribute
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateAttributeRequest $request, $id)
+    public function update(UpdateAttributeRequest $request, Attribute $attribute)
     {
-        try {
-            $attribute = $this->attributeRepo->findAttributeById($id);
+        $attribute->update($request->except('_token'));
 
-            $attributeRepo = new AttributeRepository($attribute);
-            $attributeRepo->updateAttribute($request->except('_token'));
-
-            $request->session()->flash('message', 'Attribute update successful!');
-
-            return redirect()->route('admin.attributes.edit', $attribute->id);
-        } catch (UpdateAttributeErrorException $e) {
-            $request->session()->flash('error', $e->getMessage());
-
-            return redirect()->route('admin.attributes.edit', $id)->withInput();
+        if ($request->ajax()){
+            return ['redirect' => url('admin/attributes'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
+
+        return redirect()->route('admin.attributes.edit', $attribute->id);
     }
 
     /**
-     * @param $id
+     * @param Request $request
+     * @param Attribute $attribute
      * @return bool|null
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Request $request, Attribute $attribute)
     {
-        $this->attributeRepo->findAttributeById($id)->delete();
+        $attribute->delete();
 
-        request()->session()->flash('message', 'Attribute deleted successfully!');
+        if ($request->ajax()) {
+            return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
+        }
 
         return redirect()->route('admin.attributes.index');
     }

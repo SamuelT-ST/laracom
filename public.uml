@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>2179679a-55ca-4fdb-90c5-b4fd45e997d6.SCHEMA:homestead.public</OriginalElement>
+  <nodes>
+    <node x="332.875" y="1670.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.permissions</node>
+    <node x="987.9252450980393" y="44.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.countries</node>
+    <node x="549.5061274509806" y="366.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.addresses</node>
+    <node x="220.0" y="1893.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.permission_role</node>
+    <node x="230.0" y="1340.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.product_images</node>
+    <node x="418.0" y="1274.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.order_product</node>
+    <node x="1786.0" y="1670.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.customer_groups</node>
+    <node x="1465.0061274509806" y="941.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.attributes</node>
+    <node x="940.0" y="1670.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.employees</node>
+    <node x="674.0" y="1670.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.subscriptions</node>
+    <node x="306.216911764706" y="432.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.couriers</node>
+    <node x="1236.5061274509806" y="465.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.provinces</node>
+    <node x="0.0" y="2022.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.migrations</node>
+    <node x="2041.0" y="1670.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.brands</node>
+    <node x="1531.0" y="1670.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.shoppingcart</node>
+    <node x="1745.5061274509806" y="0.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.categories</node>
+    <node x="181.13112745098033" y="776.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.products</node>
+    <node x="1230.0" y="1670.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.wysiwyg_media</node>
+    <node x="71.125" y="1670.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.roles</node>
+    <node x="0.0" y="1285.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.product_attributes</node>
+    <node x="497.0" y="2022.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.customer_customer_group</node>
+    <node x="1720.0061274509806" y="300.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.categorizables</node>
+    <node x="675.9485294117646" y="1552.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.attribute_value_product_attribute</node>
+    <node x="244.0" y="2022.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.password_resets</node>
+    <node x="1238.0061274509806" y="952.5">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.cities</node>
+    <node x="1009.5061274509806" y="498.5">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.states</node>
+    <node x="429.0" y="1882.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.permission_user</node>
+    <node x="0.0" y="1882.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.role_user</node>
+    <node x="467.7500000000001" y="776.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.orders</node>
+    <node x="435.716911764706" y="0.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.customers</node>
+    <node x="1465.0061274509806" y="1318.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.attribute_values</node>
+    <node x="779.5061274509806" y="476.0">2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.order_statuses</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.role_user" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.roles">
+      <point x="0.0" y="-47.5" />
+      <point x="100.0" y="1857.0" />
+      <point x="127.375" y="1857.0" />
+      <point x="-56.25" y="81.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.provinces" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.countries">
+      <point x="0.0" y="-81.0" />
+      <point x="1341.5061274509806" y="341.0" />
+      <point x="1162.9252450980393" y="341.0" />
+      <point x="70.0" y="114.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.attribute_value_product_attribute" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.attribute_values">
+      <point x="59.25000000000006" y="-36.5" />
+      <point x="853.6985294117646" y="1527.0" />
+      <point x="1570.0061274509806" y="1527.0" />
+      <point x="0.0" y="70.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.categorizables" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.categories">
+      <point x="0.0" y="-69.5" />
+      <point x="0.0" y="125.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.order_product" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.products">
+      <point x="-57.749999999999886" y="-114.0" />
+      <point x="475.7500000000001" y="1249.0" />
+      <point x="366.9644607843136" y="1249.0" />
+      <point x="74.33333333333326" y="224.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.orders" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.customers">
+      <point x="-30.874999999999886" y="-224.0" />
+      <point x="560.3750000000002" y="751.0" />
+      <point x="526.7169117647061" y="751.0" />
+      <point x="526.7169117647061" y="341.0" />
+      <point x="496.966911764706" y="341.0" />
+      <point x="-61.25" y="158.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.product_images" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.products">
+      <point x="0.0" y="-48.0" />
+      <point x="314.0" y="1249.0" />
+      <point x="292.63112745098033" y="1249.0" />
+      <point x="0.0" y="224.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.permission_role" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.permissions">
+      <point x="47.25" y="-36.5" />
+      <point x="361.75" y="1857.0" />
+      <point x="389.125" y="1857.0" />
+      <point x="-56.25" y="81.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.order_product" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.orders">
+      <point x="57.750000000000114" y="-114.0" />
+      <point x="0.0" y="224.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.attribute_value_product_attribute" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.product_attributes">
+      <point x="-59.24999999999994" y="-36.5" />
+      <point x="735.1985294117646" y="1527.0" />
+      <point x="105.0" y="1527.0" />
+      <point x="0.0" y="103.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.addresses" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.countries">
+      <point x="52.5" y="-180.0" />
+      <point x="707.0061274509806" y="341.0" />
+      <point x="1022.9252450980393" y="341.0" />
+      <point x="-70.0" y="114.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.permission_user" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.permissions">
+      <point x="0.0" y="-47.5" />
+      <point x="529.0" y="1857.0" />
+      <point x="501.625" y="1857.0" />
+      <point x="56.25" y="81.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.permission_role" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.roles">
+      <point x="-47.25" y="-36.5" />
+      <point x="267.25" y="1857.0" />
+      <point x="239.875" y="1857.0" />
+      <point x="56.25" y="81.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.cities" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.provinces">
+      <point x="0.0" y="-47.5" />
+      <point x="0.0" y="81.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.attribute_values" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.attributes">
+      <point x="0.0" y="-70.0" />
+      <point x="0.0" y="59.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.orders" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.addresses">
+      <point x="30.875000000000114" y="-224.0" />
+      <point x="622.1250000000002" y="751.0" />
+      <point x="654.5061274509806" y="751.0" />
+      <point x="0.0" y="180.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.orders" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.couriers">
+      <point x="-92.62499999999989" y="-224.0" />
+      <point x="498.6250000000002" y="751.0" />
+      <point x="411.216911764706" y="751.0" />
+      <point x="0.0" y="114.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.product_attributes" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.products">
+      <point x="0.0" y="-103.0" />
+      <point x="105.0" y="1249.0" />
+      <point x="218.29779411764696" y="1249.0" />
+      <point x="-74.33333333333337" y="224.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.states" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.countries">
+      <point x="0.0" y="-47.5" />
+      <point x="1113.0061274509806" y="341.0" />
+      <point x="1092.9252450980393" y="341.0" />
+      <point x="0.0" y="114.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.orders" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.order_statuses">
+      <point x="92.62500000000011" y="-224.0" />
+      <point x="683.8750000000002" y="751.0" />
+      <point x="884.5061274509806" y="751.0" />
+      <point x="0.0" y="70.0" />
+    </edge>
+    <edge source="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.addresses" target="2179679a-55ca-4fdb-90c5-b4fd45e997d6.TABLE:homestead.public.customers">
+      <point x="-52.5" y="-180.0" />
+      <point x="602.0061274509806" y="341.0" />
+      <point x="619.4669117647061" y="341.0" />
+      <point x="61.25" y="158.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.5979122739500915" x="801.9462835303472" y="1289.48816646993" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+  </Categories>
+</Diagram>
+

@@ -30,19 +30,19 @@
             <tbody>
             @foreach($products as $product)
                 <tr>
-                    <td>{{$product->sku}}</td>
-                    <td>{{$product->name}}</td>
+                    <td>{{$product->product_sku}}</td>
+                    <td>{{$product->product_name}}</td>
                     <td>
-                        {{$product->description}}
-                        @php($pattr = \App\Shop\ProductAttributes\ProductAttribute::find($product->pivot->product_attribute_id))
+                        {{$product->product_description}}
+                        @php($pattr = \App\Shop\ProductAttributes\ProductAttribute::find($product->product_attribute_id))
                         @if(!is_null($pattr))<br>
-                        @foreach($pattr->attributesValues as $it)
-                            <p class="label label-primary">{{ $it->attribute->name }} : {{ $it->value }}</p>
+                        @foreach($product->productAttributes as $it)
+                            <p class="label label-primary">{{ $it->attributesValues()->first()->value }}</p>
                         @endforeach
                         @endif
                     </td>
-                    <td>{{$product->pivot->quantity}}</td>
-                    <td class="text-right">{{config('cart.currency')}} {{number_format($product->price * $product->pivot->quantity, 2)}}</td>
+                    <td>{{$product->quantity}}</td>
+                    <td class="text-right">{{config('cart.currency')}} {{number_format($product->product_price * $product->quantity, 2)}}</td>
                 </tr>
             @endforeach
             </tbody>

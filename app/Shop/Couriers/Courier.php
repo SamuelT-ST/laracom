@@ -1,30 +1,47 @@
-<?php
+<?php namespace App\Shop\Couriers;
 
-namespace App\Shop\Couriers;
-
-use App\Shop\Orders\Order;
+use App\Models\PaymentMethod;
 use Illuminate\Database\Eloquent\Model;
 
 class Courier extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    
+    
     protected $fillable = [
-        'name',
-        'description',
-        'url',
-        'is_free',
-        'cost',
-        'status'
+        "name",
+        "description",
+        "from_width",
+        "from_height",
+        "from_length",
+        "from_weight",
+        "url",
+        "price",
+        "status",
+    
     ];
+    
+    protected $hidden = [
+    
+    ];
+    
+    protected $dates = [
+        "created_at",
+        "updated_at",
+    
+    ];
+    
+    
+    
+    protected $appends = ['resource_url'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [];
+    /* ************************ ACCESSOR ************************* */
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/couriers/'.$this->getKey());
+    }
+
+    public function paymentMethods(){
+        return $this->belongsToMany(PaymentMethod::class);
+    }
+    
 }

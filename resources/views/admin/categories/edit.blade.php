@@ -1,60 +1,52 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
-        @include('layouts.errors-and-messages')
-        <div class="box">
-            <form action="{{ route('admin.categories.update', $category->id) }}" method="post" class="form" enctype="multipart/form-data">
-                <div class="box-body">
-                    <input type="hidden" name="_method" value="put">
-                    {{ csrf_field() }}
-                    <div class="form-group">
-                        <label for="parent">Parent Category</label>
-                        <select name="parent" id="parent" class="form-control select2">
-                            <option value="0">No parent</option>
-                            @foreach($categories as $cat)
-                                <option @if($cat->id == $category->parent_id) selected="selected" @endif value="{{$cat->id}}">{{$cat->name}}</option>
-                            @endforeach
-                        </select>
+@section('title', trans('admin.categories.actions.edit', ['name' => $category->title]))
+
+@section('body')
+
+    <div class="container-xl">
+
+        <div class="card">
+
+            <category-form
+                    :categories = "{{ $categories }}"
+                    :parent = "'{{ $category->parent }}'"
+                    :action="'{{ route('admin.categories.update', $category->id) }}'"
+                    :data="{{ $category->toJson() }}"
+                    inline-template>
+
+
+                <form class="form-horizontal form-edit" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card-header">
+                        <i class="fa fa-pencil"></i> {{ trans('admin.categories.actions.edit', ['name' => $category->name]) }}
                     </div>
-                    <div class="form-group">
-                        <label for="name">Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{!! $category->name ?: old('name')  !!}">
+
+                    <div class="card-body">
+                        @include('admin.categories.components.form-elements')
                     </div>
-                    <div class="form-group">
-                        <label for="description">Description </label>
-                        <textarea class="form-control ckeditor" name="description" id="description" rows="5" placeholder="Description">{!! $category->description ?: old('description')  !!}</textarea>
+
+                    @include('brackets/admin-ui::admin.includes.media-uploader', [
+                            'mediaCollection' => app(App\Shop\Categories\Category::class)->getMediaCollection('cover'),
+                            'media' => $category->getThumbs200ForCollection('cover'),
+                            'label' => 'Obrázok kategórie'
+                        ])
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" :disabled="submiting">
+                            <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                            {{ trans('brackets/admin-ui::admin.btn.save') }}
+                        </button>
                     </div>
-                    @if(isset($category->cover))
-                    <div class="form-group">
-                        <img src="{{ asset("storage/$category->cover") }}" alt="" class="img-responsive"> <br/>
-                        <a onclick="return confirm('Are you sure?')" href="{{ route('admin.category.remove.image', ['category' => $category->id]) }}" class="btn btn-danger">Remove image?</a>
-                    </div>
-                    @endif
-                    <div class="form-group">
-                        <label for="cover">Cover </label>
-                        <input type="file" name="cover" id="cover" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="status">Status </label>
-                        <select name="status" id="status" class="form-control">
-                            <option value="0" @if($category->status == 0) selected="selected" @endif>Disable</option>
-                            <option value="1" @if($category->status == 1) selected="selected" @endif>Enable</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a href="{{ route('admin.categories.index') }}" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                </div>
-            </form>
+
+                </form>
+
+
+            </category-form>
+
         </div>
-        <!-- /.box -->
 
-    </section>
-    <!-- /.content -->
+    </div>
+
 @endsection
+

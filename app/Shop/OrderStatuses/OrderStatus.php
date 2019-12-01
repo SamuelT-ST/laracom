@@ -23,6 +23,12 @@ class OrderStatus extends Model
      * @var array
      */
     protected $hidden = [];
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/order-statuses/'.$this->getKey());
+    }
 
     public function orders()
     {

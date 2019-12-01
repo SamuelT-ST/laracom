@@ -1,32 +1,31 @@
-@extends('layouts.admin.app')
+@extends('brackets/admin-ui::admin.layout.default')
 
-@section('content')
+@section('body')
     <!-- Main content -->
-    <section class="content">
+    <div class="container-xl">
 
-        <!-- Default box -->
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Title</h3>
-
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                        <i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-                        <i class="fa fa-times"></i></button>
+    <!-- Default box -->
+        <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Dashboard a rýchle voľby
                 </div>
-            </div>
-            <div class="box-body">
-                Start creating your amazing application!
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer">
-                Footer
-            </div>
-            <!-- /.box-footer-->
-        </div>
-        <!-- /.box -->
 
-    </section>
+                {{--<div class="card-tools pull-right">--}}
+                    {{--<button type="button" class="btn btn-card-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">--}}
+                        {{--<i class="fa fa-minus"></i></button>--}}
+                    {{--<button type="button" class="btn btn-card-tool" data-widget="remove" data-toggle="tooltip" title="Remove">--}}
+                        {{--<i class="fa fa-times"></i></button>--}}
+                {{--</div>--}}
+            <div class="card-body">
+                Tu sa budú vyskytovať grafy a rýchle voľby.
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+            </div>
+            <!-- /.card-footer-->
+        </div>
+        <!-- /.card -->
+
+    </div>
     <!-- /.content -->
 @endsection

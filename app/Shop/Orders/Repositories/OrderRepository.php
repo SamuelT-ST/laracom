@@ -4,6 +4,7 @@ namespace App\Shop\Orders\Repositories;
 
 use App\Shop\Carts\Repositories\CartRepository;
 use App\Shop\Carts\ShoppingCart;
+use Brackets\AdminAuth\Models\AdminUser;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Employees\Employee;
@@ -120,7 +121,8 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
      */
     public function associateProduct(Product $product, int $quantity = 1, array $data = [])
     {
-        $this->model->products()->attach($product, [
+        $this->model->orderProduct()->create([
+            'product_id'=>$product->id,
             'quantity' => $quantity,
             'product_name' => $product->name,
             'product_sku' => $product->sku,
@@ -137,7 +139,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
      */
     public function sendEmailToCustomer()
     {
-        Mail::to($this->model->customer)
+        Mail::to($this->model->customer_email)
             ->send(new SendOrderToCustomerMailable($this->findOrderById($this->model->id)));
     }
 
@@ -146,10 +148,9 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
      */
     public function sendEmailNotificationToAdmin()
     {
-        $employeeRepo = new EmployeeRepository(new Employee);
-        $employee = $employeeRepo->findEmployeeById(1);
+        $adminUser = AdminUser::first();
 
-        Mail::to($employee)
+        Mail::to($adminUser)
             ->send(new sendEmailNotificationToAdminMailable($this->findOrderById($this->model->id)));
     }
 
@@ -198,12 +199,22 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         $items->each(function ($item) {
             $productRepo = new ProductRepository(new Product);
             $product = $productRepo->find($item->id);
+
+            if ($item->options->has('size')){
+                $size = $item->options->size;
+            } else {
+                $size = null;
+            }
+
             if ($item->options->has('product_attribute_id')) {
                 $this->associateProduct($product, $item->qty, [
-                    'product_attribute_id' => $item->options->product_attribute_id
+                    'product_attribute_id' => $item->options->product_attribute_id,
+                    'size' => $size
                 ]);
             } else {
-                $this->associateProduct($product, $item->qty);
+                $this->associateProduct($product, $item->qty, [
+                    'size' => $size
+                ]);
             }
         });
     }

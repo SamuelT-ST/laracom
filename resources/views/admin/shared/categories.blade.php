@@ -1,4 +1,4 @@
-<ul class="checkbox-list">
+<ul class="checkbox-list categories-list">
     @foreach($categories as $category)
         <li>
             <div class="checkbox">
@@ -7,6 +7,7 @@
                             type="checkbox"
                             @if(isset($selectedIds) && in_array($category->id, $selectedIds))checked="checked" @endif
                             name="categories[]"
+                            v-model="form.categories"
                             value="{{ $category->id }}">
                     {{ $category->name }}
                 </label>
@@ -17,3 +18,30 @@
         @endif
     @endforeach
 </ul>
+
+@section('bottom-scripts')
+    <script>
+
+        $( document ).ready(function() {
+
+            $('.categories-list li').each(function(){
+                showChildren(this);
+            });
+
+
+            $('.categories-list input').on('click', function () {
+                showChildren(this);
+            })
+        });
+
+        function showChildren(item) {
+            if ($(item)[0].checked){
+                $(item).closest('li').next('ul').show();
+            } else {
+                $(item).closest('li').next('ul').hide();
+            }
+        }
+
+    </script>
+
+@endsection

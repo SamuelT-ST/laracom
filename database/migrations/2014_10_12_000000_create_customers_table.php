@@ -18,6 +18,9 @@ class CreateCustomersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('company')->nullable();
+            $table->integer('ico')->nullable();
+            $table->integer('dic')->nullable();
             $table->integer('status')->default(1);
             $table->softDeletes();
             $table->rememberToken();

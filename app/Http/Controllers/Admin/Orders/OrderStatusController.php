@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Orders;
 
+use App\Shop\OrderStatuses\OrderStatus;
 use App\Shop\OrderStatuses\Repositories\Interfaces\OrderStatusRepositoryInterface;
 use App\Shop\OrderStatuses\Repositories\OrderStatusRepository;
 use App\Shop\OrderStatuses\Requests\CreateOrderStatusRequest;
+use App\Shop\OrderStatuses\Requests\IndexOrderStatus;
 use App\Shop\OrderStatuses\Requests\UpdateOrderStatusRequest;
-use Illuminate\Database\QueryException;
+use Brackets\AdminListing\Facades\AdminListing;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -23,11 +25,29 @@ class OrderStatusController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param IndexOrderStatus $request
+     * @return array|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexOrderStatus $request)
     {
-        return view('admin.order-statuses.list', ['orderStatuses' => $this->orderStatuses->listOrderStatuses()]);
+
+        // create and AdminListing instance for a specific model and
+        $data = AdminListing::create(OrderStatus::class)->processRequestAndGet(
+        // pass the request with params
+            $request,
+
+            // set columns to query
+            ['id', 'name', 'color'],
+
+            // set columns to searchIn
+            ['name', 'color']
+        );
+
+        if ($request->ajax()) {
+            return ['data' => $data];
+        }
+
+        return view('admin.order-statuses.list', ['data' => $data]);
     }
 
     /**
@@ -44,12 +64,16 @@ class OrderStatusController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  CreateOrderStatusRequest $request
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function store(CreateOrderStatusRequest $request)
     {
-        $this->orderStatuses->createOrderStatus($request->except('_token', '_method'));
-        $request->session()->flash('message', 'Create successful');
+        OrderStatus::create($request->validated());
+
+        if ($request->ajax()) {
+            return ['redirect' => url('admin/order-statuses'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
+
         return redirect()->route('admin.order-statuses.index');
     }
 
@@ -68,31 +92,37 @@ class OrderStatusController extends Controller
      * Update the specified resource in storage.
      *
      * @param  UpdateOrderStatusRequest $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param OrderStatus $orderStatus
+     * @return array|\Illuminate\Http\Response
      */
-    public function update(UpdateOrderStatusRequest $request, int $id)
+    public function update(UpdateOrderStatusRequest $request, OrderStatus $orderStatus)
     {
-        $orderStatus = $this->orderStatuses->findOrderStatusById($id);
-
         $update = new OrderStatusRepository($orderStatus);
-        $update->updateOrderStatus($request->all());
+        $update->updateOrderStatus($request->validated());
 
-        $request->session()->flash('message', 'Update successful');
-        return redirect()->route('admin.order-statuses.edit', $id);
+        if ($request->ajax()){
+            return ['redirect' => url('admin/order-statuses'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
+
+        return redirect()->route('admin.order-statuses.edit', $orderStatus->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Request $request
+     * @param OrderStatus $orderStatus
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy(int $id)
+    public function destroy(Request $request, OrderStatus $orderStatus)
     {
-        $this->orderStatuses->findOrderStatusById($id)->delete();
+        $orderStatus->delete();
 
-        request()->session()->flash('message', 'Delete successful');
+        if ($request->ajax()) {
+            return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
+        }
+
         return redirect()->route('admin.order-statuses.index');
     }
 }

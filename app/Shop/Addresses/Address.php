@@ -60,6 +60,15 @@ class Address extends Model
         ]
     ];
 
+    protected $with = ['country', 'customer'];
+
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/addresses/'.$this->getKey());
+    }
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -68,21 +77,6 @@ class Address extends Model
     public function country()
     {
         return $this->belongsTo(Country::class);
-    }
-
-    public function province()
-    {
-        return $this->belongsTo(Province::class);
-    }
-
-    /**
-     * @deprecated
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function city()
-    {
-        return $this->belongsTo(City::class, 'city');
     }
 
     /**

@@ -1,77 +1,120 @@
-@extends('layouts.admin.app')
+@extends('admin.products.default')
 
-@section('content')
-    <!-- Main content -->
-    <section class="content">
-        @include('layouts.errors-and-messages')
-        <div class="box">
-            <form action="{{ route('admin.products.store') }}" method="post" class="form" enctype="multipart/form-data">
-                <div class="box-body">
-                    {{ csrf_field() }}
-                    <div class="col-md-8">
-                        <h2>Product</h2>
-                        <div class="form-group">
-                            <label for="sku">SKU <span class="text-danger">*</span></label>
-                            <input type="text" name="sku" id="sku" placeholder="xxxxx" class="form-control" value="{{ old('sku') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Name <span class="text-danger">*</span></label>
-                            <input type="text" name="name" id="name" placeholder="Name" class="form-control" value="{{ old('name') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Description </label>
-                            <textarea class="form-control" name="description" id="description" rows="5" placeholder="Description">{{ old('description') }}</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="cover">Cover </label>
-                            <input type="file" name="cover" id="cover" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="image">Images</label>
-                            <input type="file" name="image[]" id="image" class="form-control" multiple>
-                            <small class="text-warning">You can use ctr (cmd) to select multiple images</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="quantity">Quantity <span class="text-danger">*</span></label>
-                            <input type="text" name="quantity" id="quantity" placeholder="Quantity" class="form-control" value="{{ old('quantity') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="price">Price <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-addon">PHP</span>
-                                <input type="text" name="price" id="price" placeholder="Price" class="form-control" value="{{ old('price') }}">
+@section('title', trans('admin.products.actions.create'))
+
+@section('body')
+
+
+    <div class="container-xl">
+
+        <product-form
+                :categories = "{{ $categories }}"
+                :available-features = "{{ $features }}"
+                :action="'{{ route('admin.products.store') }}'"
+                inline-template>
+
+            <div>
+
+                <form class="form-horizontal form-create row" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>
+
+                    <div class="card col-md-8">
+
+                            <div class="card-header">
+                                <i class="fa fa-plus"></i> {{ trans('admin.products.actions.create') }}
                             </div>
-                        </div>
-                        @if(!$brands->isEmpty())
-                        <div class="form-group">
-                            <label for="brand_id">Brand </label>
-                            <select name="brand_id" id="brand_id" class="form-control select2">
-                                <option value=""></option>
-                                @foreach($brands as $brand)
-                                    <option @if(old('brand_id') == $brand->id) selected="selected" @endif value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @endif
-                        @include('admin.shared.status-select', ['status' => 0])
-                        @include('admin.shared.attribute-select', [compact('default_weight')])
-                    </div>
-                    <div class="col-md-4">
-                        <h2>Categories</h2>
-                        @include('admin.shared.categories', ['categories' => $categories, 'selectedIds' => []])
-                    </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <div class="btn-group">
-                        <a href="{{ route('admin.products.index') }}" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <!-- /.box -->
 
-    </section>
-    <!-- /.content -->
+                            <div class="card-body">
+
+                                @include('admin.products.components.form-elements')
+
+                            </div>
+
+                            <div class="card-header">
+                                <i class="fa fa-plus"></i> Doručenie
+                            </div>
+
+                            <div class="card-body">
+
+                                @include('admin.products.components.shipping')
+
+                            </div>
+
+                            <div class="card-header">
+                                <i class="fa fa-plus"></i> Vlastnosti produktu
+                            </div>
+
+                            <div class="card-body">
+
+                                @include('admin.products.components.features')
+
+                            </div>
+
+                            @include('brackets/admin-ui::admin.includes.media-uploader', [
+                                    'mediaCollection' => app(App\Shop\Products\Product::class)->getMediaCollection('cover'),
+                                    'label' => 'Hlavný obrázok produktu'
+                                ])
+
+                            @include('brackets/admin-ui::admin.includes.media-uploader', [
+                                    'mediaCollection' => app(App\Shop\Products\Product::class)->getMediaCollection('images'),
+                                    'label' => 'Obrázky'
+                                ])
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary" :disabled="submiting">
+                                    <i class="fa" :class="submiting ? 'fa-spinner' : 'fa-download'"></i>
+                                    {{ trans('brackets/admin-ui::admin.btn.save') }}
+                                </button>
+                            </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="card">
+
+                            <div class="card-header">
+                                <i class="fa fa-plus"></i> {{ trans('admin.products.actions.combinations') }}
+                            </div>
+
+                            <div class="card-body">
+                                <ul v-cloak>
+                                    <li v-for="(combination, index) in form.combinations">
+                                        <span>@{{ combination.attribute.name }}: @{{ combination.value.value }}
+                                            <div class="btn btn-sm btn-primary mr-1" @click="editCombination(index)"><i class="fa fa-edit"></i></div>
+                                            <div class="btn btn-sm btn-danger" @click="deleteCombination(index)"><i class="fa fa-trash-o"></i></div>
+                                        </span>
+                                    </li>
+                                </ul>
+                                <div class="text-center">
+                                    <div class="btn btn-primary" @click="show">Vytvoriť kombináciu</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card">
+
+                            <div class="card-header">
+                                <i class="fa fa-plus"></i> {{ trans('admin.products.actions.categories') }}
+                            </div>
+
+                            <div class="card-body">
+                                @include('admin.products.components.sidebar')
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </form>
+                @include('admin.products.components.new-combination')
+
+            </div>
+
+        </product-form>
+
+
+    </div>
+
 @endsection

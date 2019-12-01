@@ -2,37 +2,56 @@
 
 namespace App\Shop\Categories;
 
+
+use App\Models\Discounts\Discount;
 use App\Shop\Products\Product;
-use Kalnoy\Nestedset\NodeTrait;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
+use Spatie\MediaLibrary\Media;
+use Brackets\Media\HasMedia\HasMediaCollections;
+use Brackets\Media\HasMedia\HasMediaCollectionsTrait;
+use Brackets\Media\HasMedia\HasMediaThumbsTrait;
 
-class Category extends Model
+class Category extends \Rinvex\Categories\Models\Category implements HasMediaCollections, HasMediaConversions
 {
-    use NodeTrait;
-    
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'slug',
-        'description',
-        'cover',
-        'status',
-        'parent_id'
-    ];
+    protected $appends = ['resource_url', 'front_url'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [];
+    use HasMediaCollectionsTrait;
+    use HasMediaThumbsTrait;
 
-    public function products()
+    public function registerMediaCollections() {
+        $this->addMediaCollection('cover');
+    }
+
+    public function registerMediaConversions(Media $media = null)
     {
-        return $this->belongsToMany(Product::class);
+        $this->autoRegisterThumb200();
+    }
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
+
+    public function discounts(){
+        return $this->belongsToMany(Discount::class);
+    }
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/categories/'.$this->slug);
+    }
+
+    public function getFrontUrlAttribute() {
+        if ($this->parent !== null) {
+            return url('/category/'.$this->getAncestors()->toFlatTree()->map->slug->implode('/').'/'.$this->slug);
+        }
+        return url('/category/'.$this->slug);
+    }
+
+    public function getRouteKeyName() {
+        return 'slug';
+    }
+
+    public function getCategoryThumb() {
+        return $this->getFirstMediaUrl('cover') ? $this->getFirstMediaUrl('cover') : asset('images/camera.png');
     }
 }

@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers\Admin\Customers;
 
+use App\Shop\CustomerGroups\CustomerGroup;
 use App\Shop\Customers\Customer;
 use App\Shop\Customers\Repositories\CustomerRepository;
 use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
 use App\Shop\Customers\Requests\CreateCustomerRequest;
+use App\Shop\Customers\Requests\IndexCustomer;
 use App\Shop\Customers\Requests\UpdateCustomerRequest;
 use App\Shop\Customers\Transformations\CustomerTransformable;
 use App\Http\Controllers\Controller;
+use Brackets\AdminListing\Facades\AdminListing;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 
 class CustomerController extends Controller
 {
@@ -31,24 +37,29 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param IndexCustomer $request
+     * @return array|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexCustomer $request)
     {
-        $list = $this->customerRepo->listCustomers('created_at', 'desc');
+        // create and AdminListing instance for a specific model and
+        $data = AdminListing::create(Customer::class)->processRequestAndGet(
+        // pass the request with params
+            $request,
 
-        if (request()->has('q')) {
-            $list = $this->customerRepo->searchCustomer(request()->input('q'));
+            // set columns to query
+            ['id', 'name', 'email', 'status'],
+
+            // set columns to searchIn
+            ['name', 'email']
+        );
+
+        if ($request->ajax()) {
+            return ['data' => $data];
         }
 
-        $customers = $list->map(function (Customer $customer) {
-            return $this->transformCustomer($customer);
-        })->all();
 
-
-        return view('admin.customers.list', [
-            'customers' => $this->customerRepo->paginateArrayResults($customers)
-        ]);
+        return view('admin.customers.list', ['data' => $data]);
     }
 
     /**
@@ -58,18 +69,30 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('admin.customers.create');
+        $groups = CustomerGroup::all();
+
+        return view('admin.customers.create')->with(compact('groups'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  CreateCustomerRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Customer
      */
     public function store(CreateCustomerRequest $request)
     {
-        $this->customerRepo->createCustomer($request->except('_token', '_method'));
+        $sanitized = $request->validated();
+
+        if(!$request->has('password')) {
+            $sanitized['password'] = Hash::make(str_random(16));
+        }
+
+        $customer = $this->customerRepo->createCustomer($sanitized);
+
+        if ($request->ajax()) {
+            return $customer;
+        }
 
         return redirect()->route('admin.customers.index');
     }
@@ -77,13 +100,11 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(Customer $customer)
     {
-        $customer = $this->customerRepo->findCustomerById($id);
-        
         return view('admin.customers.show', [
             'customer' => $customer,
             'addresses' => $customer->addresses
@@ -93,52 +114,55 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Customer $customer)
     {
-        return view('admin.customers.edit', ['customer' => $this->customerRepo->findCustomerById($id)]);
+        return view('admin.customers.edit', ['customer' => $customer, 'groups'=>CustomerGroup::all()]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  UpdateCustomerRequest $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Customer $customer
+     * @return array|\Illuminate\Http\Response
+     * @throws \App\Shop\Customers\Exceptions\UpdateCustomerInvalidArgumentException
      */
-    public function update(UpdateCustomerRequest $request, $id)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $customer = $this->customerRepo->findCustomerById($id);
-
         $update = new CustomerRepository($customer);
-        $data = $request->except('_method', '_token', 'password');
+        $data = $request->validated();
 
         if ($request->has('password')) {
-            $data['password'] = bcrypt($request->input('password'));
+            $data['password'] = bcrypt($data['password']);
         }
 
         $update->updateCustomer($data);
 
-        $request->session()->flash('message', 'Update successful');
-        return redirect()->route('admin.customers.edit', $id);
+        if ($request->ajax()){
+            return ['redirect' => url('admin/customers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
+        return redirect()->route('admin.customers.edit', $customer->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     *
+     * @param Request $request
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Request $request, Customer $customer)
     {
-        $customer = $this->customerRepo->findCustomerById($id);
-
         $customerRepo = new CustomerRepository($customer);
         $customerRepo->deleteCustomer();
+
+        if ($request->ajax()) {
+            return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
+        }
 
         return redirect()->route('admin.customers.index')->with('message', 'Delete successful');
     }

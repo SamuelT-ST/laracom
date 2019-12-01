@@ -2,53 +2,70 @@
 
 namespace App\Http\Controllers\Admin\Categories;
 
-use App\Shop\Categories\Repositories\CategoryRepository;
-use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Shop\Categories\AdminListing;
 use App\Shop\Categories\Requests\CreateCategoryRequest;
+use App\Shop\Categories\Requests\IndexCategory;
 use App\Shop\Categories\Requests\UpdateCategoryRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Shop\Categories\Category;
 
 class CategoryController extends Controller
 {
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepo;
-
-    /**
-     * CategoryController constructor.
-     *
-     * @param CategoryRepositoryInterface $categoryRepository
-     */
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
-    {
-        $this->categoryRepo = $categoryRepository;
-    }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param IndexCategory $request
+     * @param null $categories
+     * @return array|\Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexCategory $request, $categories = null)
     {
-        $list = $this->categoryRepo->rootCategories('created_at', 'desc');
+        $parentId = null;
+        $parentName = '';
 
-        return view('admin.categories.list', [
-            'categories' => $this->categoryRepo->paginateArrayResults($list->all())
-        ]);
+        if (!is_null($categories)){
+            $categories = explode('/', $categories);
+            $parent = Category::where('slug', array_pop($categories))->first();
+            $parentId = $parent->id;
+            $parentName = $parent->name;
+        }
+
+        $data = AdminListing::create(Category::class)->processRequestAndGet(
+        // pass the request with params
+            $request,
+
+            // set columns to query
+            ['id', 'name', 'slug', 'description'],
+
+            // set columns to searchIn
+            ['name', 'description'],
+            function ($query) use ($parentId){
+                $query->where('parent_id', $parentId);
+            }
+        );
+
+        $breadcrumbs = collect(app('rinvex.categories.category')->ancestorsOf($parentId)->toFlatTree());
+
+        if ($request->ajax()) {
+            return ['data' => $data, 'breadcrumbs' => $breadcrumbs, 'parentName' => $parentName];
+        }
+
+        return view('admin.categories.list', ['data' => $data, 'breadcrumbs' => $breadcrumbs, 'parentName' => $parentName]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param Category|null $category
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Category $category = null)
     {
         return view('admin.categories.create', [
-            'categories' => $this->categoryRepo->listCategories('name', 'asc')
+            'categories' => Category::all(),
+            'parentCategory' => $category
         ]);
     }
 
@@ -60,7 +77,14 @@ class CategoryController extends Controller
      */
     public function store(CreateCategoryRequest $request)
     {
-        $this->categoryRepo->createCategory($request->except('_token', '_method'));
+
+        $category = Category::create($request->getSanitized());
+
+        $redirectTo = $category->parent ? $category->parent->slug : "";
+
+        if ($request->ajax()) {
+            return ['redirect' => url('admin/categories/'. $redirectTo), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
 
         return redirect()->route('admin.categories.index')->with('message', 'Category created');
     }
@@ -68,33 +92,33 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Category $category
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        $category = $this->categoryRepo->findCategoryById($id);
-
-        $cat = new CategoryRepository($category);
-
         return view('admin.categories.show', [
             'category' => $category,
             'categories' => $category->children,
-            'products' => $cat->findProducts()
+            'products' => $category->products
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param string $slug
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(string $slug)
     {
+        $category = Category::with('parent')->where('slug', $slug)->first();
+
+        $category['parent'] = $category->parent;
+
         return view('admin.categories.edit', [
-            'categories' => $this->categoryRepo->listCategories('name', 'asc', $id),
-            'category' => $this->categoryRepo->findCategoryById($id)
+            'categories' => Category::all(),
+            'category' => $category
         ]);
     }
 
@@ -102,44 +126,41 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  UpdateCategoryRequest $request
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, $id)
+    public function update(UpdateCategoryRequest $request, int $id)
     {
-        $category = $this->categoryRepo->findCategoryById($id);
+        $category = Category::findOrFail($id);
 
-        $update = new CategoryRepository($category);
-        $update->updateCategory($request->except('_token', '_method'));
+        $category->update($request->getSanitized());
 
-        $request->session()->flash('message', 'Update successful');
-        return redirect()->route('admin.categories.edit', $id);
+        $redirectTo = $category->parent ? $category->parent->slug : "";
+
+        if ($request->ajax()){
+            return ['redirect' => url('admin/categories/'. $redirectTo), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
+
+        return redirect()->route('admin.categories.edit', $category->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(Request $request, int $id)
     {
-        $category = $this->categoryRepo->findCategoryById($id);
-        $category->products()->sync([]);
+        $category = Category::findOrFail($id);
+
         $category->delete();
 
-        request()->session()->flash('message', 'Delete successful');
-        return redirect()->route('admin.categories.index');
-    }
+        if ($request->ajax()) {
+            return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
+        }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function removeImage(Request $request)
-    {
-        $this->categoryRepo->deleteFile($request->only('category'));
-        request()->session()->flash('message', 'Image delete successful');
-        return redirect()->route('admin.categories.edit', $request->input('category'));
+        return redirect()->route('admin.categories.index');
     }
 }

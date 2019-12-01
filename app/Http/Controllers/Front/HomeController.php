@@ -2,32 +2,25 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Http\Controllers\Controller;
+use App\Models\Setting;
+use Illuminate\Support\Facades\Auth;
 
-class HomeController
+class HomeController extends Controller
 {
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepo;
-
-    /**
-     * HomeController constructor.
-     * @param CategoryRepositoryInterface $categoryRepository
-     */
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
-    {
-        $this->categoryRepo = $categoryRepository;
-    }
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $cat1 = $this->categoryRepo->findCategoryById(2);
-        $cat2 = $this->categoryRepo->findCategoryById(3);
 
-        return view('front.index', compact('cat1', 'cat2'));
+        $settings = Setting::with('media')->get()->mapWithKeys(function ($setting){
+           return [$setting['option_slug'] => $setting];
+        });
+
+        return view('front.home.index')->with([
+            'settings' => $settings
+        ]);
     }
 }

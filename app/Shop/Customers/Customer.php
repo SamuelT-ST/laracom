@@ -3,6 +3,7 @@
 namespace App\Shop\Customers;
 
 use App\Shop\Addresses\Address;
+use App\Shop\CustomerGroups\CustomerGroup;
 use App\Shop\Orders\Order;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -14,6 +15,8 @@ class Customer extends Authenticatable
 {
     use Notifiable, SoftDeletes, SearchableTrait, Billable;
 
+    const LOADED_IN_SEARCH = 50;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -23,7 +26,10 @@ class Customer extends Authenticatable
         'name',
         'email',
         'password',
-        'status'
+        'status',
+        'company',
+        'ico',
+        'dic'
     ];
 
     /**
@@ -50,6 +56,15 @@ class Customer extends Authenticatable
         ]
     ];
 
+    protected $with = ['groups'];
+    protected $appends = ['resource_url'];
+
+
+    public function getResourceUrlAttribute() {
+        return url('/admin/customers/'.$this->getKey());
+    }
+
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -64,6 +79,14 @@ class Customer extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function groups(){
+        return $this->belongsToMany(CustomerGroup::class);
+    }
+
+    public function hasCustomerGroup(){
+        return is_null($this->groups()) ? false : true;
     }
 
     /**
