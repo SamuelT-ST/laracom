@@ -56,7 +56,6 @@ $factory->define(/**
         'invoice' => null,
         'customer_name' => $customer->name,
         'customer_email' => $customer->email,
-        'customer_phone' => $address->phone,
         'customer_company' => $customer->company,
         'customer_ico' => $customer->ico,
         'customer_dic' => $customer->dic,
