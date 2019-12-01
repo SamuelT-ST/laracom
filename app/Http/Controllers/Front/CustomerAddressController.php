@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Shop\Addresses\Requests\CreateAddressRequest;
 use App\Shop\Addresses\Requests\UpdateAddressRequest;
 use App\Shop\Addresses\Repositories\AddressRepository;
-use App\Shop\Cities\Repositories\Interfaces\CityRepositoryInterface;
 use App\Shop\Addresses\Repositories\Interfaces\AddressRepositoryInterface;
 use App\Shop\Countries\Repositories\Interfaces\CountryRepositoryInterface;
-use App\Shop\Provinces\Repositories\Interfaces\ProvinceRepositoryInterface;
 
 class CustomerAddressController extends Controller
 {
@@ -23,33 +21,18 @@ class CustomerAddressController extends Controller
      */
     private $countryRepo;
 
-    /**
-     * @var CityRepositoryInterface
-     */
-    private $cityRepo;
-
-    /**
-     * @var ProvinceRepositoryInterface
-     */
-    private $provinceRepo;
-
+//TODO este vo vyvoji
 
     /**
      * @param AddressRepositoryInterface  $addressRepository 
-     * @param CountryRepositoryInterface  $countryRepository 
-     * @param CityRepositoryInterface     $cityRepository    
-     * @param ProvinceRepositoryInterface $provinceRepository
+     * @param CountryRepositoryInterface  $countryRepository
      */
     public function __construct(
         AddressRepositoryInterface $addressRepository,
-        CountryRepositoryInterface $countryRepository,
-        CityRepositoryInterface $cityRepository,
-        ProvinceRepositoryInterface $provinceRepository
+        CountryRepositoryInterface $countryRepository
     ) {
         $this->addressRepo = $addressRepository;
         $this->countryRepo = $countryRepository;
-        $this->provinceRepo = $provinceRepository;
-        $this->cityRepo = $cityRepository;
     }
 
     /**
@@ -76,8 +59,6 @@ class CustomerAddressController extends Controller
         return view('front.customers.addresses.create', [
             'customer' => $customer,
             'countries' => $this->countryRepo->listCountries(),
-            'cities' => $this->cityRepo->listCities(),
-            'provinces' => $this->provinceRepo->listProvinces()
         ]);
     }
 
@@ -110,8 +91,6 @@ class CustomerAddressController extends Controller
             'customer' => auth()->user(),
             'address' => $address,
             'countries' => $countries,
-            'cities' => $this->cityRepo->listCities(),
-            'provinces' => $this->provinceRepo->listProvinces()
         ]);
     }
 

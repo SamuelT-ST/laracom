@@ -20,7 +20,7 @@ $factory->define(Courier::class, function (Faker\Generator $faker) {
         'name' => $faker->company,
         'description' => $faker->paragraph,
         'url' => $faker->url,
-        'is_free' => 1,
+        'price' => $faker->numberBetween(1, 10),
         'status' => 1
     ];
 });

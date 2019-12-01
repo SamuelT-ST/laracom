@@ -50,7 +50,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
     public function createCustomer(array $params) : Customer
     {
         try {
-            $data = collect($params)->except('password')->all();
+            $data = collect($params)->except('password', '_token', '_method')->all();
 
             $customer = new Customer($data);
             if (isset($params['password'])) {
@@ -181,5 +181,32 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
         } catch (\Exception $e) {
             throw new CustomerPaymentChargingErrorException($e);
         }
+    }
+
+    /**
+     * @param int $from
+     * @param string $query
+     * @return array
+     */
+    public function getCustomersOnAutocomplete(?int $from = 0, string $query = null) : ?array
+    {
+        $nameParts = explode(' ', $query);
+
+        $queryCustomers = Customer::query();
+
+        foreach ($nameParts as $part) {
+            $queryCustomers->orWhere('name', 'ilike', '%' . $part . '%')
+                ->orWhere('company', 'ilike', '%' . $part . '%')
+                ->orWhere('email', 'ilike', '%' . $part . '%');
+        }
+
+        $count = $queryCustomers->count();
+
+        $queryCustomers->skip($from);
+
+        return [
+            'data' => $queryCustomers->limit(Customer::LOADED_IN_SEARCH)->get(),
+            'count' => $count
+        ];
     }
 }

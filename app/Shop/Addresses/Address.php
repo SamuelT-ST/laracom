@@ -79,21 +79,6 @@ class Address extends Model
         return $this->belongsTo(Country::class);
     }
 
-    public function province()
-    {
-        return $this->belongsTo(Province::class);
-    }
-
-    /**
-     * @deprecated
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function city()
-    {
-        return $this->belongsTo(City::class, 'city');
-    }
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

@@ -1,4 +1,4 @@
-@extends('brackets/admin-ui::admin.layout.default')
+@extends('admin.products.default')
 
 @section('title', trans('admin.products.actions.create'))
 
@@ -9,6 +9,7 @@
 
         <product-form
                 :categories = "{{ $categories }}"
+                :available-features = "{{ $features }}"
                 :action="'{{ route('admin.products.store') }}'"
                 inline-template>
 
@@ -25,6 +26,26 @@
                             <div class="card-body">
 
                                 @include('admin.products.components.form-elements')
+
+                            </div>
+
+                            <div class="card-header">
+                                <i class="fa fa-plus"></i> Doručenie
+                            </div>
+
+                            <div class="card-body">
+
+                                @include('admin.products.components.shipping')
+
+                            </div>
+
+                            <div class="card-header">
+                                <i class="fa fa-plus"></i> Vlastnosti produktu
+                            </div>
+
+                            <div class="card-body">
+
+                                @include('admin.products.components.features')
 
                             </div>
 
@@ -59,13 +80,15 @@
                             <div class="card-body">
                                 <ul v-cloak>
                                     <li v-for="(combination, index) in form.combinations">
-                                        <span>@{{ combination.attribute.name }}: @{{ combination.value.value }} - @{{ combination.price }} -
-                                            <div class="btn btn-primary" @click="editCombination(index)">Upraviť</div>
-                                            <div class="btn btn-warning" @click="deleteCombination(index)">Vymazat</div>
+                                        <span>@{{ combination.attribute.name }}: @{{ combination.value.value }}
+                                            <div class="btn btn-sm btn-primary mr-1" @click="editCombination(index)"><i class="fa fa-edit"></i></div>
+                                            <div class="btn btn-sm btn-danger" @click="deleteCombination(index)"><i class="fa fa-trash-o"></i></div>
                                         </span>
                                     </li>
                                 </ul>
-                                <div class="btn btn-primary" @click="show">Vytvoriť kombináciu</div>
+                                <div class="text-center">
+                                    <div class="btn btn-primary" @click="show">Vytvoriť kombináciu</div>
+                                </div>
                             </div>
 
                         </div>

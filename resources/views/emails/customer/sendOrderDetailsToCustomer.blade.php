@@ -15,10 +15,10 @@
 <body>
 <section class="container">
     <div class="col-md-12">
-        <h2>Hello {{$customer->name}}!</h2>
-        @php($country = \App\Shop\Countries\Country::find($address->country_id))
-        <p>This order is for deliver to your: <strong>{{ ucfirst($address->alias) }} <br /></strong></p>
-        <p>Address: {{$address->address_1}} {{$address->address_2}} {{$address->city}} {{$address->state_code}}, {{$country->name}}</p>
+        <h2>Hello {{$order->customer_name}}!</h2>
+        @php($country = \App\Shop\Countries\Country::find($order->shipping_country))
+        <p>This order is for deliver to: <br /></p>
+        <p>Address: {{$order->shipping_address_1}} @if($order->shipping_address_2){{$order->shipping_address_2}}@endif {{$order->shipping_city}} {{$order->shipping_zip}}, {{$country->name}}</p>
         <table class="table table-striped" width="100%" border="0" cellspacing="0" cellpadding="0">
             <thead>
             <tr>
@@ -32,19 +32,19 @@
             <tbody>
             @foreach($products as $product)
                 <tr>
-                    <td>{{$product->sku}}</td>
-                    <td>{{$product->name}}</td>
+                    <td>{{$product->product_sku}}</td>
+                    <td>{{$product->product_name}}</td>
                     <td>
-                        {{$product->description}}
-                        @php($pattr = \App\Shop\ProductAttributes\ProductAttribute::find($product->pivot->product_attribute_id))
+                        {{$product->product_description}}
+                        @php($pattr = \App\Shop\ProductAttributes\ProductAttribute::find($product->product_attribute_id))
                         @if(!is_null($pattr))<br>
-                        @foreach($pattr->attributesValues as $it)
-                            <p class="label label-primary">{{ $it->attribute->name }} : {{ $it->value }}</p>
+                        @foreach($product->productAttributes as $it)
+                            <p class="label label-primary">{{ $it->attributesValues()->first()->value }}</p>
                         @endforeach
                         @endif
                     </td>
-                    <td>{{$product->pivot->quantity}}</td>
-                    <td class="text-right">{{config('cart.currency')}} {{number_format($product->price * $product->pivot->quantity, 2)}}</td>
+                    <td>{{$product->quantity}}</td>
+                    <td class="text-right">{{config('cart.currency')}} {{number_format($product->product_price * $product->quantity, 2)}}</td>
                 </tr>
             @endforeach
             </tbody>

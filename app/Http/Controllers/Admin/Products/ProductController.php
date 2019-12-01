@@ -3,17 +3,12 @@
 namespace App\Http\Controllers\Admin\Products;
 
 use App\Shop\Attributes\Attribute;
-use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
 use App\Shop\AttributeValues\AttributeValue;
-use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
-use App\Shop\Brands\Repositories\BrandRepositoryInterface;
 use App\Shop\Categories\Category;
-use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Shop\Features\Feature;
+use App\Shop\Features\Transformations\FeatureValueTransformable;
 use App\Shop\ProductAttributes\ProductAttribute;
-use App\Shop\Products\Exceptions\ProductInvalidArgumentException;
-use App\Shop\Products\Exceptions\ProductNotFoundException;
 use App\Shop\Products\Product;
-use App\Shop\Products\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Requests\CreateProductRequest;
 use App\Shop\Products\Requests\IndexProduct;
@@ -23,69 +18,16 @@ use App\Shop\Products\Transformations\ProductTransformable;
 use App\Shop\Tools\UploadableTrait;
 use Brackets\AdminListing\Facades\AdminListing;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
     use ProductTransformable, UploadableTrait;
 
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepo;
+    public function __construct(){
 
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepo;
-
-    /**
-     * @var AttributeRepositoryInterface
-     */
-    private $attributeRepo;
-
-    /**
-     * @var AttributeValueRepositoryInterface
-     */
-    private $attributeValueRepository;
-
-    /**
-     * @var ProductAttribute
-     */
-    private $productAttribute;
-
-    /**
-     * @var BrandRepositoryInterface
-     */
-    private $brandRepo;
-
-    /**
-     * ProductController constructor.
-     *
-     * @param ProductRepositoryInterface $productRepository
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param AttributeRepositoryInterface $attributeRepository
-     * @param AttributeValueRepositoryInterface $attributeValueRepository
-     * @param ProductAttribute $productAttribute
-     * @param BrandRepositoryInterface $brandRepository
-     */
-    public function __construct(
-        ProductRepositoryInterface $productRepository,
-        CategoryRepositoryInterface $categoryRepository,
-        AttributeRepositoryInterface $attributeRepository,
-        AttributeValueRepositoryInterface $attributeValueRepository,
-        ProductAttribute $productAttribute,
-        BrandRepositoryInterface $brandRepository
-    ) {
-        $this->productRepo = $productRepository;
-        $this->categoryRepo = $categoryRepository;
-        $this->attributeRepo = $attributeRepository;
-        $this->attributeValueRepository = $attributeValueRepository;
-        $this->productAttribute = $productAttribute;
-        $this->brandRepo = $brandRepository;
+//        TODO dorobit pravomoci niekedy v buducnosti
 
 //        $this->middleware(['permission:create-product, guard:employee'], ['only' => ['create', 'store']]);
 //        $this->middleware(['permission:update-product, guard:employee'], ['only' => ['edit', 'update']]);
@@ -96,6 +38,7 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param IndexProduct $request
      * @return \Illuminate\Http\Response
      */
     public function index(IndexProduct $request)
@@ -132,10 +75,11 @@ class ProductController extends Controller
 
         return view('admin.products.create', [
             'categories' => $categories,
-            'brands' => $this->brandRepo->listBrands(['*'], 'name', 'asc'),
             'default_weight' => env('SHOP_WEIGHT'),
             'weight_units' => Product::MASS_UNIT,
             'attributes' => Attribute::all(),
+//            TODO nacitat postupne
+            'features' => Feature::all(),
             'product' => new Product
         ]);
     }
@@ -150,16 +94,13 @@ class ProductController extends Controller
     public function store(CreateProductRequest $request)
     {
 
-        dd($request->toArray());
+        $sanitized = $request->getSanitized();
 
-        $data = $request->except('_token', '_method', 'combinations', 'categories', 'cover', 'images', 'wysiwygMedia');
+        $product = Product::create($sanitized);
 
-        $data['slug'] = str_slug($request->input('name'));
-
-        $product = $this->productRepo->createProduct($data);
 
         if($request->has('combinations')){
-            $combinations = $request->get('combinations');
+            $combinations = $sanitized['combinations'];
 
             foreach ($combinations as $combination){
                 $this->saveProductCombinations($combination, $product);
@@ -167,10 +108,18 @@ class ProductController extends Controller
         }
 
         if ($request->has('categories')) {
-            $categories = $request->get('categories');
-            $product->categories()->sync($categories);
+            $product->categories()->sync($sanitized['categories']);
         } else {
             $product->categories()->sync([]);
+        }
+
+        if ($request->has('featureValues')){
+           $featureValuesIds = collect($sanitized['featureValues'])->map(function ($item){
+                return $item['chosenValue']['id'];
+            });
+           $product->featureValues()->sync($featureValuesIds);
+        } else {
+            $product->featureValues()->sync([]);
         }
 
         if ($request->ajax()) {
@@ -183,26 +132,23 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     *
+     * @param Product $product
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(Product $product)
     {
-        $product = $this->productRepo->findProductById($id);
+        $product->load('featureValues', 'featureValues.feature');
         return view('admin.products.show', compact('product'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
-     *
+     * @param Product $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(int $id)
+    public function edit(Product $product)
     {
-        $product = Product::find($id);
         $productAttributes = $product->attributes()->with('attributesValues')->get();
         $qty = $productAttributes->map(function ($item) {
             return $item->quantity;
@@ -217,6 +163,8 @@ class ProductController extends Controller
 
         $data = collect($product);
 
+        $data->put('featureValues', app(FeatureValueTransformable::class)->prepareFeaturesForEdit($product));
+
         $data['categories'] = $product->categories()->pluck('id');
 
         $categories = Category::whereNull('parent_id')->get();
@@ -225,12 +173,10 @@ class ProductController extends Controller
             'product' => $product,
             'data' => $data,
             'categories' => $categories,
-            'attributes' => $this->attributeRepo->listAttributes(),
+            'attributes' => Attribute::all(),
+            //             TODO nacitat postupne
+            'features' => Feature::all(),
             'qty' => $qty,
-            'brands' => $this->brandRepo->listBrands(['*'], 'name', 'asc'),
-            'weight' => $product->weight,
-            'default_weight' => $product->mass_unit,
-            'weight_units' => Product::MASS_UNIT
         ]);
     }
 
@@ -238,24 +184,20 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  UpdateProductRequest $request
-     * @param  int $id
-     *
+     * @param Product $product
      * @return \Illuminate\Http\Response
      * @throws \App\Shop\Products\Exceptions\ProductUpdateErrorException
      */
-    public function update(UpdateProductRequest $request, int $id)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-
-        $product = $this->productRepo->findProductById($id);
-        $productRepo = new ProductRepository($product);
-
+        $sanitized = $request->getSanitized();
 
         if($request->has('combinations')){
-            $combinations = $request->get('combinations');
+            $combinations = $sanitized['combinations'];
 
             $attachedAttributesIds = $product->attributes()->pluck('id');
 
-            $updatedAttributesIds = collect($combinations)->map(function($combination){
+            $updatedAttributesIds = collect($sanitized['combinations'])->map(function($combination){
                 if(isset($combination['id'])){
                     return $combination['id'];
                 }
@@ -274,7 +216,7 @@ class ProductController extends Controller
 
             foreach ($combinations as $combination){
                 if(isset($combination['wasEdited']) && isset($combination['id'])) {
-                    $this->updateProductCombination($combination);
+                    $this->updateProductCombination($combination, $product);
                 }
                 else if(!isset($combination['id'])) {
                     $this->saveProductCombinations($combination, $product);
@@ -282,46 +224,38 @@ class ProductController extends Controller
             }
         }
 
-        $data = $request->except(
-            'categories',
-            '_token',
-            '_method',
-            'default',
-            'image',
-            'productAttributeQuantity',
-            'productAttributePrice',
-            'attributeValue',
-            'combinations',
-            'cover',
-            'images',
-            'wysiwygMedia',
-            'resource_url'
-        );
+        DB::transaction(function () use ($request, $product, $sanitized) {
+            if ($request->has('categories')) {
+                $product->syncCategories($sanitized['categories']);
+            } else {
+                $product->syncCategories([]);
+            }
 
-        $data['slug'] = str_slug($request->input('name'));
+            if ($request->has('featureValues')){
+                $featureValuesIds = collect($sanitized['featureValues'])->map(function ($item){
+                    return $item['chosenValue']['id'];
+                });
+                $product->featureValues()->sync($featureValuesIds);
+            } else {
+                $product->featureValues()->sync([]);
+            }
 
-
-        if ($request->has('categories')) {
-            $product->syncCategories($request->input('categories'));
-        } else {
-            $product->syncCategories();
-        }
-
-        $productRepo->updateProduct($data);
+            $product->update($sanitized);
+        });
 
         if ($request->ajax()){
             return ['redirect' => url('admin/products/'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
-        return redirect()->route('admin.products.edit', $id)
+        return redirect()->route('admin.products.edit', $product->id)
             ->with('message', 'Update successful');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     *
+     * @param Request $request
+     * @param Product $product
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
@@ -329,30 +263,49 @@ class ProductController extends Controller
     public function destroy(Request $request,Product $product)
     {
 
-        $product->categories()->sync([]);
         $productAttr = $product->attributes();
-        $productAttr->each(function ($pa) {
-            DB::table('attribute_value_product_attribute')->where('product_attribute_id', $pa->id)->delete();
+
+        DB::transaction(function () use ($productAttr, $product){
+            $product->categories()->sync([]);
+            $productAttr->each(function ($pa) {
+                DB::table('attribute_value_product_attribute')->where('product_attribute_id', $pa->id)->delete();
+            });
+            $productAttr->where('product_id', $product->id)->delete();
+            $product->delete();
         });
-        $productAttr->where('product_id', $product->id)->delete();
-        $productRepo = new ProductRepository($product);
-        $productRepo->removeProduct();
 
 
         if ($request->ajax()) {
             return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
         }
-
-        request()->session()->flash('message', 'Delete successful');
         return redirect()->route('admin.categories.index');
     }
 
-    private function updateProductCombination($combination){
-        $productAttribute = ProductAttribute::find($combination['id']);
-        $productAttribute->fill($combination);
-        $productAttribute->save();
-        $productAttribute->attributesValues()->detach();
-        $productAttribute->attributesValues()->attach($combination['value']['id']);
+    private function updateProductCombination($combination, $product){
+
+        DB::transaction(function () use ($product, $combination){
+
+            $default = 0;
+
+            if (isset($combination['defaultPrice']) && ($combination['defaultPrice'] === true || $combination['defaultPrice'] === 1)) {
+                $product->attributes()->where('default', 1)->update([
+                    'default' => 0
+                ]);
+                $default = 1;
+            }
+
+            $combination['default'] = $default;
+
+            $productAttribute = ProductAttribute::find($combination['id']);
+            $productAttribute->fill($combination);
+            $productAttribute->save();
+            if(!empty($combination['valueCover'])){
+                $productAttribute->processMedia(collect($combination));
+            }
+            $productAttribute->attributesValues()->detach();
+            $productAttribute->attributesValues()->attach($combination['value']['id']);
+
+        });
     }
 
     /**
@@ -362,7 +315,6 @@ class ProductController extends Controller
      */
     private function saveProductCombinations($combination, Product $product): void
     {
-
         $combination = collect($combination);
 
         $quantity = $combination->get('quantity');
@@ -373,26 +325,25 @@ class ProductController extends Controller
             $sale_price = $combination->get('sale_price');
         }
 
-        $productRepo = new ProductRepository($product);
-
-        $hasDefault = $productRepo->listProductAttributes()->where('default', 1)->count();
-
         $default = 0;
-        if ($combination->has('defaultPrice')) {
-            $default = $combination->get('defaultPrice');
+        if (isset($combination['defaultPrice']) && ($combination['defaultPrice'] === true || $combination['defaultPrice'] === 1)) {
+            $product->attributes()->where('default', 1)->update([
+                'default' => 0
+            ]);
+            $default = 1;
         }
 
-        if ($default == 1 && $hasDefault > 0) {
-            $default = 0;
-        }
-
-        $productAttribute = $productRepo->saveProductAttributes(
+        $productAttribute = $product->attributes()->save(
             new ProductAttribute(compact('quantity', 'price', 'sale_price', 'default'))
         );
 
-        $attribute = $this->attributeValueRepository->find($combination['value']['id']);
+        if(!empty($combination['valueCover'])){
+            $productAttribute->processMedia($combination);
+        }
 
-        $productAttribute->attributesValues()->save($attribute);
+        $attributeValue = AttributeValue::find($combination['value']['id']);
+
+        $productAttribute->attributesValues()->save($attributeValue);
 
 
 //        // save the combinations
@@ -402,21 +353,6 @@ class ProductController extends Controller
 //        })->count();
     }
 
-    /**
-     * @param array $data
-     *
-     * @return
-     */
-    private function validateFields(array $data)
-    {
-        $validator = Validator::make($data, [
-            'productAttributeQuantity' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return $validator;
-        }
-    }
 
     private function transformCombinations(ProductAttribute $productAttribute){
 
@@ -427,9 +363,21 @@ class ProductController extends Controller
             'price' => $productAttribute->price,
             'quantity' => $productAttribute->quantity,
             'salePrice' => $productAttribute->sale_price,
-            'value' => $productAttribute->attributesValues()->first()
+            'value' => $productAttribute->attributesValues()->first(),
+            'thumb' => $productAttribute->getThumbs200ForCollection('valueCover')
         ]);
 
 
+    }
+
+    public function ajaxFindProduct($query = null)
+    {
+        return app(ProductRepository::class)->getProductsOnAutocomplete($query);
+    }
+
+    public function setStatus(Product $product) {
+        $product->update(['status' => !$product->status]);
+
+        return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
     }
 }

@@ -3,7 +3,7 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
-        @include('layouts.errors-and-messages')
+        @include('admin.layout.errors-and-messages')
         <div class="box">
             <form action="{{ route('admin.employees.update', $employee->id) }}" method="post" class="form">
                 <div class="box-body">

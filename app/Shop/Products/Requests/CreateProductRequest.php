@@ -14,6 +14,7 @@ class CreateProductRequest extends BaseFormRequest
     public function rules()
     {
         return [
+            'has_combinations' => ['nullable', 'boolean'],
             'sku' => ['required'],
             'name' => ['required', 'unique:products'],
             'quantity' => ['required', 'numeric'],
@@ -26,6 +27,20 @@ class CreateProductRequest extends BaseFormRequest
             'weight' => ['numeric', 'nullable'],
             'width' => ['numeric', 'nullable'],
             'combinations' => ['array', 'nullable'],
+            'wholesale_price' => ['numeric', 'required'],
+            'featureValues' => ['nullable', 'array'],
+            'has_size' => ['boolean', 'required'],
+            'status' => ['nullable', 'boolean'],
+            'distance_unit' => ['nullable'],
+            'mass_unit' => ['nullable'],
         ];
+    }
+
+    public function getSanitized(){
+
+        $sanitized = $this->validated();
+        $sanitized['slug'] = str_slug($sanitized['name']);
+
+        return $sanitized;
     }
 }

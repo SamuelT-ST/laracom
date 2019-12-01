@@ -2,10 +2,15 @@
 
 namespace App\Shop\Products\Repositories;
 
+use App\Models\Discounts\Discount;
 use App\Shop\AttributeValues\AttributeValue;
+use App\Shop\CustomerGroups\CustomerGroup;
+use App\Shop\Customers\Customer;
 use App\Shop\Products\Exceptions\ProductCreateErrorException;
 use App\Shop\Products\Exceptions\ProductUpdateErrorException;
 use App\Shop\Tools\UploadableTrait;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Brands\Brand;
 use App\Shop\ProductAttributes\ProductAttribute;
@@ -74,10 +79,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
      */
     public function updateProduct(array $data) : bool
     {
-        $filtered = collect($data)->except('image')->all();
-
         try {
-            return $this->model->where('id', $this->model->id)->update($filtered);
+            return $this->update($data);
         } catch (QueryException $e) {
             throw new ProductUpdateErrorException($e);
         }
@@ -325,5 +328,31 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function findBrand()
     {
         return $this->model->brand;
+    }
+
+    /**
+     * @param int $from
+     * @param string $query
+     * @return array
+     */
+    public function getProductsOnAutocomplete(?int $from = 0, string $query = null) : ?array
+    {
+        $nameParts = explode(' ', $query);
+
+        $queryProducts = Product::query();
+
+        foreach ($nameParts as $part) {
+            $queryProducts->orWhere('name', 'ilike', '%' . $part . '%')
+                ->orWhere('sku', 'ilike', '%' . $part . '%');
+        }
+
+        $count = $queryProducts->count();
+
+        $queryProducts->skip($from);
+
+        return [
+            'data' => $queryProducts->limit(Product::LOADED_IN_SEARCH)->get(),
+            'count' => $count
+        ];
     }
 }

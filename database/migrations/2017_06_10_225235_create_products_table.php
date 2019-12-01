@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             $table->string('cover')->nullable();
             $table->integer('quantity');
             $table->decimal('price');
-            $table->integer('status')->default(0);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

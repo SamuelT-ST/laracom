@@ -12,8 +12,7 @@ class IndexCourier extends FormRequest
      */
     public function authorize()
     {
-//        return Gate::allows('admin.customer.index');
-        return true;
+        return Gate::allows('admin.courier.index');
     }
 
     /**
@@ -24,7 +23,7 @@ class IndexCourier extends FormRequest
     public function rules()
     {
         return [
-            'orderBy' => 'in:id,name,url,is_free,status,cost',
+            'orderBy' => 'in:id,name,from_width,from_height,from_length,url,price,status|nullable',
             'orderDirection' => 'in:asc,desc|nullable',
             'search' => 'string|nullable',
             'page' => 'integer|nullable',

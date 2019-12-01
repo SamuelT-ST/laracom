@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Services\CategoriesWithDiscount;
+use App\Shop\ProductGroups\ProductGroup;
 use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\Interfaces\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Shop\Products\Transformations\ProductTransformable;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -26,19 +29,26 @@ class ProductController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Request $request
+     * @return \Illuminate\Support\Collection
      */
-    public function search()
+    public function search(Request $request)
     {
-        if (request()->has('q') && request()->input('q') != '') {
-            $list = $this->productRepo->searchProduct(request()->input('q'));
+//        TODO dorobit lepsiu validaciu
+
+        if ($request->has('q') && $request->input('q') != '') {
+            $list = $this->productRepo->searchProduct($request->input('q'));
         } else {
             $list = $this->productRepo->listProducts();
         }
 
-        $products = $list->where('status', 1)->map(function (Product $item) {
+        $products = $list->where('status', true)->map(function (Product $item) {
             return $this->transformProduct($item);
         });
+
+        if($request->ajax()){
+            return $products;
+        }
 
         return view('front.products.product-search', [
             'products' => $this->productRepo->paginateArrayResults($products->all(), 10)
@@ -53,17 +63,33 @@ class ProductController extends Controller
      */
     public function show(string $slug)
     {
-        $product = $this->productRepo->findProductBySlug(['slug' => $slug]);
-        $images = $product->images()->get();
-        $category = $product->categories()->first();
-        $productAttributes = $product->attributes;
+        try {
+            $product = app(CategoriesWithDiscount::class)->getSingleProductBySlug($slug);
+            $productAttributes = $product->attributes;
+        } catch (\Exception $e){
+            abort(404);
+        }
 
-        return view('front.products.product', compact(
+        return view('front.product-detail.index', compact(
             'product',
-            'images',
             'productAttributes',
-            'category',
-            'combos'
+            'defaultAttribute'
+        ));
+    }
+
+    public function showProductGroup(string $slug){
+
+        $productGroup = ProductGroup::with('categories', 'products', 'products.attributes', 'products.attributes.attributesValues', 'products.attributes.attributesValues.attribute')->where('slug', $slug)->first();
+
+        $products = $productGroup->products->map(function ($product){
+            return collect(app(CategoriesWithDiscount::class)->getSingleProductById($product->id))
+                ->put('pivot', $product->pivot)
+                ->put('attributes', $product->attributes);
+        });
+
+        return view('front.product-group.index', compact(
+            'productGroup',
+            'products'
         ));
     }
 }

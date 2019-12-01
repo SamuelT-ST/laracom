@@ -3,46 +3,20 @@
 namespace App\Http\Controllers\Admin\Addresses;
 
 use App\Shop\Addresses\Address;
-use App\Shop\Addresses\Repositories\AddressRepository;
-use App\Shop\Addresses\Repositories\Interfaces\AddressRepositoryInterface;
 use App\Shop\Addresses\Requests\CreateAddressRequest;
 use App\Shop\Addresses\Requests\UpdateAddressRequest;
 use App\Shop\Addresses\Transformations\AddressTransformable;
-use App\Shop\Cities\City;
-use App\Shop\Cities\Repositories\Interfaces\CityRepositoryInterface;
 use App\Shop\Countries\Country;
-use App\Shop\Countries\Repositories\CountryRepository;
-use App\Shop\Countries\Repositories\Interfaces\CountryRepositoryInterface;
-use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
+use App\Shop\Customers\Customer;
 use App\Http\Controllers\Controller;
 use App\Shop\Addresses\Requests\IndexAddress;
-use App\Shop\Provinces\Repositories\Interfaces\ProvinceRepositoryInterface;
 use Brackets\AdminListing\Facades\AdminListing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AddressController extends Controller
 {
     use AddressTransformable;
-
-    private $addressRepo;
-    private $customerRepo;
-    private $countryRepo;
-    private $provinceRepo;
-    private $cityRepo;
-
-    public function __construct(
-        AddressRepositoryInterface $addressRepository,
-        CustomerRepositoryInterface $customerRepository,
-        CountryRepositoryInterface $countryRepository,
-        ProvinceRepositoryInterface $provinceRepository,
-        CityRepositoryInterface $cityRepository
-    ) {
-        $this->addressRepo = $addressRepository;
-        $this->customerRepo = $customerRepository;
-        $this->countryRepo = $countryRepository;
-        $this->provinceRepo = $provinceRepository;
-        $this->cityRepo = $cityRepository;
-    }
 
     /**
      * Display a listing of the resource.
@@ -80,15 +54,10 @@ class AddressController extends Controller
      */
     public function create()
     {
-        $countries = $this->countryRepo->listCountries();
-
-        $customers = $this->customerRepo->listCustomers();
-
         return view('admin.addresses.create', [
-            'customers' => $customers,
-            'countries' => $countries,
-//            'provinces' => $country->provinces,
-//            'cities' => City::all()
+//            TODO customerov nacitat postupne, nie naraz!
+            'customers' => Customer::all(),
+            'countries' => Country::all()
         ]);
     }
 
@@ -100,20 +69,12 @@ class AddressController extends Controller
      */
     public function store(CreateAddressRequest $request)
     {
-
-        $request['country_id'] = $request['country']['id'];
-        $request['customer_id'] = $request['customer']['id'];
-
-
-        $this->addressRepo->createAddress($request->except('_token', '_method'));
-
+        Address::create($request->getSanitized());
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/addresses'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
-
-        $request->session()->flash('message', 'Creation successful');
         return redirect()->route('admin.addresses.index');
     }
 
@@ -123,39 +84,33 @@ class AddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(int $customerId, int $addressId, Request $request)
     {
-        return view('admin.addresses.show', ['address' => $this->addressRepo->findAddressById($id)]);
+        if($request->ajax()){
+            return Address::find($addressId);
+        }
+        return view('admin.addresses.customers.show', [
+            'address' => Address::find($addressId),
+            'customerId' => $customerId
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Address $address
      * @return \Illuminate\Http\Response
      */
-    public function edit(int $id)
+    public function edit(Address $address)
     {
-        $countries = $this->countryRepo->listCountries();
-
-        $country = $countries->filter(function ($country) {
-            return $country == env('SHOP_COUNTRY_ID', '1');
-        })->first();
-
-        $countryRepo = new CountryRepository(new Country);
-        if (!empty($country)) {
-            $countryRepo = new CountryRepository($country);
-        }
-
-        $address = $this->addressRepo->findAddressById($id);
-        $addressRepo = new AddressRepository($address);
-        $customer = $addressRepo->findCustomer();
+        $countries = Country::all();
+        $customer = $address->customer;
 
         return view('admin.addresses.edit', [
             'address' => $address,
             'countries' => $countries,
             'countryId' => $address->country->id,
-            'customers' => $this->customerRepo->listCustomers(),
+            'customers' => Customer::all(),
             'customer' => $customer
         ]);
     }
@@ -164,44 +119,44 @@ class AddressController extends Controller
      * Update the specified resource in storage.
      *
      * @param  UpdateAddressRequest $request
-     * @param  int  $id
+     * @param Address $address
      * @return array|\Illuminate\Http\Response
      */
-    public function update(UpdateAddressRequest $request, $id)
+    public function update(UpdateAddressRequest $request, Address $address)
     {
-        $address = $this->addressRepo->findAddressById($id);
-
-        $request['country_id'] = $request['country']['id'];
-        $request['customer_id'] = $request['customer']['id'];
-
-        $update = new AddressRepository($address);
-        $update->updateAddress($request->except('_method', '_token'));
+        $address->update($request->getSanitized());
 
         if ($request->ajax()){
             return ['redirect' => url('admin/addresses'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
         $request->session()->flash('message', 'Update successful');
-        return redirect()->route('admin.addresses.edit', $id);
+        return redirect()->route('admin.addresses.edit', $address->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Request $request
+     * @param Address $address
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Address $address)
     {
-        $address = $this->addressRepo->findAddressById($id);
-        $delete = new AddressRepository($address);
-        $delete->deleteAddress();
+        DB::transaction(function () use ($address){
+            $address->customer()->dissociate();
+            $address->delete();
+        });
 
         if ($request->ajax()) {
             return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
         }
 
-        request()->session()->flash('message', 'Delete successful');
         return redirect()->route('admin.addresses.index');
+    }
+
+    public function getAvailableAddresses(Customer $customer){
+        return $customer->addresses;
     }
 }

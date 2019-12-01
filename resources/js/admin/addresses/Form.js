@@ -27,7 +27,7 @@ Vue.component('address-form', {
                 city:  '' ,
                 country:  '' ,
                 phone:  '' ,
-                status:  '' ,
+                status:  false,
             },
         }
     }

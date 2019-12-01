@@ -28,7 +28,7 @@ Vue.component('order-form', {
                 country:  '' ,
                 phone:  '' ,
                 status:  '' ,
-            },
+            }
         }
     }
 

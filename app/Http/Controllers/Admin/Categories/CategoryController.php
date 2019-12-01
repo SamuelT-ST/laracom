@@ -3,36 +3,21 @@
 namespace App\Http\Controllers\Admin\Categories;
 
 use App\Shop\Categories\AdminListing;
-use App\Shop\Categories\Repositories\CategoryRepository;
-use App\Shop\Categories\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Shop\Categories\Requests\CreateCategoryRequest;
 use App\Shop\Categories\Requests\IndexCategory;
 use App\Shop\Categories\Requests\UpdateCategoryRequest;
 use App\Http\Controllers\Controller;
-use App\Shop\Customers\Customer;
 use Illuminate\Http\Request;
 use App\Shop\Categories\Category;
 
 class CategoryController extends Controller
 {
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepo;
-
-    /**
-     * CategoryController constructor.
-     *
-     * @param CategoryRepositoryInterface $categoryRepository
-     */
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
-    {
-        $this->categoryRepo = $categoryRepository;
-    }
 
     /**
      * Display a listing of the resource.
      *
+     * @param IndexCategory $request
+     * @param null $categories
      * @return array|\Illuminate\Http\Response
      */
     public function index(IndexCategory $request, $categories = null)
@@ -73,6 +58,7 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param Category|null $category
      * @return \Illuminate\Http\Response
      */
     public function create(Category $category = null)
@@ -92,12 +78,7 @@ class CategoryController extends Controller
     public function store(CreateCategoryRequest $request)
     {
 
-        if($request->has('parent')){
-            $request['parent_id'] = $request['parent']['id'];
-        }
-
-
-        $category = $this->categoryRepo->createCategory($request->except('_token', '_method'));
+        $category = Category::create($request->getSanitized());
 
         $redirectTo = $category->parent ? $category->parent->slug : "";
 
@@ -111,31 +92,26 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Category $category
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        $category = $this->categoryRepo->findCategoryById($id);
-
-        $cat = new CategoryRepository($category);
-
         return view('admin.categories.show', [
             'category' => $category,
             'categories' => $category->children,
-            'products' => $cat->findProducts()
+            'products' => $category->products
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param string $slug
      * @return \Illuminate\Http\Response
      */
-    public function edit($slug)
+    public function edit(string $slug)
     {
-
         $category = Category::with('parent')->where('slug', $slug)->first();
 
         $category['parent'] = $category->parent;
@@ -150,16 +126,14 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  UpdateCategoryRequest $request
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, $id)
+    public function update(UpdateCategoryRequest $request, int $id)
     {
+        $category = Category::findOrFail($id);
 
-        $category = $this->categoryRepo->findCategoryById($id);
-
-        $update = new CategoryRepository($category);
-        $update->updateCategory($request->except('_token', '_method'));
+        $category->update($request->getSanitized());
 
         $redirectTo = $category->parent ? $category->parent->slug : "";
 
@@ -167,38 +141,26 @@ class CategoryController extends Controller
             return ['redirect' => url('admin/categories/'. $redirectTo), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
-        $request->session()->flash('message', 'Update successful');
-        return redirect()->route('admin.categories.edit', $id);
+        return redirect()->route('admin.categories.edit', $category->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Request $request
-     * @param Category $slug
+     * @param int $id
      * @return \Illuminate\Http\Response
-     * @throws \Exception
      */
-    public function destroy(Request $request,Category $category)
+    public function destroy(Request $request, int $id)
     {
+        $category = Category::findOrFail($id);
+
         $category->delete();
 
         if ($request->ajax()) {
             return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
         }
 
-        request()->session()->flash('message', 'Delete successful');
         return redirect()->route('admin.categories.index');
-    }
-
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function removeImage(Request $request)
-    {
-        $this->categoryRepo->deleteFile($request->only('category'));
-        request()->session()->flash('message', 'Image delete successful');
-        return redirect()->route('admin.categories.edit', $request->input('category'));
     }
 }

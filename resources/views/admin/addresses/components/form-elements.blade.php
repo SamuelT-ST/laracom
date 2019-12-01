@@ -26,7 +26,7 @@
 <div class="form-group row align-items-center" :class="{'has-danger': errors.has('address_2'), 'has-success': this.fields.address_2 && this.fields.address_2.valid }">
     <label for="address_2" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.address.columns.address_2') }}</label>
     <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <input type="text" v-model="form.address_2" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('address_2'), 'form-control-success': this.fields.address_2 && this.fields.address_2.valid}" id="address_2" name="address_2" placeholder="{{ trans('admin.address.columns.address_2') }}">
+        <input type="text" v-model="form.address_2" v-validate="''" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('address_2'), 'form-control-success': this.fields.address_2 && this.fields.address_2.valid}" id="address_2" name="address_2" placeholder="{{ trans('admin.address.columns.address_2') }}">
         <div v-if="errors.has('address_2')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('address_2') }}</div>
     </div>
 </div>

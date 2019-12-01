@@ -54,13 +54,13 @@
                             <tbody>
                             <tr v-for="(item, index) in collection">
                                 <td>@{{ item.sku }}</td>
-                                <td><a :href="item.resource_url">@{{ item.name }}</a></td>
+                                <td><a :href="item.resource_url + '/edit'">@{{ item.name }}</a></td>
                                 <td>@{{ item.quantity }}</td>
                                 <td>@{{ item.price }}</td>
 
                                 <td>
                                     <label class="switch switch-3d switch-success">
-                                        <input type="checkbox" class="switch-input" v-model="collection[index].status" @change="toggleSwitch(item.resource_url, 'enabled', collection[index])">
+                                        <input type="checkbox" class="switch-input" v-model="collection[index].status" @change="toggleState(item.id)">
                                         <span class="switch-slider"></span>
                                     </label>
                                 </td>

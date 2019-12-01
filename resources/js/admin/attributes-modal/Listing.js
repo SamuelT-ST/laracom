@@ -1,6 +1,6 @@
 import AppListing from '../app-components/Listing/AppListing';
 
-Vue.component('products-listing', {
+Vue.component('attribute-modal-listing', {
     mixins: [AppListing],
     props: {
         'breadcrumbs': {

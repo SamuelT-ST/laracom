@@ -1,4 +1,4 @@
-@extends('brackets/admin-ui::admin.layout.default')
+@extends('admin.products.default')
 
 @section('title', trans('admin.products.actions.create'))
 
@@ -10,6 +10,7 @@
         <product-form
                 :categories = "{{ $categories }}"
                 :action="'{{ route('admin.products.update', $product->id) }}'"
+                :available-features = "{{ $features }}"
                 :data="{{ $data->toJson() }}"
                 inline-template>
 
@@ -26,6 +27,26 @@
                         <div class="card-body">
 
                             @include('admin.products.components.form-elements')
+
+                        </div>
+
+                        <div class="card-header">
+                            <i class="fa fa-plus"></i> Vlastnosti produktu
+                        </div>
+
+                        <div class="card-body">
+
+                            @include('admin.products.components.shipping')
+
+                        </div>
+
+                        <div class="card-header">
+                            <i class="fa fa-plus"></i> Vlastnosti produktu
+                        </div>
+
+                        <div class="card-body">
+
+                            @include('admin.products.components.features')
 
                         </div>
 
@@ -62,13 +83,18 @@
                             <div class="card-body">
                                 <ul v-cloak>
                                     <li v-for="(combination, index) in form.combinations">
-                                        <span>@{{ combination.attribute.name }}: @{{ combination.value.value }} - @{{ combination.price }} -
-                                            <div class="btn btn-primary" @click="editCombination(index)">Upraviť</div>
-                                            <div class="btn btn-warning" @click="deleteCombination(index)">Vymazat</div>
-                                        </span>
+                                        <div class="row mb-2">
+                                            <div class="col-8">@{{ combination.attribute.name }}: @{{ combination.value.value }} </div>
+                                            <div class="row col-4">
+                                                <div class="btn btn-sm btn-primary mr-1" @click="editCombination(index)"><i class="fa fa-edit"></i></div>
+                                                <div class="btn btn-sm btn-danger" @click="deleteCombination(index)"><i class="fa fa-trash-o"></i></div>
+                                            </div>
+                                        </div>
                                     </li>
                                 </ul>
-                                <div class="btn btn-primary" @click="show">Vytvoriť kombináciu</div>
+                                <div class="row col-12 d-flex justify-content-center">
+                                <div class="btn btn-sm btn-primary" @click="show">{{ __('Vytvoriť novú kombináciu') }}</div>
+                                </div>
                             </div>
 
                         </div>

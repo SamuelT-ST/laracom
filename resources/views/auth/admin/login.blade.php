@@ -17,7 +17,7 @@
         LUMO.sk admin
         </div>
         <!-- /.login-logo -->
-        @include('layouts.errors-and-messages')
+        @include('admin.layout.errors-and-messages')
         <div class="login-box-body">
             <p class="login-box-msg">Prosím, prihláste sa</p>
 

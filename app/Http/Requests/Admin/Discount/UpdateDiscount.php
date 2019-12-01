@@ -30,6 +30,7 @@ class UpdateDiscount extends FormRequest
             'percentage' => ['sometimes', 'integer'],
             'from_margin' => ['sometimes', 'boolean'],
             'customer_groups' => ['nullable', 'array'],
+            'categories' => ['nullable', 'array'],
 
         ];
     }

@@ -15,6 +15,8 @@ class Customer extends Authenticatable
 {
     use Notifiable, SoftDeletes, SearchableTrait, Billable;
 
+    const LOADED_IN_SEARCH = 50;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,7 +26,10 @@ class Customer extends Authenticatable
         'name',
         'email',
         'password',
-        'status'
+        'status',
+        'company',
+        'ico',
+        'dic'
     ];
 
     /**
@@ -78,6 +83,10 @@ class Customer extends Authenticatable
 
     public function groups(){
         return $this->belongsToMany(CustomerGroup::class);
+    }
+
+    public function hasCustomerGroup(){
+        return is_null($this->groups()) ? false : true;
     }
 
     /**

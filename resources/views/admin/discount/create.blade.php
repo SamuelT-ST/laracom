@@ -11,6 +11,7 @@
             <discount-form
                 :action="'{{ url('admin/discounts') }}'"
                 :customer-groups="{{$customerGroups}}"
+                :categories="{{$categories}}"
                 inline-template>
 
                 <form class="form-horizontal form-create" method="post" @submit.prevent="onSubmit" :action="this.action" novalidate>

@@ -13,6 +13,7 @@ use App\Shop\Customers\Transformations\CustomerTransformable;
 use App\Http\Controllers\Controller;
 use Brackets\AdminListing\Facades\AdminListing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 
 class CustomerController extends Controller
@@ -77,14 +78,20 @@ class CustomerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  CreateCustomerRequest $request
-     * @return array|\Illuminate\Http\Response
+     * @return Customer
      */
     public function store(CreateCustomerRequest $request)
     {
-        $this->customerRepo->createCustomer($request->except('_token', '_method'));
+        $sanitized = $request->validated();
+
+        if(!$request->has('password')) {
+            $sanitized['password'] = Hash::make(str_random(16));
+        }
+
+        $customer = $this->customerRepo->createCustomer($sanitized);
 
         if ($request->ajax()) {
-            return ['redirect' => url('admin/customers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+            return $customer;
         }
 
         return redirect()->route('admin.customers.index');
@@ -93,13 +100,11 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(Customer $customer)
     {
-        $customer = $this->customerRepo->findCustomerById($id);
-        
         return view('admin.customers.show', [
             'customer' => $customer,
             'addresses' => $customer->addresses
@@ -109,30 +114,29 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Customer $customer)
     {
-        return view('admin.customers.edit', ['customer' => $this->customerRepo->findCustomerById($id), 'groups'=>CustomerGroup::all()]);
+        return view('admin.customers.edit', ['customer' => $customer, 'groups'=>CustomerGroup::all()]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  UpdateCustomerRequest $request
-     * @param  int $id
+     * @param Customer $customer
      * @return array|\Illuminate\Http\Response
+     * @throws \App\Shop\Customers\Exceptions\UpdateCustomerInvalidArgumentException
      */
-    public function update(UpdateCustomerRequest $request, $id)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $customer = $this->customerRepo->findCustomerById($id);
-
         $update = new CustomerRepository($customer);
-        $data = $request->except('_method', '_token', 'password');
+        $data = $request->validated();
 
         if ($request->has('password')) {
-            $data['password'] = bcrypt($request->input('password'));
+            $data['password'] = bcrypt($data['password']);
         }
 
         $update->updateCustomer($data);
@@ -140,24 +144,19 @@ class CustomerController extends Controller
         if ($request->ajax()){
             return ['redirect' => url('admin/customers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
-
-        $request->session()->flash('message', 'Update successful');
-        return redirect()->route('admin.customers.edit', $id);
+        return redirect()->route('admin.customers.edit', $customer->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Request $request
-     * @param  int $id
-     *
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Customer $customer)
     {
-        $customer = $this->customerRepo->findCustomerById($id);
-
         $customerRepo = new CustomerRepository($customer);
         $customerRepo->deleteCustomer();
 

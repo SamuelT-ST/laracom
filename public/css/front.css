@@ -1,0 +1,103 @@
+.slide-sidebar-area {
+  width: 350px;
+}
+
+.slide-sidebar-area .recent-reviews h4,
+.slide-sidebar-area .recent-reviews h5 {
+  color: white;
+}
+
+.slide-sidebar-area .recent-reviews .boxed-btn {
+  width: auto;
+}
+
+.user-menu {
+  color: white;
+  text-align: center;
+}
+
+.user-menu li {
+  list-style: none;
+  margin: 10px;
+  font-weight: 600;
+}
+
+.user-menu li a {
+  color: white;
+}
+
+.right-login input {
+  margin-bottom: 6px;
+  height: 50px;
+}
+
+.recent-reviews {
+  text-align: center;
+}
+
+.category-content-area .input-field {
+  width: 200px;
+  height: 50px;
+  border: 2px solid #f0f0f0;
+  color: #b1b6bd;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: inline-block;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 25px;
+  background-color: #fff;
+}
+
+.category-content-area .right-content-area .top-content .right-content ul li .form-element {
+  display: inline-block;
+  width: 200px;
+}
+
+.recent-reviews .form-element input {
+  font-size: 14px;
+  font-family: "Rubik", sans-serif;
+  border-radius: 30px;
+  border: 2px solid #f0f0f0;
+  margin-bottom: 20px;
+}
+
+.recent-reviews a.link {
+  color: white;
+}
+
+.recent-reviews a.link:hover {
+  color: #dee5e6;
+}
+
+.multiselect.input-field {
+  width: 82.3% !important;
+}
+
+.multiselect__tags {
+  min-height: 60px !important;
+  font-size: 16px !important;
+  padding: 16px 40px 0 8px !important;
+}
+
+.multiselect__option {
+  font-size: 16px !important;
+}
+
+.multiselect__select {
+  display: none !important;
+}
+
+.multiselect__content-wrapper {
+  width: 89.2% !important;
+}
+
+input[type=text]:focus {
+  border: 0;
+}
+
+.multiselect__option--highlight {
+  background: #2a9cf5 !important;
+}
+

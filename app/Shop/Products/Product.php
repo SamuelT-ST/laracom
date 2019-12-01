@@ -2,8 +2,9 @@
 
 namespace App\Shop\Products;
 
+use App\Services\CategoriesWithDiscount;
 use App\Shop\Brands\Brand;
-use App\Shop\Categories\Category;
+use App\Shop\FeatureValues\FeatureValue;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\ProductImages\ProductImage;
 use Brackets\Media\HasMedia\HasMediaCollections;
@@ -23,6 +24,8 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     use Categorizable;
     use HasMediaCollectionsTrait;
     use HasMediaThumbsTrait;
+
+    const LOADED_IN_SEARCH = 50;
 
     public const MASS_UNIT = [
         'OUNCES' => 'oz',
@@ -73,7 +76,9 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
         'width',
         'height',
         'distance_unit',
+        'wholesale_price',
         'slug',
+        'has_size',
     ];
 
     /**
@@ -83,10 +88,30 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
      */
     protected $hidden = [];
 
-    protected $appends = ['resource_url'];
+    protected $appends = ['resource_url', 'product_thumb', 'front_url', 'default_attribute_id'];
+
+    protected $with = ['categories', 'media'];
+
+    public const TAX_RATE = 20;
+    public const CURRENCY = '€';
 
     public function getResourceUrlAttribute() {
         return url('/admin/products/'.$this->id);
+    }
+
+    public function getFrontUrlAttribute() {
+        return url('/'.$this->slug);
+    }
+
+    public function getDefaultAttributeIdAttribute() {
+
+        $defaultAttribute = $this->attributes()->where('default', 1)->first();
+
+        return $defaultAttribute ? $defaultAttribute->id : null;
+    }
+
+    public function getProductThumbAttribute() {
+        return $this->getFirstMediaUrl('cover') ? $this->getFirstMediaUrl('cover') : asset('images/camera.png');
     }
 
     /**
@@ -119,6 +144,18 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
      */
     public function getBuyablePrice($options = null)
     {
+        $price = app(CategoriesWithDiscount::class)->getSingleProductById($this->id)->discounted_price;
+
+        $finalPrice = $price ? $price : $this->price;
+
+        if (isset($options['size']) && $this->has_size){
+            return $finalPrice * $options['size'];
+        } else {
+            return $finalPrice;
+        }
+    }
+
+    public function getPriceBeforeDiscount(){
         return $this->price;
     }
 
@@ -156,17 +193,42 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     }
 
     public function registerMediaCollections() {
+
         $this->addMediaCollection('cover')
         ->maxNumberOfFiles(1)
         ->accepts('image/*');
 
         $this->addMediaCollection('images')
-             ->accepts('image/*');
+             ->accepts('image/*')->maxNumberOfFiles(100);
 
     }
 
     public function registerMediaConversions(Media $media = null)
     {
         $this->autoRegisterThumb200();
+
+        $this->addMediaConversion('product_detail')
+            ->width(540)
+            ->height(540)
+            ->performOnCollections('cover', 'images');
+
+        $this->addMediaConversion('product_detail_thumb')
+            ->width(160)
+            ->height(160)
+            ->performOnCollections('cover', 'images');
+    }
+
+
+
+    public function featureValues(){
+        return $this->belongsToMany(FeatureValue::class);
+    }
+
+    public function getProductThumb() {
+        return $this->getFirstMediaUrl('cover', 'product_detail') ? $this->getFirstMediaUrl('cover', 'product_detail') : asset('images/camera.png');
+    }
+
+    public function getMiniProductThumb() {
+        return $this->getFirstMediaUrl('cover', 'product_detail_thumb') ? $this->getFirstMediaUrl('cover', 'product_detail_thumb') : asset('images/camera.png');
     }
 }

@@ -8,6 +8,8 @@ use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Shop\Orders\Order;
 use App\Shop\Orders\Transformers\OrderTransformable;
+use App\Shop\OrderStatuses\OrderStatus;
+use Illuminate\Support\Facades\Auth;
 
 class AccountsController extends Controller
 {
@@ -39,21 +41,37 @@ class AccountsController extends Controller
 
     public function index()
     {
-        $customer = $this->customerRepo->findCustomerById(auth()->user()->id);
 
-        $customerRepo = new CustomerRepository($customer);
-        $orders = $customerRepo->findOrders(['*'], 'created_at');
+//        TODO dorobit v dalsej faze editaciu adries
 
-        $orders->transform(function (Order $order) {
-            return $this->transformOrder($order);
-        });
+//        $customer = $this->customerRepo->findCustomerById(auth()->user()->id);
 
-        $addresses = $customerRepo->findAddresses();
+//        $customerRepo = new CustomerRepository($customer);
+//        $orders = $customerRepo->findOrders(['*'], 'created_at');
 
-        return view('front.accounts', [
-            'customer' => $customer,
-            'orders' => $this->customerRepo->paginateArrayResults($orders->toArray(), 15),
-            'addresses' => $addresses
+//        $orders->transform(function (Order $order) {
+//            return $this->transformOrder($order);
+//        });
+
+//        $addresses = $customerRepo->findAddresses();
+
+        if (!Auth::user()){
+            abort(404);
+        }
+
+        $statuses = OrderStatus::with('orders')->whereHas('orders', function ($q){
+            $q->where('customer_id', auth()->user()->id);
+        })->get();
+
+//        dd($statuses);
+
+        return view('front.account.orders', [
+//            'customer' => $customer,
+//            'orders' => $this->customerRepo->paginateArrayResults($orders->toArray(), 15),
+//            'addresses' => $addresses,
+            'statuses' => OrderStatus::with('orders')->whereHas('orders', function ($q){
+                $q->where('customer_id', auth()->user()->id);
+            })->get(),
         ]);
     }
 }
