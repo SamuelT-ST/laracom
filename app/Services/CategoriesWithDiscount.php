@@ -9,7 +9,6 @@ use App\Shop\Customers\Customer;
 use App\Shop\Products\Product;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class CategoriesWithDiscount
 {
@@ -21,6 +20,8 @@ class CategoriesWithDiscount
         $guestId = CustomerGroup::where('title', 'Guest')->first()->id;
 
         $customerGroups = Auth::user() instanceof Customer && Auth::user()->groups()->count() ? Auth::user()->groups()->pluck('id') : [$guestId];
+
+//        TODO ZAMYSLIET SA CO S TOUTO QUERY
 
 
         $discountsWithGroupAndCategory = Discount::selectRaw('discounts.percentage, discounts.from_margin, discounts.id, category_id, customer_group_id')

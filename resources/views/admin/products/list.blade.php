@@ -60,7 +60,7 @@
 
                                 <td>
                                     <label class="switch switch-3d switch-success">
-                                        <input type="checkbox" class="switch-input" v-model="collection[index].status" @change="toggleSwitch(item.resource_url, 'enabled', collection[index])">
+                                        <input type="checkbox" class="switch-input" v-model="collection[index].status" @change="toggleState(item.id)">
                                         <span class="switch-slider"></span>
                                     </label>
                                 </td>

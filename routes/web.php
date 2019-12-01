@@ -25,16 +25,18 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin'], 'as' => 'admin.' ], function () {
 
     Route::namespace('Admin')->group(function () {
+
+            Route::get('search-product-query/{from?}/{query?}',      'SearchController@searchProductQuery')->name('search-product-query');
+            Route::get('search-customer-query/{from?}/{query?}',      'SearchController@searchCustomerQuery')->name('search-customer-query');
             Route::get('/', 'DashboardController@index')->name('dashboard');
+
             Route::namespace('Products')->group(function () {
                 Route::get('products/ajaxFindProduct/{query?}',      'ProductController@ajaxFindProduct')->name('ajaxFindProduct');
+                Route::get('products/set-status/{product}', 'ProductController@setStatus')->name('products.set-status');
                 Route::resource('products', 'ProductController')->except('update');
                 Route::post('products/{product}', 'ProductController@update')->name('products.update');
-                Route::get('remove-image-product', 'ProductController@removeImage')->name('product.remove.image');
-                Route::get('remove-image-thumb', 'ProductController@removeThumbnail')->name('product.remove.thumb');
             });
             Route::namespace('Customers')->group(function () {
-                Route::get('customer/{customer}/address','CustomerAddressController@getAvailableAddresses')->name('addresses.getAvailable');
                 Route::resource('customers', 'CustomerController')->except('update');
                 Route::post('customers/{customer}', 'CustomerController@update')->name('customers.update');
                 Route::resource('customers.addresses', 'CustomerAddressController');
@@ -47,7 +49,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth
                     ->where('categories','^[a-zA-Z0-9-_\/]+$')
                     ->name('categories.index');
                 Route::post('categories/{category}', 'CategoryController@update')->name('categories.update');
-                Route::get('remove-image-category', 'CategoryController@removeImage')->name('category.remove.image');
+//                Route::get('remove-image-category', 'CategoryController@removeImage')->name('category.remove.image');
             });
             Route::namespace('Orders')->group(function () {
                 Route::resource('order-statuses', 'OrderStatusController')->except('update');
@@ -55,14 +57,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth
 //                Route::get('orders/{id}/invoice', 'OrderController@generateInvoice')->name('orders.invoice.generate');
             });
             Route::resource('addresses', 'Addresses\AddressController')->except('update');
+            Route::get('customer/{customer}/address','Addresses\AddressController@getAvailableAddresses')->name('addresses.getAvailable');
             Route::post('addresses/{address}', 'Addresses\AddressController@update')->name('addresses.update');
             Route::resource('customerGroups', 'CustomerGroups\CustomerGroupsController')->except('update');
             Route::post('customerGroups/{customerGroup}', 'CustomerGroups\CustomerGroupsController@update')->name('customerGroups.update');
-            Route::resource('countries', 'Countries\CountryController');
+//            Route::resource('countries', 'Countries\CountryController');
             Route::resource('attributes', 'Attributes\AttributeController')->except('update');
             Route::post('attributes/{attribute}', 'Attributes\AttributeController@update')->name('attributes.update');
             Route::resource('attributes.values', 'Attributes\AttributeValueController');
-            Route::resource('brands', 'Brands\BrandController');
+//            Route::resource('brands', 'Brands\BrandController');
 
             Route::get('discounts',                              'Discounts\DiscountsController@index');
             Route::get('discounts/create',                       'Discounts\DiscountsController@create');

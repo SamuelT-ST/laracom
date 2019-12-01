@@ -14,9 +14,6 @@ import VeeValidate from 'vee-validate';
 import Multiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.min.css';
 
-
-
-
 Vue.use(VueCookie);
 Vue.use(Notifications);
 Vue.use(VeeValidate, {strict: true});

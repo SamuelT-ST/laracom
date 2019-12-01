@@ -70,7 +70,7 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return array|\Illuminate\Http\Response
+     * @return \Illuminate\Support\Collection
      */
     public function index(Request $request)
     {
@@ -89,8 +89,9 @@ class CartController extends Controller
      */
     public function store(AddToCartRequest $request)
     {
+        $sanitized = $request->validated();
 
-        $product = app(CategoriesWithDiscount::class)->getSingleProductById($request->input('product'));
+        $product = app(CategoriesWithDiscount::class)->getSingleProductById($sanitized['product']);
 
         if ($product->attributes()->count() > 0) {
             $productAttr = $product->attributes()->where('default', 1)->first();
@@ -106,9 +107,9 @@ class CartController extends Controller
 
         $options = [];
 
-        if ($request->has('productAttribute') && $request->get('productAttribute') !== null) {
+        if ($request->has('productAttribute') && $sanitized['productAttribute'] !== null) {
 
-            $attr = $this->productAttributeRepo->findProductAttributeById(intval($request->input('productAttribute')));
+            $attr = $this->productAttributeRepo->findProductAttributeById(intval($sanitized['productAttribute']));
 
             $attr->price = is_null($attr->price) ? 0 : $attr->price;
 

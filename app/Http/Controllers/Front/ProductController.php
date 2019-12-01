@@ -34,13 +34,15 @@ class ProductController extends Controller
      */
     public function search(Request $request)
     {
+//        TODO dorobit lepsiu validaciu
+
         if ($request->has('q') && $request->input('q') != '') {
             $list = $this->productRepo->searchProduct($request->input('q'));
         } else {
             $list = $this->productRepo->listProducts();
         }
 
-        $products = $list->where('status', 1)->map(function (Product $item) {
+        $products = $list->where('status', true)->map(function (Product $item) {
             return $this->transformProduct($item);
         });
 
@@ -61,16 +63,12 @@ class ProductController extends Controller
      */
     public function show(string $slug)
     {
-
         try {
             $product = app(CategoriesWithDiscount::class)->getSingleProductBySlug($slug);
             $productAttributes = $product->attributes;
         } catch (\Exception $e){
             abort(404);
         }
-
-//        dd($product->toArray());
-
 
         return view('front.product-detail.index', compact(
             'product',

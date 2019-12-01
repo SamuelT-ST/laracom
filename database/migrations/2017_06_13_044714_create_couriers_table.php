@@ -17,9 +17,10 @@ class CreateCouriersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->integer('from_width')->nullable();
-            $table->integer('from_height')->nullable();
-            $table->integer('from_length')->nullable();
+            $table->decimal('from_width')->nullable();
+            $table->decimal('from_height')->nullable();
+            $table->decimal('from_length')->nullable();
+            $table->decimal('from_weight')->nullable();
             $table->string('url')->nullable();
             $table->decimal('price')->nullable();
             $table->boolean('status')->default(true);

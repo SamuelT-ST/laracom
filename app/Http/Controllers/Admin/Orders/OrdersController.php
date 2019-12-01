@@ -67,8 +67,9 @@ class OrdersController extends Controller
     {
         $this->authorize('admin.order.create');
 
-        return view('admin.order.create',
-            ['customers' => Customer::all(),
+        return view('admin.order.create', [
+//            TODO nacitat postupne
+            'customers' => Customer::all(),
             'statuses'=>OrderStatus::all(),
             'couriers'=>Courier::all(),
             'paymentMethods'=>PaymentMethod::all(),
@@ -131,6 +132,7 @@ class OrdersController extends Controller
 
         return view('admin.order.edit', [
             'order' => $order,
+//            TODO nacitat postupne
             'customers' => Customer::all(),
             'statuses'=>OrderStatus::all(),
             'couriers'=>Courier::all(),

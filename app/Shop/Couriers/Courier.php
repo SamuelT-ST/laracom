@@ -13,6 +13,7 @@ class Courier extends Model
         "from_width",
         "from_height",
         "from_length",
+        "from_weight",
         "url",
         "price",
         "status",

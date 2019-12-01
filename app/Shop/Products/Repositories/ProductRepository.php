@@ -330,28 +330,29 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return $this->model->brand;
     }
 
-    public function getProductsOnAutocomplete($query = null)
+    /**
+     * @param int $from
+     * @param string $query
+     * @return array
+     */
+    public function getProductsOnAutocomplete(?int $from = 0, string $query = null) : ?array
     {
         $nameParts = explode(' ', $query);
 
-        if (!$query || count($nameParts) == 0 || count($nameParts) > 2) {
-            return Product::all();
-        }
-
-        $query = Product::with('attributes','attributes.attributesValues', 'attributes.attributesValues.attribute');
-//            ->join('product_attributes', 'product_attributes.product_id', '=', 'products.id')
-//            ->join('attribute_value_product_attribute', 'product_attribute_id', '=', 'product_attributes.id')
-//            ->join('attribute_values', 'attribute_values.id', '=', 'product_attribute_id')
-//            ->join('attributes', 'attributes.id', '=', 'attribute_values.attribute_id');
+        $queryProducts = Product::query();
 
         foreach ($nameParts as $part) {
-            $query->where(function ($q) use ($part) {
-                $q->orWhere('sku', 'ilike', '%' . $part . '%')
-                    ->orWhere('name', 'ilike', '%' . $part . '%')
-                    ->orWhere('description', 'ilike', '%' . $part . '%');
-            });
+            $queryProducts->orWhere('name', 'ilike', '%' . $part . '%')
+                ->orWhere('sku', 'ilike', '%' . $part . '%');
         }
 
-        return $query->get();
+        $count = $queryProducts->count();
+
+        $queryProducts->skip($from);
+
+        return [
+            'data' => $queryProducts->limit(Product::LOADED_IN_SEARCH)->get(),
+            'count' => $count
+        ];
     }
 }

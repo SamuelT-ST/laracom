@@ -26,7 +26,7 @@ class CreateAddressTable extends Migration
             $table->foreign('country_id')->references('id')->on('countries');
             $table->integer('customer_id')->unsigned()->index();
             $table->foreign('customer_id')->references('id')->on('customers');
-            $table->integer('status')->default(0);
+            $table->boolean('status')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

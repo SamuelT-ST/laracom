@@ -11,6 +11,7 @@ Vue.component('courier-form', {
                 from_width:  '' ,
                 from_height:  '' ,
                 from_length:  '' ,
+                from_weight:  '' ,
                 url:  '' ,
                 price:  '' ,
                 status:  false ,

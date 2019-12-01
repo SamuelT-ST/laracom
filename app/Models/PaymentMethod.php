@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentMethod extends Model
 {
-    
+//    TODO neskor spojit s payment methods v Shop
     
     protected $fillable = [
         "title",

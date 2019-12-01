@@ -15,12 +15,11 @@ class UpdateProductRequest extends BaseFormRequest
     public function rules()
     {
         return [
+            'has_combinations' => ['nullable', 'boolean'],
             'sku' => ['required'],
             'name' => ['required', Rule::unique('products')->ignore($this->segment(3))],
-            'quantity' => ['required', 'integer'],
+            'quantity' => ['required', 'numeric'],
             'price' => ['required'],
-            'wholesale_price' => ['numeric', 'required'],
-            'featureValues' => ['array'],
             'sale_price' => ['numeric', 'nullable'],
             'categories' => ['array', 'required'],
             'description' => ['string', 'required'],
@@ -29,7 +28,20 @@ class UpdateProductRequest extends BaseFormRequest
             'weight' => ['numeric', 'nullable'],
             'width' => ['numeric', 'nullable'],
             'combinations' => ['array', 'nullable'],
-            'has_size' => ['boolean', 'required']
+            'wholesale_price' => ['numeric', 'required'],
+            'featureValues' => ['nullable', 'array'],
+            'has_size' => ['boolean', 'required'],
+            'status' => ['nullable', 'boolean'],
+            'distance_unit' => ['nullable'],
+            'mass_unit' => ['nullable'],
         ];
+    }
+
+    public function getSanitized(){
+
+        $sanitized = $this->validated();
+        $sanitized['slug'] = str_slug($sanitized['name']);
+
+        return $sanitized;
     }
 }

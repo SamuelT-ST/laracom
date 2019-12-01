@@ -67,6 +67,7 @@ return [
             'wholesale_price' => 'Nákupná cena',
             'defaultPrice' => 'Základný variant',
             'distance_unit' => 'Jednotka',
+            'weight' => 'Váha',
             'has_size' => 'Vypočítať cenu podľa mernej jednotky'
         ],
     ],
@@ -237,6 +238,7 @@ return [
             'from_width' => "From width",
             'from_height' => "From height",
             'from_length' => "From length",
+            'from_weight' => "From length",
             'url' => "Url",
             'price' => "Price",
             'status' => "Status",

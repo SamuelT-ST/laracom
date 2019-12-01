@@ -100,13 +100,11 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(Customer $customer)
     {
-        $customer = $this->customerRepo->findCustomerById($id);
-        
         return view('admin.customers.show', [
             'customer' => $customer,
             'addresses' => $customer->addresses
@@ -116,30 +114,29 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Customer $customer)
     {
-        return view('admin.customers.edit', ['customer' => $this->customerRepo->findCustomerById($id), 'groups'=>CustomerGroup::all()]);
+        return view('admin.customers.edit', ['customer' => $customer, 'groups'=>CustomerGroup::all()]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  UpdateCustomerRequest $request
-     * @param  int $id
+     * @param Customer $customer
      * @return array|\Illuminate\Http\Response
+     * @throws \App\Shop\Customers\Exceptions\UpdateCustomerInvalidArgumentException
      */
-    public function update(UpdateCustomerRequest $request, $id)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $customer = $this->customerRepo->findCustomerById($id);
-
         $update = new CustomerRepository($customer);
-        $data = $request->except('_method', '_token', 'password');
+        $data = $request->validated();
 
         if ($request->has('password')) {
-            $data['password'] = bcrypt($request->input('password'));
+            $data['password'] = bcrypt($data['password']);
         }
 
         $update->updateCustomer($data);
@@ -147,24 +144,19 @@ class CustomerController extends Controller
         if ($request->ajax()){
             return ['redirect' => url('admin/customers'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
-
-        $request->session()->flash('message', 'Update successful');
-        return redirect()->route('admin.customers.edit', $id);
+        return redirect()->route('admin.customers.edit', $customer->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Request $request
-     * @param  int $id
-     *
+     * @param Customer $customer
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Customer $customer)
     {
-        $customer = $this->customerRepo->findCustomerById($id);
-
         $customerRepo = new CustomerRepository($customer);
         $customerRepo->deleteCustomer();
 

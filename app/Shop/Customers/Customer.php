@@ -15,6 +15,8 @@ class Customer extends Authenticatable
 {
     use Notifiable, SoftDeletes, SearchableTrait, Billable;
 
+    const LOADED_IN_SEARCH = 50;
+
     /**
      * The attributes that are mass assignable.
      *

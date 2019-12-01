@@ -15,7 +15,8 @@ class UpdateOrderStatusRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'name' => ['required', Rule::unique('order_statuses')->ignore($this->segment('4'))]
+            'name' => ['required', Rule::unique('order_statuses')->ignore($this->segment('4'))],
+            'color' => ['required', 'string']
         ];
     }
 }

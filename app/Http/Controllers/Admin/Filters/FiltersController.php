@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Shop\Categories\Category;
 use App\Shop\Features\Feature;
 use App\Shop\Filters\Filter;
+use App\Shop\Filters\Requests\DestroyFilter;
 use App\Shop\Filters\Requests\IndexFilter;
 use App\Shop\Filters\Requests\StoreFilter;
 use App\Shop\Filters\Requests\UpdateFilter;
@@ -121,6 +122,7 @@ class FiltersController extends Controller
 
         return view('admin.filter.edit', [
             'filter' => $data,
+//            TODO nacitat postupne, moze ich byt vela
             'features' => Feature::all(),
             'categories' => $categories
         ]);

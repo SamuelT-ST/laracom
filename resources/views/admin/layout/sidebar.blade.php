@@ -5,7 +5,6 @@
             <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard')  }}"><i class="nav-icon icon-home"></i>Home</a></li>
             <li class="nav-title">{{ trans('brackets/admin-ui::admin.sidebar.content') }}</li>
 {{--           <li class="nav-item"><a class="nav-link" href="{{ url('admin/orders') }}"><i class="nav-icon icon-drop"></i> {{ trans('admin.order.title') }}</a></li>--}}
-           <li class="nav-item"><a class="nav-link" href="{{ url('admin/filters') }}"><i class="nav-icon icon-plane"></i> {{ trans('admin.filter.title') }}</a></li>
            {{-- Do not delete me :) I'm used for auto-generation menu items --}}
 
             <li class="nav-title">Predaj</li>

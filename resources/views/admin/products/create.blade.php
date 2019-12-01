@@ -80,9 +80,9 @@
                             <div class="card-body">
                                 <ul v-cloak>
                                     <li v-for="(combination, index) in form.combinations">
-                                        <span>@{{ combination.attribute.name }}: @{{ combination.value.value }} - @{{ combination.price }} -
-                                            <div class="btn btn-primary" @click="editCombination(index)">Upraviť</div>
-                                            <div class="btn btn-warning" @click="deleteCombination(index)">Vymazat</div>
+                                        <span>@{{ combination.attribute.name }}: @{{ combination.value.value }}
+                                            <div class="btn btn-sm btn-primary mr-1" @click="editCombination(index)"><i class="fa fa-edit"></i></div>
+                                            <div class="btn btn-sm btn-danger" @click="deleteCombination(index)"><i class="fa fa-trash-o"></i></div>
                                         </span>
                                     </li>
                                 </ul>

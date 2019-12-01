@@ -14,7 +14,21 @@ class CreateCategoryRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'name' => ['required']
+            'name' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
+            'parent' => ['nullable', 'array'],
+            'slug' => ['nullable', 'string'],
+            'status' => ['nullable'],
         ];
+    }
+
+    public function getSanitized(){
+        $sanitized = $this->validated();
+
+        if (isset($sanitized['parent'])){
+            $sanitized['parent_id'] = $sanitized['parent']['id'];
+        }
+
+        return $sanitized;
     }
 }

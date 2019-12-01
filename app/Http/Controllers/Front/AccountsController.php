@@ -41,6 +41,9 @@ class AccountsController extends Controller
 
     public function index()
     {
+
+//        TODO dorobit v dalsej faze editaciu adries
+
 //        $customer = $this->customerRepo->findCustomerById(auth()->user()->id);
 
 //        $customerRepo = new CustomerRepository($customer);

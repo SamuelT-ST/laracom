@@ -14,7 +14,8 @@ class CreateOrderStatusRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:order_statuses']
+            'name' => ['required', 'unique:order_statuses'],
+            'color' => ['required', 'string']
         ];
     }
 }

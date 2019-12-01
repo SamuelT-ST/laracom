@@ -40,13 +40,13 @@
         </div>
     </div>
 
-    <div class="form-group row align-items-center" :class="{'has-danger': errors.has('discounts'), 'has-success': this.fields.discounts && this.fields.discounts.valid }">
-        <label for="discounts" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-3'">{{ trans('admin.order.columns.discounts') }}</label>
-        <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-            <input type="text" v-model="form.discounts" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('discounts'), 'form-control-success': this.fields.discounts && this.fields.discounts.valid}" id="discounts" name="discounts" placeholder="{{ trans('admin.order.columns.discounts') }}">
-            <div v-if="errors.has('discounts')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('discounts') }}</div>
-        </div>
-    </div>
+    {{--<div class="form-group row align-items-center" :class="{'has-danger': errors.has('discounts'), 'has-success': this.fields.discounts && this.fields.discounts.valid }">--}}
+        {{--<label for="discounts" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-3'">{{ trans('admin.order.columns.discounts') }}</label>--}}
+        {{--<div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">--}}
+            {{--<input type="text" v-model="form.discounts" v-validate="'required|decimal'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('discounts'), 'form-control-success': this.fields.discounts && this.fields.discounts.valid}" id="discounts" name="discounts" placeholder="{{ trans('admin.order.columns.discounts') }}">--}}
+            {{--<div v-if="errors.has('discounts')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('discounts') }}</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
 
     <div class="form-group row align-items-center" :class="{'has-danger': errors.has('courier'), 'has-success': this.fields.courier && this.fields.courier.valid }">
         <label for="courier" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-3'">{{ trans('admin.order.columns.courier') }}</label>

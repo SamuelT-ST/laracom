@@ -26,7 +26,7 @@ class StoreOrder extends FormRequest
         return [
             'reference' => ['required', Rule::unique('orders', 'reference'), 'string'],
             'courier' => ['required'],
-            'customer' => ['required'],
+            'customer' => ['nullable'],
             'shipping_address' => ['nullable'],
             'billing_address' => ['nullable'],
             'order_status' => ['required'],
@@ -42,7 +42,6 @@ class StoreOrder extends FormRequest
             'products'=> ['required', 'array'],
             'customer_name'=> ['required', 'string'],
             'customer_email'=> ['nullable', 'string'],
-            'customer_phone'=> ['nullable', 'string'],
             'customer_company'=> ['nullable', 'string'],
             'customer_ico'=> ['nullable', 'integer'],
             'customer_dic'=> ['nullable', 'string'],
@@ -60,7 +59,6 @@ class StoreOrder extends FormRequest
             'shipping_phone'=> ['nullable', 'string'],
             "shipping_customer_name" => ['nullable', 'string'],
             "shipping_customer_email" => ['nullable', 'string'],
-            "shipping_customer_phone" => ['nullable', 'string'],
             "shipping_customer_company" => ['nullable', 'string'],
             "shipping_customer_ico" => ['nullable', 'string'],
             "shipping_customer_dic" => ['nullable', 'string'],
@@ -74,16 +72,18 @@ class StoreOrder extends FormRequest
         $sanitized['courier_id'] = $sanitized['courier']['id'];
         $sanitized['shipping_country'] = $sanitized['shipping_country']['id'];
         $sanitized['billing_country'] = $sanitized['billing_country']['id'];
-        $sanitized['customer_id'] = $sanitized['customer']['id'];
+        if (isset($sanitized['customer']) && !empty($sanitized['shipping_address'])){
+            $sanitized['customer_id'] = $sanitized['customer']['id'];
+        }
         $sanitized['order_status_id'] = $sanitized['order_status']['id'];
         $sanitized['payment_method_id'] = $sanitized['payment']['id'];
-        if (isset($sanitized['shipping_address'])){
+        if (isset($sanitized['shipping_address']) && !empty($sanitized['shipping_address'])){
             $sanitized['shipping_address_id'] = $sanitized['shipping_address']['id'];
         } else {
             $sanitized['shipping_address_id'] = null;
         }
 
-        if (isset($sanitized['billing_address'])){
+        if (isset($sanitized['billing_address']) && !empty($sanitized['shipping_address'])){
             $sanitized['billing_address_id'] = $sanitized['billing_address']['id'];
         } else {
             $sanitized['billing_address_id'] = null;

@@ -25,6 +25,8 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     use HasMediaCollectionsTrait;
     use HasMediaThumbsTrait;
 
+    const LOADED_IN_SEARCH = 50;
+
     public const MASS_UNIT = [
         'OUNCES' => 'oz',
         'GRAMS' => 'gms',

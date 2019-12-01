@@ -27,7 +27,7 @@ class CreateOrdersTable extends Migration
             $table->integer('order_status_id')->unsigned()->index();
             $table->foreign('order_status_id')->references('id')->on('order_statuses');
             $table->integer('payment_method_id')->unsigned()->index();
-            $table->decimal('discounts')->default(0.00);
+            $table->decimal('discounts')->nullable()->default(0.00);
             $table->decimal('total_products');
             $table->decimal('tax')->default(0.00);
             $table->decimal('total');
@@ -35,7 +35,6 @@ class CreateOrdersTable extends Migration
             $table->string('invoice')->nullable();
             $table->string('customer_name')->nullable();
             $table->string('customer_email')->nullable();
-            $table->string('customer_phone')->nullable();
             $table->string('customer_company')->nullable();
             $table->string('customer_ico')->nullable();
             $table->string('customer_dic')->nullable();

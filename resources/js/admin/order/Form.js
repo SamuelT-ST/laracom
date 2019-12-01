@@ -31,11 +31,10 @@ Vue.component('order-form', {
                     tracking_number:  '' ,
                     total_shipping:  '' ,
 
-                    customer:{},
+                    customer: '',
 
                     customer_name: '',
                     customer_email: '',
-                    customer_phone: '',
                     customer_is_company: false,
                     customer_company: '',
                     customer_ico: '',
@@ -43,7 +42,6 @@ Vue.component('order-form', {
 
                     shipping_customer_name: '',
                     shipping_customer_email: '',
-                    shipping_customer_phone: '',
                     shipping_customer_is_company: false,
                     shipping_customer_company: '',
                     shipping_customer_ico: '',
@@ -76,11 +74,7 @@ Vue.component('order-form', {
         }
     },
     created: function () {
-        axios.get('/admin/products/ajaxFindProduct/')
-            .then(response => {
-                this.availableProductsLoaded = response.data
-            });
-        if (this.form.customer){
+        if (!_.isEmpty(this.form.customer)){
             this.loadAvailableAddresses('/admin/customer/'+this.form.customer.id+'/address')
         }
     },
@@ -90,7 +84,7 @@ Vue.component('order-form', {
         },
         total: function() {
             return (Number(this.totalPrice) + Number(this.totalTax)).toFixed(2);
-        }
+        },
     },
     methods: {
         loadAvailableAddresses(url){
@@ -125,9 +119,11 @@ Vue.component('order-form', {
             this.calculateTotalPrice();
         },
         addProduct(value){
+            console.log(value);
             value.chosenAttributes = [];
             value.chosenQuantity = 1;
             value.chosenDiscount = 0;
+            value.size = 1;
             value.priceAfterDiscount = value.price;
             this.form.products.push(value);
             this.calculateTotalPrice();
@@ -234,6 +230,8 @@ Vue.component('order-form', {
             this.form.customer_company = data.company;
             this.form.customer_ico = data.ico;
             this.form.customer_dic = data.dic;
+
+            this.loadAvailableAddresses('/admin/customer/'+data.id+'/address')
         }
 
 

@@ -48,21 +48,23 @@
                 </div>
             </div>
 
-            <div class="form-group row align-items-center" :class="{'has-danger': errors.has('price'), 'has-success': this.fields.price && this.fields.price.valid }">
-                <label for="price" class="col-form-label text-md-right" :class="'col-md-2'">{{ trans('admin.products.columns.price') }}</label>
-                <div :class="'col-md-10'">
-                    <input type="text" v-model="form.price" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('price'), 'form-control-success': this.fields.price && this.fields.price.valid}" id="price" name="price" placeholder="{{ trans('admin.products.columns.price') }}">
-                    <div v-if="errors.has('price')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('price') }}</div>
-                </div>
-            </div>
+            {{--Toto v lume nepotrebujeme--}}
 
-            <div class="form-group row align-items-center" :class="{'has-danger': errors.has('salePrice'), 'has-success': this.fields.salePrice && this.fields.salePrice.valid }">
-                <label for="salePrice" class="col-form-label text-md-right" :class="'col-md-2'">{{ trans('admin.products.columns.salePrice') }}</label>
-                <div :class="'col-md-10'">
-                    <input type="text" v-model="form.salePrice" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('salePrice'), 'form-control-success': this.fields.salePrice && this.fields.salePrice.valid}" id="salePrice" name="salePrice" placeholder="{{ trans('admin.products.columns.salePrice') }}">
-                    <div v-if="errors.has('salePrice')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('salePrice') }}</div>
-                </div>
-            </div>
+            {{--<div class="form-group row align-items-center" :class="{'has-danger': errors.has('price'), 'has-success': this.fields.price && this.fields.price.valid }">--}}
+                {{--<label for="price" class="col-form-label text-md-right" :class="'col-md-2'">{{ trans('admin.products.columns.price') }}</label>--}}
+                {{--<div :class="'col-md-10'">--}}
+                    {{--<input type="text" v-model="form.price" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('price'), 'form-control-success': this.fields.price && this.fields.price.valid}" id="price" name="price" placeholder="{{ trans('admin.products.columns.price') }}">--}}
+                    {{--<div v-if="errors.has('price')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('price') }}</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+            {{--<div class="form-group row align-items-center" :class="{'has-danger': errors.has('salePrice'), 'has-success': this.fields.salePrice && this.fields.salePrice.valid }">--}}
+                {{--<label for="salePrice" class="col-form-label text-md-right" :class="'col-md-2'">{{ trans('admin.products.columns.salePrice') }}</label>--}}
+                {{--<div :class="'col-md-10'">--}}
+                    {{--<input type="text" v-model="form.salePrice" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('salePrice'), 'form-control-success': this.fields.salePrice && this.fields.salePrice.valid}" id="salePrice" name="salePrice" placeholder="{{ trans('admin.products.columns.salePrice') }}">--}}
+                    {{--<div v-if="errors.has('salePrice')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('salePrice') }}</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
 
             <div class="form-check row" :class="{'has-danger': errors.has('defaultPrice'), 'has-success': this.fields.defaultPrice && this.fields.defaultPrice.valid }">
@@ -89,8 +91,8 @@
 
 
         <div class="card-footer text-center">
-            <div class="btn btn-primary" @click="$emit('save-combination', getPostData())">Create</div>
-            <div class="btn btn-danger" @click="$emit('close-modal')">Cancel</div>
+            <div class="btn btn-primary" @click="$emit('save-combination', getPostData())">{{ __('Vytvoriť / upraviť') }}</div>
+            <div class="btn btn-danger" @click="$emit('close-modal')">{{ __('Zrušiť') }}</div>
 
         </div>
 

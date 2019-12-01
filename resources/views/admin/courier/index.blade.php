@@ -50,9 +50,7 @@
 
                                     <th is='sortable' :column="'id'">{{ trans('admin.courier.columns.id') }}</th>
                                     <th is='sortable' :column="'name'">{{ trans('admin.courier.columns.name') }}</th>
-                                    <th is='sortable' :column="'from_width'">{{ trans('admin.courier.columns.from_width') }}</th>
-                                    <th is='sortable' :column="'from_height'">{{ trans('admin.courier.columns.from_height') }}</th>
-                                    <th is='sortable' :column="'from_length'">{{ trans('admin.courier.columns.from_length') }}</th>
+                                    <th is='sortable' :column="'from_weight'">{{ trans('admin.courier.columns.from_weight') }}</th>
                                     <th is='sortable' :column="'url'">{{ trans('admin.courier.columns.url') }}</th>
                                     <th is='sortable' :column="'price'">{{ trans('admin.courier.columns.price') }}</th>
                                     <th is='sortable' :column="'status'">{{ trans('admin.courier.columns.status') }}</th>
@@ -81,9 +79,7 @@
 
                                     <td>@{{ item.id }}</td>
                                     <td>@{{ item.name }}</td>
-                                    <td>@{{ item.from_width }}</td>
-                                    <td>@{{ item.from_height }}</td>
-                                    <td>@{{ item.from_length }}</td>
+                                    <td>@{{ item.from_weight }}</td>
                                     <td>@{{ item.url }}</td>
                                     <td>@{{ item.price }}</td>
                                     <td>@{{ item.status }}</td>

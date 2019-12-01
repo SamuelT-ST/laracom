@@ -11,6 +11,9 @@ use App\Shop\Roles\Requests\UpdateRoleRequest;
 
 class RoleController extends Controller
 {
+
+//    TODO role sa zatial nedaju vytvarat, dorobi sa neskor
+
     /**
      * @var RoleRepositoryInterface
      */

@@ -52,9 +52,7 @@ class AttributeController extends Controller
      */
     public function store(CreateAttributeRequest $request)
     {
-        $attribute = Attribute::create($request->except('_token'));
-
-        $request->session()->flash('message', 'Create attribute successful!');
+        $attribute = Attribute::create($request->validated());
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/attributes'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
@@ -65,13 +63,11 @@ class AttributeController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
+     * @param Attribute $attribute
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Support\Collection|\Illuminate\View\View
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, Attribute $attribute)
     {
-
-        $attribute = Attribute::findOrFail($id);
 
         if ($request->ajax()) {
             return response()->json($attribute->values);
@@ -84,28 +80,22 @@ class AttributeController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param Attribute $attribute
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Attribute $attribute)
     {
-        $attribute = Attribute::findOrFail($id);
-
         return view('admin.attributes.edit', compact('attribute'));
     }
 
     /**
      * @param UpdateAttributeRequest $request
-     * @param $id
+     * @param Attribute $attribute
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateAttributeRequest $request, $id)
+    public function update(UpdateAttributeRequest $request, Attribute $attribute)
     {
-        $attribute = Attribute::findOrFail($id);
-
         $attribute->update($request->except('_token'));
-
-        $request->session()->flash('message', 'Attribute update successful!');
 
         if ($request->ajax()){
             return ['redirect' => url('admin/attributes'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
@@ -116,18 +106,17 @@ class AttributeController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
+     * @param Attribute $attribute
      * @return bool|null
+     * @throws \Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Attribute $attribute)
     {
-        Attribute::findOrFail($id)->delete();
+        $attribute->delete();
 
         if ($request->ajax()) {
             return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
         }
-
-        request()->session()->flash('message', 'Attribute deleted successfully!');
 
         return redirect()->route('admin.attributes.index');
     }

@@ -1,16 +1,14 @@
 <div class="form-group row align-items-center">
     <label for="customer_id" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.customer_id') }}</label>
     <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <multiselect
-                v-model="form.customer"
-                :options="customers"
-                :multiple="false"
-                @input="loadAvailableAddresses('/admin/customer/'+form.customer.id+'/address')"
+        <chunk-loaded-multiselect
                 @select="loadCustomer"
+                placeholder="{{ __('Select customer') }}"
+                v-model="form.customer"
                 label="name"
-                track-by="id"
-                placeholder="{{ __('Select customer') }}">
-        </multiselect>
+                :search-url="'{{ route('admin.search-customer-query') }}'"
+        >
+        </chunk-loaded-multiselect>
         {{--<button class="btn btn-primary mt-2" @click.prevent="$modal.show('add-new-customer')">{{ trans('admin.order.actions.new_customer') }}</button>--}}
 
     </div>
@@ -29,14 +27,6 @@
     <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
         <input type="text" v-model="form.customer_email" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('customer_email'), 'form-control-success': this.fields.customer_email && this.fields.customer_email.valid}" id="customer_email" name="customer_email" placeholder="{{ trans('admin.order.columns.customer_email') }}">
         <div v-if="errors.has('customer_email')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('customer_email') }}</div>
-    </div>
-</div>
-
-<div class="form-group row align-items-center" :class="{'has-danger': errors.has('customer_phone'), 'has-success': this.fields.customer_phone && this.fields.customer_phone.valid }">
-    <label for="customer_phone" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.customer_phone') }}</label>
-    <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <input type="text" v-model="form.customer_phone" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('customer_phone'), 'form-control-success': this.fields.customer_phone && this.fields.customer_phone.valid}" id="customer_phone" name="customer_phone" placeholder="{{ trans('admin.order.columns.customer_phone') }}">
-        <div v-if="errors.has('customer_phone')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('customer_phone') }}</div>
     </div>
 </div>
 

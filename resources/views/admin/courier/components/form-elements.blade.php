@@ -16,27 +16,37 @@
     </div>
 </div>
 
-<div class="form-group row align-items-center" :class="{'has-danger': errors.has('from_width'), 'has-success': this.fields.from_width && this.fields.from_width.valid }">
-    <label for="from_width" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.courier.columns.from_width') }}</label>
-        <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <input type="text" v-model="form.from_width" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('from_width'), 'form-control-success': this.fields.from_width && this.fields.from_width.valid}" id="from_width" name="from_width" placeholder="{{ trans('admin.courier.columns.from_width') }}">
-        <div v-if="errors.has('from_width')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('from_width') }}</div>
-    </div>
-</div>
+{{-- Zatial nebudeme robit --}}
+
+{{--<div class="form-group row align-items-center" :class="{'has-danger': errors.has('from_width'), 'has-success': this.fields.from_width && this.fields.from_width.valid }">--}}
+    {{--<label for="from_width" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.courier.columns.from_width') }}</label>--}}
+        {{--<div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">--}}
+        {{--<input type="text" v-model="form.from_width" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('from_width'), 'form-control-success': this.fields.from_width && this.fields.from_width.valid}" id="from_width" name="from_width" placeholder="{{ trans('admin.courier.columns.from_width') }}">--}}
+        {{--<div v-if="errors.has('from_width')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('from_width') }}</div>--}}
+    {{--</div>--}}
+{{--</div>--}}
+
+{{--<div class="form-group row align-items-center" :class="{'has-danger': errors.has('from_height'), 'has-success': this.fields.from_height && this.fields.from_height.valid }">--}}
+    {{--<label for="from_height" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.courier.columns.from_height') }}</label>--}}
+        {{--<div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">--}}
+        {{--<input type="text" v-model="form.from_height" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('from_height'), 'form-control-success': this.fields.from_height && this.fields.from_height.valid}" id="from_height" name="from_height" placeholder="{{ trans('admin.courier.columns.from_height') }}">--}}
+        {{--<div v-if="errors.has('from_height')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('from_height') }}</div>--}}
+    {{--</div>--}}
+{{--</div>--}}
+
+{{--<div class="form-group row align-items-center" :class="{'has-danger': errors.has('from_length'), 'has-success': this.fields.from_length && this.fields.from_length.valid }">--}}
+    {{--<label for="from_length" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.courier.columns.from_length') }}</label>--}}
+        {{--<div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">--}}
+        {{--<input type="text" v-model="form.from_length" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('from_length'), 'form-control-success': this.fields.from_length && this.fields.from_length.valid}" id="from_length" name="from_length" placeholder="{{ trans('admin.courier.columns.from_length') }}">--}}
+        {{--<div v-if="errors.has('from_length')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('from_length') }}</div>--}}
+    {{--</div>--}}
+{{--</div>--}}
 
 <div class="form-group row align-items-center" :class="{'has-danger': errors.has('from_height'), 'has-success': this.fields.from_height && this.fields.from_height.valid }">
     <label for="from_height" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.courier.columns.from_height') }}</label>
         <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
         <input type="text" v-model="form.from_height" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('from_height'), 'form-control-success': this.fields.from_height && this.fields.from_height.valid}" id="from_height" name="from_height" placeholder="{{ trans('admin.courier.columns.from_height') }}">
         <div v-if="errors.has('from_height')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('from_height') }}</div>
-    </div>
-</div>
-
-<div class="form-group row align-items-center" :class="{'has-danger': errors.has('from_length'), 'has-success': this.fields.from_length && this.fields.from_length.valid }">
-    <label for="from_length" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.courier.columns.from_length') }}</label>
-        <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <input type="text" v-model="form.from_length" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('from_length'), 'form-control-success': this.fields.from_length && this.fields.from_length.valid}" id="from_length" name="from_length" placeholder="{{ trans('admin.courier.columns.from_length') }}">
-        <div v-if="errors.has('from_length')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('from_length') }}</div>
     </div>
 </div>
 

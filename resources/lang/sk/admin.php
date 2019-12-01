@@ -74,6 +74,7 @@ return [
             'wholesale_price' => 'Nákupná cena',
             'defaultPrice' => 'Základný variant',
             'distance_unit' => 'Jednotka',
+            'weight' => 'Váha',
             'has_size' => 'Vypočítať cenu podľa mernej jednotky'
         ],
     ],
@@ -238,23 +239,24 @@ return [
     ],
 
     'courier' => [
-        'title' => 'Couriers',
+        'title' => 'Doručenie',
 
         'actions' => [
-            'index' => 'Couriers',
-            'create' => 'New Courier',
-            'edit' => 'Edit :name',
+            'index' => 'Doručenie',
+            'create' => 'Nové doručenie',
+            'edit' => 'Uprav :name',
         ],
 
         'columns' => [
             'id' => "ID",
-            'name' => "Name",
-            'description' => "Description",
+            'name' => "Názov",
+            'description' => "Popis",
             'from_width' => "From width",
             'from_height' => "From height",
             'from_length' => "From length",
+            'from_weight' => "Od váhy",
             'url' => "Url",
-            'price' => "Price",
+            'price' => "Cena",
             'status' => "Status",
             
         ],

@@ -11,6 +11,7 @@ import VueCookie from 'vue-cookie';
 import { Admin } from 'craftable';
 import VModal from 'vue-js-modal'
 import Vue from 'vue';
+import ChunkLoadedMultiselect from './components/ChunkLoadedMultiselect'
 import './customers/index.js'
 import './customer-groups/index.js'
 import './addresses/index.js'
@@ -27,6 +28,7 @@ import './index';
 
 import 'craftable/dist/ui';
 
+Vue.component('chunk-loaded-multiselect', ChunkLoadedMultiselect);
 Vue.component('multiselect', Multiselect);
 Vue.use(VeeValidate, {strict: true});
 Vue.component('datetime', flatPickr);

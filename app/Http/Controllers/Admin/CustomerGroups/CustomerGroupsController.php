@@ -60,6 +60,7 @@ class CustomerGroupsController extends Controller
     public function store(CreateGroupRequest $request)
     {
         CustomerGroup::create($request->validated());
+
         if ($request->ajax()) {
             return ['redirect' => url('admin/customerGroups'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }

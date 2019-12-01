@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Shop\Addresses\Requests\IndexAddress;
 use Brackets\AdminListing\Facades\AdminListing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AddressController extends Controller
 {
@@ -54,6 +55,7 @@ class AddressController extends Controller
     public function create()
     {
         return view('admin.addresses.create', [
+//            TODO customerov nacitat postupne, nie naraz!
             'customers' => Customer::all(),
             'countries' => Country::all()
         ]);
@@ -67,17 +69,12 @@ class AddressController extends Controller
      */
     public function store(CreateAddressRequest $request)
     {
-
-        $request['country_id'] = $request['country']['id'];
-        $request['customer_id'] = $request['customer']['id'];
-
-        Address::create($request->except('_token', '_method'));
+        Address::create($request->getSanitized());
 
         if ($request->ajax()) {
             return ['redirect' => url('admin/addresses'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
-        $request->session()->flash('message', 'Creation successful');
         return redirect()->route('admin.addresses.index');
     }
 
@@ -87,21 +84,26 @@ class AddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(int $customerId, int $addressId, Request $request)
     {
-        return view('admin.addresses.show', ['address' => Address::findOrFail($id)]);
+        if($request->ajax()){
+            return Address::find($addressId);
+        }
+        return view('admin.addresses.customers.show', [
+            'address' => Address::find($addressId),
+            'customerId' => $customerId
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Address $address
      * @return \Illuminate\Http\Response
      */
-    public function edit(int $id)
+    public function edit(Address $address)
     {
         $countries = Country::all();
-        $address = Address::findOrFail($id);
         $customer = $address->customer;
 
         return view('admin.addresses.edit', [
@@ -117,46 +119,44 @@ class AddressController extends Controller
      * Update the specified resource in storage.
      *
      * @param  UpdateAddressRequest $request
-     * @param  int  $id
+     * @param Address $address
      * @return array|\Illuminate\Http\Response
      */
-    public function update(UpdateAddressRequest $request, $id)
+    public function update(UpdateAddressRequest $request, Address $address)
     {
-        $address = Address::findOrFail($id);
-
-        $request['country_id'] = $request['country']['id'];
-        $request['customer_id'] = $request['customer']['id'];
-
-        $address->update($request->except('_method', '_token'));
+        $address->update($request->getSanitized());
 
         if ($request->ajax()){
             return ['redirect' => url('admin/addresses'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
         $request->session()->flash('message', 'Update successful');
-        return redirect()->route('admin.addresses.edit', $id);
+        return redirect()->route('admin.addresses.edit', $address->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Request $request
-     * @param  int $id
+     * @param Address $address
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Address $address)
     {
-        $address = Address::findOrFail($id);
-
-        $address->customer()->dissociate();
-
-        $address->delete();
+        DB::transaction(function () use ($address){
+            $address->customer()->dissociate();
+            $address->delete();
+        });
 
         if ($request->ajax()) {
             return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
         }
 
-        request()->session()->flash('message', 'Delete successful');
         return redirect()->route('admin.addresses.index');
+    }
+
+    public function getAvailableAddresses(Customer $customer){
+        return $customer->addresses;
     }
 }

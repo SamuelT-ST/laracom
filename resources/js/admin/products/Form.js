@@ -144,7 +144,6 @@ Vue.component('product-form', {
                 }]
             });
         },
-
         createValue(value, id){
 
             let data = {

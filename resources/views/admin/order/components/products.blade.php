@@ -21,13 +21,13 @@
             <th scope="row">@{{ product.id }}</th>
             <td>@{{ product.sku }}</td>
             <td><strong>@{{ product.name }}</strong></td>
-            <td><input style="width: 50px" type="number" @input="updateProduct"  v-model="product.chosenQuantity"> @{{product.distance_unit}} </td>
-            <td><input style="width: 50px" type="number" @input="updateProduct"  v-model="product.size"> </td>
-            <td><input v-if="product.has_size" style="width: 50px" type="number" @input="updateProduct" v-model="product.price"></td>
+            <td><input style="width: 50px" type="number" @input="updateProduct"  v-model="product.chosenQuantity"></td>
+            <td><template v-if="product.has_size"><input style="width: 50px" type="number" @input="updateProduct"  v-model="product.size"> @{{product.distance_unit}}</template></td>
+            <td><input style="width: 50px" type="number" @input="updateProduct" v-model="product.price"></td>
             <td>@{{ (Number(product.price) * 1.2).toFixed(2) }}</td>
             <td><input style="width: 50px" type="text" @input="updateProduct" v-model="product.chosenDiscount"></td>
-            <td>@{{ ((product.chosenQuantity * Number(product.price)) / 100 * (100 - Number(product.chosenDiscount) )).toFixed(2) }}
-                (@{{ (((product.chosenQuantity * Number(product.price)) / 100 * (100 - Number(product.chosenDiscount) ))*1.2).toFixed(2) }})</td>
+            <td>@{{ ((product.size * product.chosenQuantity * Number(product.price)) / 100 * (100 - Number(product.chosenDiscount) )).toFixed(2) }}
+                (@{{ (((product.size * product.chosenQuantity * Number(product.price)) / 100 * (100 - Number(product.chosenDiscount) ))*1.2).toFixed(2) }})</td>
             <td>
                 <button type="submit" class="btn btn-sm btn-danger" @click="deleteProduct(index)" title="{{ trans('brackets/admin-ui::admin.btn.delete') }}"><i class="fa fa-trash-o"></i></button>
                 {{--<button v-if="product.attributes" type="submit" class="btn btn-sm btn-primary" @click="addCombination(index)" title="{{ trans('brackets/admin-ui::admin.btn.add') }}"><i class="fa fa-plus"></i></button>--}}
@@ -39,12 +39,13 @@
                 <td></td>
                 <td>@{{ attribute.attributes_values[0].attribute.name }}: @{{ attribute.attributes_values[0].value }}</td>
                 <td></td>
+                <td></td>
                 <td><input style="width: 50px" @input="updateProduct" v-model="attribute.price"  type="text"></td>
                 <td>@{{ (Number(attribute.price) * 1.2).toFixed(2) }}</td>
                 <td><input style="width: 50px" type="text" @input="updateProduct" v-model="attribute.chosenDiscount"></td>
-                <td>@{{ ((product.chosenQuantity * Number(attribute.price)) / 100 * (100 - Number(attribute.chosenDiscount)) ).toFixed(2) }}
+                <td>@{{ ((product.size * product.chosenQuantity * Number(attribute.price)) / 100 * (100 - Number(attribute.chosenDiscount)) ).toFixed(2) }}
 
-                    (@{{ (((product.chosenQuantity * Number(attribute.price)) / 100 * (100 - Number(attribute.chosenDiscount)) )*1.2).toFixed(2) }})</td>
+                    (@{{ (((product.size * product.chosenQuantity * Number(attribute.price)) / 100 * (100 - Number(attribute.chosenDiscount)) )*1.2).toFixed(2) }})</td>
                 <td>
                     <button class="btn btn-sm btn-danger" @click="deleteAttribute(product, index1)" title="{{ trans('brackets/admin-ui::admin.btn.delete') }}"><i class="fa fa-trash-o"></i></button>
                     {{--<button type="submit" class="btn btn-sm btn-primary" @click="addCombination(index)" title="{{ trans('brackets/admin-ui::admin.btn.add') }}"><i class="fa fa-plus"></i></button>--}}
@@ -75,22 +76,18 @@
     <tr>
         <th scope="row"></th>
         <td></td>
-        <td>
-            <multiselect
-                    v-model="chosenProduct"
-                    :options="availableProductsLoaded"
-                    track-by="id"
-                    :custom-label="customLabel"
-                    @search-change="asyncFind"
-                    :internal-search="false"
+        <td colspan="3">
+            <chunk-loaded-multiselect
                     @select="addProduct"
-                    select-label=""
                     :reset-after="true"
-                    placeholder="{{ __('Názov, SKU, Popis') }}">
-
-            </multiselect>
+                    placeholder="{{ __('Názov, SKU, Popis') }}"
+                    v-model="chosenProduct"
+                    label="name"
+                    :search-url="'{{ route('admin.search-product-query') }}'"
+            >
+            </chunk-loaded-multiselect>
         </td>
-        <td colspan="6"></td>
+        <td colspan="5"></td>
     </tr>
     <tr>
         <th scope="row"></th>

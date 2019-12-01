@@ -32,11 +32,11 @@
     </div>
 </div>
 
-<div class="form-group row align-items-center" :class="{'has-danger': errors.has('shipping_customer_phone'), 'has-success': this.fields.shipping_customer_phone && this.fields.shipping_customer_phone.valid }">
-    <label for="shipping_customer_phone" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.shipping_customer_phone') }}</label>
+<div class="form-group row align-items-center" :class="{'has-danger': errors.has('shipping_phone'), 'has-success': this.fields.shipping_phone && this.fields.shipping_phone.valid }">
+    <label for="shipping_phone" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.order.columns.shipping_phone') }}</label>
     <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <input type="text" v-model="form.shipping_customer_phone" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('shipping_customer_phone'), 'form-control-success': this.fields.shipping_customer_phone && this.fields.shipping_customer_phone.valid}" id="shipping_customer_phone" name="shipping_customer_phone" placeholder="{{ trans('admin.order.columns.shipping_customer_phone') }}">
-        <div v-if="errors.has('shipping_customer_phone')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('shipping_customer_phone') }}</div>
+        <input type="text" v-model="form.shipping_phone" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('shipping_phone'), 'form-control-success': this.fields.shipping_phone && this.fields.shipping_phone.valid}" id="shipping_phone" name="shipping_phone" placeholder="{{ trans('admin.order.columns.shipping_phone') }}">
+        <div v-if="errors.has('shipping_phone')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('shipping_phone') }}</div>
     </div>
 </div>
 
