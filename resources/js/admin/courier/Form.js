@@ -8,10 +8,8 @@ Vue.component('courier-form', {
             form: {
                 name:  '' ,
                 description:  '' ,
-                from_width:  '' ,
-                from_height:  '' ,
-                from_length:  '' ,
                 from_weight:  '' ,
+                to_weight:  '' ,
                 url:  '' ,
                 price:  '' ,
                 status:  false ,

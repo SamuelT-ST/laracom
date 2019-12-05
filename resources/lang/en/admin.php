@@ -238,11 +238,12 @@ return [
             'from_width' => "From width",
             'from_height' => "From height",
             'from_length' => "From length",
-            'from_weight' => "From length",
+            'from_weight' => "From weight",
+            'to_weight' => "To weight",
             'url' => "Url",
             'price' => "Price",
             'status' => "Status",
-            
+
         ],
     ],
 
@@ -299,7 +300,7 @@ return [
             'id' => "ID",
             'title' => "Title",
             'is_number' => "Is number",
-            
+
         ],
     ],
 
@@ -316,7 +317,7 @@ return [
             'id' => "ID",
             'value_string' => "Value string",
             'value_integer' => "Value integer",
-            
+
         ],
     ],
 
@@ -333,7 +334,7 @@ return [
             'id' => "ID",
             'feature_id' => "Feature",
             'filter_type' => "Filter type",
-            
+
         ],
     ],
 

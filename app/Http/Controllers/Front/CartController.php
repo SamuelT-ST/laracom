@@ -23,6 +23,8 @@ use Gloudemans\Shoppingcart\CartItem;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Arr;
+use Stripe\Collection;
 
 class CartController extends Controller
 {
@@ -123,8 +125,11 @@ class CartController extends Controller
             $options['size'] = $request->get('size');
         }
 
+
         $options['thumb_url'] = $product->getFirstMediaUrl('cover', 'thumb_200');
         $options['front_url'] = $product->front_url;
+        $options['weight'] = $product->weight;
+
 
         $this->cartRepo->addToCart($product, $request->input('quantity'), $options);
 
@@ -179,6 +184,7 @@ class CartController extends Controller
             $options['thumb_url'] = $product->getFirstMediaUrl('cover', 'thumb_200');
             $options['size'] = $request->get('size');
             $options['front_url'] = $product->front_url;
+            $options['weight'] = $product->weight;
             $this->cartRepo->addToCart($product, $sanitized['quantity'], $options);
 
         });
@@ -235,9 +241,11 @@ class CartController extends Controller
     }
 
     public function checkout(){
+        $cartItemWeights = $this->getWeights();
+
         return view('front.cart.checkout')->with([
             'countries' => Country::all(),
-            'couriers' => app(CourierRepository::class)->getAvailableCouriers(),
+            'couriers' => app(CourierRepository::class)->getAvailableCouriers($cartItemWeights),
         ]);
     }
     public function storeOrder(CartCheckoutRequest $order){
@@ -250,5 +258,13 @@ class CartController extends Controller
 
     public function thankYou(Order $order){
         return view('front.cart.thankyou')->with(['order'=> $order]);
+    }
+
+    public function getWeights(){
+        $cartItems=$this->cartRepo->getCartItems()->pluck('options')->pluck('weight');
+        $multiplied = $cartItems->map(function ($item,$key){
+            return $item * $this->cartRepo->getCartItems()->pluck('qty')->get($key);
+        });
+        return $multiplied;
     }
 }
