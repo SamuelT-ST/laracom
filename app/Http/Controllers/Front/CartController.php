@@ -261,10 +261,8 @@ class CartController extends Controller
     }
 
     public function getWeights(){
-        $cartItems=$this->cartRepo->getCartItems()->pluck('options')->pluck('weight');
-        $multiplied = $cartItems->map(function ($item,$key){
-            return $item * $this->cartRepo->getCartItems()->pluck('qty')->get($key);
+        return $this->cartRepo->getCartItems()->map(function ($item){
+            return $item->qty * $item->options['weight'];
         });
-        return $multiplied;
     }
 }

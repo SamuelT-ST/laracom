@@ -100,14 +100,14 @@ class CourierRepository extends BaseRepository implements CourierRepositoryInter
         return $this->delete();
     }
 
-    public function getAvailableCouriers(object $cartItemWeights){
-//        TODO dorobit validaciu rozmerov!
+    public function getAvailableCouriers($cartItemWeights){
 
         $totalWeight = $cartItemWeights->reduce(function ($total, $item) {
             return $total + $item;
         });
 
-       /* $couriersLower = Courier::where(function ($query) use ($totalWeight){
+        return Courier::with('paymentMethods')
+            ->where(function ($query) use ($totalWeight){
             $query->where('from_weight','<=', $totalWeight)
                 ->where('to_weight','>=', $totalWeight);
         })->orWhere(function ($query) use ($totalWeight){
@@ -116,18 +116,7 @@ class CourierRepository extends BaseRepository implements CourierRepositoryInter
         })->orWhere(function ($query) use ($totalWeight){
             $query->where('from_weight','<=', $totalWeight)
                 ->whereNull('to_weight');
-        })->with('paymentMethods')->get();*/
-
-        $allCouriers=Courier::with('paymentMethods')->get();
-        $couriersLowerLimit= $allCouriers
-            ->where('from_weight','<=', $totalWeight)
-            ->merge($allCouriers->where('from_weight', null));
-
-        $couriersUpperLimit= $allCouriers
-            ->where('to_weight','>=', $totalWeight)
-            ->merge($allCouriers->where('to_weight', null));
-
-        return $couriersLowerLimit->intersect($couriersUpperLimit);
+        })->get();
 
     }
 
