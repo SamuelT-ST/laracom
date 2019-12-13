@@ -107,14 +107,25 @@ class CourierRepository extends BaseRepository implements CourierRepositoryInter
             return $total + $item;
         });
 
-        $couriersLowerLimit= Courier::all()
+       /* $couriersLower = Courier::where(function ($query) use ($totalWeight){
+            $query->where('from_weight','<=', $totalWeight)
+                ->where('to_weight','>=', $totalWeight);
+        })->orWhere(function ($query) use ($totalWeight){
+            $query->whereNull('from_weight')
+                ->where('to_weight','>=', $totalWeight);
+        })->orWhere(function ($query) use ($totalWeight){
+            $query->where('from_weight','<=', $totalWeight)
+                ->whereNull('to_weight');
+        })->with('paymentMethods')->get();*/
+
+        $allCouriers=Courier::with('paymentMethods')->get();
+        $couriersLowerLimit= $allCouriers
             ->where('from_weight','<=', $totalWeight)
-            ->merge(Courier::all()->where('from_weight', null));
+            ->merge($allCouriers->where('from_weight', null));
 
-        $couriersUpperLimit= Courier::all()
+        $couriersUpperLimit= $allCouriers
             ->where('to_weight','>=', $totalWeight)
-            ->merge(Courier::all()->where('to_weight', null));
-
+            ->merge($allCouriers->where('to_weight', null));
 
         return $couriersLowerLimit->intersect($couriersUpperLimit);
 
