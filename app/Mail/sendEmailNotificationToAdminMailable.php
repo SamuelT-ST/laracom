@@ -36,7 +36,7 @@ class sendEmailNotificationToAdminMailable extends Mailable
             'products' => $this->order->orderProduct,
             'courier' => $this->order->courier,
             'status' => $this->order->orderStatus,
-            'payment' => $this->order->paymentMethod
+            'payment' => $this->order->payment
         ];
 
         return $this->view('emails.admin.OrderNotificationEmail', $data);

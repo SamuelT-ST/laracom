@@ -10,7 +10,7 @@ class PaymentMethod extends Model
         "title",
         "description",
         "price",
-    
+        "instructions",
     ];
     
     protected $hidden = [

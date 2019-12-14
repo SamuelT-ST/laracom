@@ -28,6 +28,18 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
+                    @if(session()->has('registration-result'))
+                        @if(session()->get('registration-result') === 'success')
+                            <div class="mt-3 mx-4 alert alert-success">
+                                {{ __('Váš účet bol úspešne aktivovaný, môžete sa prihlásiť') }}
+                            </div>
+                        @endif
+                        @if(session()->get('registration-result') === 'fail')
+                            <div class="mt-3 mx-4 alert alert-danger">
+                                {{ __('Váš účet už bol aktivovaný alebo link nie je správny') }}
+                            </div>
+                        @endif
+                    @endif
                     <div class="signup-page-wrapper mb-5"><!-- login page wrapper -->
                         <div class="or">
                             <span>alebo</span>
@@ -66,7 +78,7 @@
                                             </div>
                                             <div class="btn-wrapper">
                                                 <button type="submit" class="submit-btn">{{ __('Prihlásiť sa') }}</button>
-                                                <a href="#" class="link">{{ __('Zabudli ste heslo?') }}</a><br>
+                                                <a href="/password/reset" class="link">{{ __('Zabudli ste heslo?') }}</a><br>
                                                 <a href="{{ __('/register') }}" class="link">{{ __('Nemáte účet?') }}</a>
                                             </div>
                                         </form>

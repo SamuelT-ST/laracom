@@ -4,8 +4,10 @@ namespace App\Shop\Orders\Repositories;
 
 use App\Shop\Carts\Repositories\CartRepository;
 use App\Shop\Carts\ShoppingCart;
+use App\Shop\Customers\Repositories\CustomerRepository;
 use Brackets\AdminAuth\Models\AdminUser;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Employees\Employee;
 use App\Shop\Employees\Repositories\EmployeeRepository;
@@ -49,6 +51,15 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     {
         try {
 
+            if (isset($params['password'])){
+                $customer = app(CustomerRepository::class)->createCustomer($this->mapOrderToCustomer($params));
+                $params = collect($params)->put('customer_id', $customer->id)->toArray();
+            }
+
+            if (Auth::check()){
+                $params = collect($params)->put('customer_id', Auth::id())->toArray();
+            }
+
             $order = $this->create($params);
 
             $orderRepo = new OrderRepository($order);
@@ -60,6 +71,19 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         } catch (QueryException $e) {
             throw new OrderInvalidArgumentException($e->getMessage(), 500, $e);
         }
+    }
+
+    private function mapOrderToCustomer(array $params){
+        return [
+            'name' => $params['customer_name'],
+            'email' => $params ['customer_email'],
+            'password' => $params['password'],
+            'company' => isset($params['customer_company']) ? $params['customer_company'] : null,
+            'ico' => isset($params['customer_company']) ? $params['customer_company'] : null,
+            'dic' => isset($params['customer_ico']) ? $params['customer_dic'] : null,
+            'status' => 0
+//            TODO status by mal byt boolean
+        ];
     }
 
     /**

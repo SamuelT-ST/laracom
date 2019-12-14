@@ -87810,7 +87810,10 @@ Vue.component('checkout-form', {
         shipping_phone: '',
         same_addresses: true,
         courier: {},
-        payment: {}
+        payment: {},
+        create_account: false,
+        password: '',
+        password_confirmation: ''
       },
       selectedCouriers: [],
       paymentMethodCheck: []

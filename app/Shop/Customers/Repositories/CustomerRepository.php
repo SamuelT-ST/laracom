@@ -2,7 +2,12 @@
 
 namespace App\Shop\Customers\Repositories;
 
+use App\Mail\CreateCustomerMail;
+use App\Notifications\ResetPasswordNotification;
 use App\Shop\Addresses\Address;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Customers\Customer;
 use App\Shop\Customers\Exceptions\CreateCustomerInvalidArgumentException;
@@ -50,14 +55,20 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
     public function createCustomer(array $params) : Customer
     {
         try {
-            $data = collect($params)->except('password', '_token', '_method')->all();
+            $hash = Hash::make(Str::random(10));
+
+            $data = collect($params)->except('password', '_token', '_method')->put('status', 0)->put('hash', $hash)->all();
 
             $customer = new Customer($data);
             if (isset($params['password'])) {
                 $customer->password = bcrypt($params['password']);
             }
 
-            $customer->save();
+            $customer->notify(new ResetPasswordNotification($hash));
+
+            if (!Mail::failures()){
+                $customer->save();
+            }
 
             if(isset($params['groups'])){
 
@@ -68,6 +79,11 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
         } catch (QueryException $e) {
             throw new CreateCustomerInvalidArgumentException($e->getMessage(), 500, $e);
         }
+    }
+
+    public function activateCustomer(string $hash) {
+        return $this->model->where('status', 0)->update(['status' => 1]);
+//        TODO status by mal byt boolean
     }
 
     public function syncCustomerWithGroups(Array $groups, Customer $customer){

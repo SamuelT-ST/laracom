@@ -22,4 +22,14 @@
     </div>
 </div>
 
+<div class="form-group row align-items-center" :class="{'has-danger': errors.has('instructions'), 'has-success': this.fields.instructions && this.fields.instructions.valid }">
+    <label for="instructions" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.post.columns.instructions') }}</label>
+    <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
+        <div>
+            <wysiwyg v-model="form.instructions" v-validate="''" id="instructions" name="instructions" :config="mediaWysiwygConfig"></wysiwyg>
+        </div>
+        <div v-if="errors.has('instructions')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('instructions') }}</div>
+    </div>
+</div>
+
 

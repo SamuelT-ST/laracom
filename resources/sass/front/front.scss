@@ -107,3 +107,7 @@ input[type="text"]:focus{
 .multiselect__option--highlight {
   background: #2a9cf5 !important;
 }
+
+.one-column .signup-page-wrapper:after {
+  background-color: transparent;
+}

@@ -32,12 +32,13 @@ class SendOrderToCustomerMailable extends Mailable
      */
     public function build()
     {
+
         $data = [
             'order' => $this->order,
             'products' => $this->order->orderProduct,
             'courier' => $this->order->courier,
             'status' => $this->order->orderStatus,
-            'payment' => $this->order->paymentMethod
+            'payment' => $this->order->payment
         ];
 
         return $this->view('emails.customer.sendOrderDetailsToCustomer', $data);

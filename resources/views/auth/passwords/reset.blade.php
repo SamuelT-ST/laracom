@@ -1,76 +1,90 @@
-@extends('layouts.front.app')
+@extends('front.layout.master')
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Reset Password</div>
-
-                <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
+@section('body')
+    <!-- breadcrumb area start -->
+    <section class="breadcrumb-area breadcrumb-bg extra">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-inner"><!-- breadcrumb inner -->
+                        <div class="left-content-area"><!-- left content area -->
+                            <h1 class="title">{{ __('Reset hesla') }}</h1>
+                        </div><!-- //. left content area -->
+                        <div class="right-content-area">
+                            <ul>
+                                <li><a href="/">{{ __('Domov') }}</a></li>
+                                <li>{{ __('Reset hesla') }}</li>
+                            </ul>
                         </div>
-                    @endif
+                    </div><!-- //. breadcrumb inner -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb area end -->
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('password.request') }}">
-                        {{ csrf_field() }}
+    <!-- login page content area start -->
+    <div class="login-page-content-area one-column">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-lg-3">
+                    <div class="signup-page-wrapper mb-5"><!-- login page wrapper -->
+                        @if(session()->has('status'))
+                            <div class="mt-3 mx-4 alert alert-success">
+                                {{ session()->get('status') }}
+                            </div>
+                        @endif
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="right-contnet-area">
+                                    <div class="top-content">
+                                        <h4 class="title">{{ __('Reset hesla') }}</h4>
+                                        {{--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>--}}
+                                    </div>
+                                    <div class="bottom-content">
+                                        <form action="{{ route('password.request') }}" method="post" class="login-form">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" name="token" value="{{ $token }}">
+                                            <div class="form-element">
+                                                <input type="email" name="email" class="input-field" placeholder="{{ __('Email') }}">
+                                                @if ($errors->has('password_confirmation'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('email') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                            <div class="form-element">
+                                                <input type="password" name="password" class="input-field" placeholder="{{ __('Nové heslo') }}">
+                                                @if ($errors->has('password_confirmation'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('password') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
 
-                        <input type="hidden" name="token" value="{{ $token }}">
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ $email or old('email') }}" required autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
+                                            <div class="form-element">
+                                                <input type="password" name="password_confirmation" class="input-field" placeholder="{{ __('Nové heslo znovu') }}">
+                                                @if ($errors->has('password_confirmation'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                            <div class="btn-wrapper">
+                                                <button type="submit" class="submit-btn">{{ __('Prihlásiť sa') }}</button>
+                                                <a href="{{ __('/register') }}" class="link">{{ __('Nemáte účet?') }}</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Reset Password
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    </div><!-- //.login page wrapper -->
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- login page content area end -->
 @endsection
+
