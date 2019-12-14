@@ -29,12 +29,13 @@ class StoreCourier extends FormRequest
             'from_width' => ['nullable', 'integer'],
             'from_height' => ['nullable', 'integer'],
             'from_length' => ['nullable', 'integer'],
-            'from_weight' => ['nullable', 'integer'],
+            'from_weight' => ['nullable', 'numeric'],
+            'to_weight' => ['nullable', 'numeric'],
             'url' => ['nullable', 'string'],
             'price' => ['nullable', 'integer'],
             'status' => ['required', 'boolean'],
             'payment_methods' => ['nullable', 'array']
-                        
+
         ];
     }
 

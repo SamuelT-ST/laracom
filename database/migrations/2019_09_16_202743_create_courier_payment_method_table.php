@@ -14,8 +14,8 @@ class CreateCourierPaymentMethodTable extends Migration
     public function up()
     {
         Schema::create('courier_payment_method', function (Blueprint $table) {
-            $table->integer('courier_id');
-            $table->integer('payment_method_id');
+            $table->unsignedInteger('courier_id');
+            $table->unsignedInteger('payment_method_id');
             $table->foreign('courier_id')->references('id')->on('couriers')->onDelete('cascade');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
         });

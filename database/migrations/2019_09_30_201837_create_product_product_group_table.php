@@ -15,8 +15,8 @@ class CreateProductProductGroupTable extends Migration
     {
         Schema::create('product_product_group', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product_group_id');
-            $table->integer('product_id');
+            $table->unsignedInteger('product_group_id');
+            $table->unsignedInteger('product_id');
             $table->foreign('product_group_id')->references('id')->on('product_groups')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->integer('position')->nullable();

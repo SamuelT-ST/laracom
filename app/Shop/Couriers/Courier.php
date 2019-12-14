@@ -5,8 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Courier extends Model
 {
-    
-    
+
+
     protected $fillable = [
         "name",
         "description",
@@ -14,24 +14,25 @@ class Courier extends Model
         "from_height",
         "from_length",
         "from_weight",
+        "to_weight",
         "url",
         "price",
         "status",
-    
+
     ];
-    
+
     protected $hidden = [
-    
+
     ];
-    
+
     protected $dates = [
         "created_at",
         "updated_at",
-    
+
     ];
-    
-    
-    
+
+
+
     protected $appends = ['resource_url'];
 
     /* ************************ ACCESSOR ************************* */
@@ -43,5 +44,5 @@ class Courier extends Model
     public function paymentMethods(){
         return $this->belongsToMany(PaymentMethod::class);
     }
-    
+
 }

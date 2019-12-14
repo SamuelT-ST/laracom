@@ -3,6 +3,9 @@
 namespace App\Shop\Couriers\Repositories;
 
 use App\Models\PaymentMethod;
+use App\Shop\Carts\ShoppingCart;
+use Gloudemans\Shoppingcart\Cart;
+use Illuminate\Support\Facades\DB;
 use Jsdecena\Baserepo\BaseRepository;
 use App\Shop\Couriers\Courier;
 use App\Shop\Couriers\Exceptions\CourierInvalidArgumentException;
@@ -11,6 +14,8 @@ use App\Shop\Couriers\Repositories\Interfaces\CourierRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use phpDocumentor\Reflection\Types\Object_;
+use App\Shop\Carts\Repositories\Interfaces\CartRepositoryInterface;
 
 class CourierRepository extends BaseRepository implements CourierRepositoryInterface
 {
@@ -95,11 +100,23 @@ class CourierRepository extends BaseRepository implements CourierRepositoryInter
         return $this->delete();
     }
 
-    public function getAvailableCouriers(){
+    public function getAvailableCouriers($cartItemWeights){
 
-//        TODO dorobit validaciu rozmerov!
+        $totalWeight = $cartItemWeights->reduce(function ($total, $item) {
+            return $total + $item;
+        });
 
-        return Courier::with('paymentMethods')->get();
+        return Courier::with('paymentMethods')
+            ->where(function ($query) use ($totalWeight){
+            $query->where('from_weight','<=', $totalWeight)
+                ->where('to_weight','>=', $totalWeight);
+        })->orWhere(function ($query) use ($totalWeight){
+            $query->whereNull('from_weight')
+                ->where('to_weight','>=', $totalWeight);
+        })->orWhere(function ($query) use ($totalWeight){
+            $query->where('from_weight','<=', $totalWeight)
+                ->whereNull('to_weight');
+        })->get();
 
     }
 

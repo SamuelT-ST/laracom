@@ -16,7 +16,7 @@ class CreateFiltersTable extends Migration
         Schema::create('filters', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->integer('feature_id');
+            $table->unsignedInteger('feature_id');
             $table->string('filter_type');
             $table->foreign('feature_id')->references('id')->on('features')->onDelete('cascade');
         });

@@ -42,11 +42,20 @@
     {{--</div>--}}
 {{--</div>--}}
 
-<div class="form-group row align-items-center" :class="{'has-danger': errors.has('from_height'), 'has-success': this.fields.from_height && this.fields.from_height.valid }">
-    <label for="from_height" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.courier.columns.from_height') }}</label>
-        <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <input type="text" v-model="form.from_height" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('from_height'), 'form-control-success': this.fields.from_height && this.fields.from_height.valid}" id="from_height" name="from_height" placeholder="{{ trans('admin.courier.columns.from_height') }}">
-        <div v-if="errors.has('from_height')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('from_height') }}</div>
+
+<div class="form-group row align-items-center" :class="{'has-danger': errors.has('from_height'), 'has-success': this.fields.from_weight && this.fields.from_weight.valid }">
+    <label for="from_weight" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.courier.columns.from_weight') }}</label>
+    <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
+        <input type="text" v-model="form.from_weight" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('from_weight'), 'form-control-success': this.fields.from_weight && this.fields.from_weight.valid}" id="from_weight" name="from_weight" placeholder="{{ trans('admin.courier.columns.from_weight') }}">
+        <div v-if="errors.has('from_weight')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('from_weight') }}</div>
+    </div>
+</div>
+
+<div class="form-group row align-items-center" :class="{'has-danger': errors.has('from_height'), 'has-success': this.fields.to_weight && this.fields.to_weight.valid }">
+    <label for="to_weight" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.courier.columns.to_weight') }}</label>
+    <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
+        <input type="text" v-model="form.to_weight" v-validate="'integer'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('to_weight'), 'form-control-success': this.fields.to_weight && this.fields.to_weight.valid}" id="to_weight" name="to_weight" placeholder="{{ trans('admin.courier.columns.to_weight') }}">
+        <div v-if="errors.has('to_weight')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('to_weight') }}</div>
     </div>
 </div>
 

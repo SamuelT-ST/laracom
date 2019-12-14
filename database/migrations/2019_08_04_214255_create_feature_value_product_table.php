@@ -14,8 +14,8 @@ class CreateFeatureValueProductTable extends Migration
     public function up()
     {
         Schema::create('feature_value_product', function (Blueprint $table) {
-            $table->integer('product_id');
-            $table->integer('feature_value_id');
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('feature_value_id');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('feature_value_id')->references('id')->on('feature_values')->onDelete('cascade');
 
