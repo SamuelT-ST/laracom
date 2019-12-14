@@ -52,9 +52,9 @@
                                                     <input v-model="form.billing_city" type="text" class="input-field" placeholder="{{ __('Mesto') }}...">
                                                     <div v-if="errors.has('billing_city')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('billing_city') }}</div>
                                                 </div>
-                                                <div class="form-element" :class="{'has-danger': errors.has('customer_phone'), 'has-success': this.fields.customer_phone && this.fields.customer_phone.valid }">
+                                                <div class="form-element" :class="{'has-danger': errors.has('billing_phone'), 'has-success': this.fields.billing_phone && this.fields.billing_phone.valid }">
                                                 <label>{{ __('Telefón') }} <span class="base-color">**</span></label>
-                                                    <input v-model="form.customer_phone" type="text" class="input-field" placeholder="{{ __('Telefón') }}...">
+                                                    <input v-model="form.billing_phone" type="text" class="input-field" placeholder="{{ __('Telefón') }}...">
                                                     <div v-if="errors.has('billing_phone')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('billing_phone') }}</div>
                                                 </div>
                                             </div>
@@ -102,11 +102,23 @@
                                                 <div class="checkbox-element account">
                                                     <div class="checkbox-wrapper">
                                                         <label class="checkbox-inner">{{ __('Vytvoriť účet?') }}
-                                                            <input type="checkbox">
+                                                            <input v-model="form.create_account" type="checkbox">
                                                             <span class="checkmark"></span>
                                                         </label>
                                                     </div>
                                                 </div>
+                                                    <div v-if="form.create_account" class="row">
+                                                        <div class="form-element col" :class="{'has-danger': errors.has('password'), 'has-success': this.fields.password && this.fields.password.valid }">
+                                                            <label>{{ __('Heslo') }} <span class="base-color">*</span></label>
+                                                            <input v-validate="'required|min:6'" ref="password" v-model="form.password" type="password" class="input-field" placeholder="{{ __('Heslo') }}...">
+                                                            <div v-if="errors.has('password')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('password') }}</div>
+                                                        </div>
+                                                        <div class="form-element col" :class="{'has-danger': errors.has('password_confirmation'), 'has-success': this.fields.password_confirmation && this.fields.password_confirmation.valid }">
+                                                            <label>{{ __('Heslo znovu') }} <span class="base-color">*</span></label>
+                                                            <input v-validate="'required|confirmed:password'" v-model="form.password_confirmation" type="password" class="input-field" placeholder="{{ __('Heslo znovu') }}...">
+                                                            <div v-if="errors.has('password_confirmation')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('password_confirmation') }}</div>
+                                                        </div>
+                                                    </div>
                                                 @endguest
                                                 <div class="shipping-details"><!-- shipping details -->
                                                     <h3 class="title">{{ __('Dodacie údaje') }}</h3>
@@ -239,7 +251,7 @@
                                             <div class="checkbox-element account">
                                                 <div class="checkbox-wrapper">
                                                     <label class="checkbox-inner">{{ $courier->name }}
-                                                        <input v-key="{{ $courier->id }}" @click="selectCourier({{ $courier }})" value="{{ $courier->id }}" v-model="selectedCouriers" name="courier" type="checkbox">
+                                                        <input :v-key="{{ $courier->id }}" @click="selectCourier({{ $courier }})" value="{{ $courier->id }}" v-model="selectedCouriers" name="courier" type="checkbox">
                                                         <span class="checkmark"></span>
                                                     </label>
                                                 </div>
@@ -253,7 +265,6 @@
                                     </div>
                                     <div v-if="form.courier.id === {{ $courier->id }}" class="notify-area">
                                         {{ $courier->description }}
-                                        {{--VSETKO SA BUDE ROBIT NA BACKENDE--}}
                                     </div>
                                 @endforeach
                                 <h3> {{ __('Platba') }} </h3>
@@ -265,7 +276,7 @@
                                                 <div class="checkbox-element account">
                                                     <div class="checkbox-wrapper">
                                                         <label class="checkbox-inner">@{{ paymentMethod.title }}
-                                                            <input v-key="paymentMethod.id" @click="selectPaymentMethod(paymentMethod)" v-model="paymentMethodCheck" :value="paymentMethod.id" name="paymentMethod" type="checkbox">
+                                                            <input :v-key="paymentMethod.id" @click="selectPaymentMethod(paymentMethod)" v-model="paymentMethodCheck" :value="paymentMethod.id" name="paymentMethod" type="checkbox">
                                                             <span class="checkmark"></span>
                                                         </label>
                                                     </div>
@@ -283,24 +294,6 @@
                                         </div>
                                     </template>
                                 </template>
-
-                                {{--<div class="credit-card-area">--}}
-                                    {{--<div class="left-content">--}}
-                                        {{--<div class="checkbox-element account">--}}
-                                            {{--<div class="checkbox-wrapper">--}}
-                                                {{--<label class="checkbox-inner">Credit Card (Stripe)--}}
-                                                    {{--<input type="checkbox">--}}
-                                                    {{--<span class="checkmark"></span>--}}
-                                                {{--</label>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="right-content">--}}
-                                        {{--<ul>--}}
-                                            {{--sd;lcjv--}}
-                                        {{--</ul>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
                                 <div class="checkbox-element account">
                                     <div class="checkbox-wrapper">
                                         <label class="checkbox-inner">{{ __('Súhlasím s ') }} <a href="#" class="base-color">{{ __('obchodnými podmienkami') }} *</a>

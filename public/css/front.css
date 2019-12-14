@@ -101,3 +101,7 @@ input[type=text]:focus {
   background: #2a9cf5 !important;
 }
 
+.one-column .signup-page-wrapper:after {
+  background-color: transparent;
+}
+

@@ -29,7 +29,6 @@ class CartCheckoutRequest extends BaseFormRequest
             'payment' => ['required', 'array'],
             'customer_name' => ['required', 'string'],
             'customer_email' => ['nullable', 'string'],
-            'customer_phone' => ['nullable', 'string'],
             'customer_company' => ['nullable', 'string'],
             'customer_ico' => ['nullable', 'integer'],
             'customer_dic' => ['nullable', 'string'],
@@ -48,10 +47,11 @@ class CartCheckoutRequest extends BaseFormRequest
             'shipping_phone' => ['nullable', 'string'],
             "shipping_customer_name" => ['nullable', 'string'],
             "shipping_customer_email" => ['nullable', 'string'],
-            "shipping_customer_phone" => ['nullable', 'string'],
             "shipping_customer_company" => ['nullable', 'string'],
             "shipping_customer_ico" => ['nullable', 'string'],
             "shipping_customer_dic" => ['nullable', 'string'],
+            "password_confirmation" => ['nullable', 'string'],
+            "password" => ['nullable', 'string', 'min:6', 'confirmed'],
         ];
     }
 
@@ -69,7 +69,7 @@ class CartCheckoutRequest extends BaseFormRequest
 
 
 
-        $sanitized['order_status_id'] = OrderStatus::where('name', 'pending')->first()->id;
+        $sanitized['order_status_id'] = OrderStatus::where('name', 'prijatá')->first()->id;
         $sanitized['reference'] = $reference = rand(1,999);
         $sanitized['courier_id'] = $sanitized['courier']['id'];
         $sanitized['shipping_country'] = $sanitized['shipping_country']['id'];

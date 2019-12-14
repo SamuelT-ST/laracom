@@ -58,7 +58,7 @@
                                 <button type="submit" class="submit-btn mb-3">Login</button><br>
 
                                 <a href="{{ route('register') }}" class="link">{{ __('Ešte nemáte účet?') }}</a><br>
-                                <a href="#" class="link">{{ __('Zabudli ste heslo?') }}</a>
+                                <a href="/password/reset" class="link">{{ __('Zabudli ste heslo?') }}</a>
                             </div>
                         </form>
                     </div>

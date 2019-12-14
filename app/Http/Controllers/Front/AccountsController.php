@@ -59,19 +59,25 @@ class AccountsController extends Controller
             abort(404);
         }
 
-        $statuses = OrderStatus::with('orders')->whereHas('orders', function ($q){
-            $q->where('customer_id', auth()->user()->id);
-        })->get();
-
-//        dd($statuses);
+        $statuses = OrderStatus::with(['orders' => function($q){
+            $q->where('customer_id', Auth::id());
+        }])->get();
 
         return view('front.account.orders', [
 //            'customer' => $customer,
 //            'orders' => $this->customerRepo->paginateArrayResults($orders->toArray(), 15),
 //            'addresses' => $addresses,
-            'statuses' => OrderStatus::with('orders')->whereHas('orders', function ($q){
-                $q->where('customer_id', auth()->user()->id);
-            })->get(),
+            'statuses' => $statuses,
         ]);
+    }
+
+    public function verifyEmail(string $hash){
+        if ($this->customerRepo->activateCustomer($hash)){
+            $result = 'success';
+        } else {
+            $result = 'fail';
+        };
+
+        return redirect(route('login'))->with(['registration-result' => $result]);
     }
 }

@@ -26,8 +26,8 @@ class UpdatePaymentMethod extends FormRequest
         return [
             'title' => ['sometimes', 'string'],
             'description' => ['sometimes', 'string'],
-            'price' => ['sometimes', 'integer'],
-            
+            'price' => ['sometimes', 'numeric'],
+            'instructions' => ['sometimes', 'string'],
         ];
     }
 }

@@ -26,8 +26,9 @@ class StorePaymentMethod extends FormRequest
         return [
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'price' => ['required', 'integer'],
-            
+            'price' => ['required', 'numeric'],
+            'instructions' => ['required', 'string'],
+
         ];
     }
 }

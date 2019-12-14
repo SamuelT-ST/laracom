@@ -39,7 +39,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth
             Route::namespace('Customers')->group(function () {
                 Route::resource('customers', 'CustomerController')->except('update');
                 Route::post('customers/{customer}', 'CustomerController@update')->name('customers.update');
-                Route::resource('customers.addresses', 'CustomerAddressController');
 
             });
             Route::namespace('Categories')->group(function () {
@@ -87,6 +86,9 @@ Route::namespace('Auth')->group(function () {
 });
 
 Route::namespace('Front')->group(function () {
+
+    Route::get('/activate/{token}', 'AccountsController@verifyEmail');
+
     Route::get('/', 'HomeController@index')->name('home');
     Route::group(['middleware' => ['auth', 'web']], function () {
 

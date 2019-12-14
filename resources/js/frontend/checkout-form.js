@@ -50,6 +50,10 @@ Vue.component('checkout-form', {
                 courier: {},
                 payment: {},
 
+                create_account: false,
+                password: '',
+                password_confirmation: ''
+
             },
             selectedCouriers: [],
             paymentMethodCheck: [],

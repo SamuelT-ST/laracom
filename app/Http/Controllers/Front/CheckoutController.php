@@ -148,21 +148,28 @@ class CheckoutController extends Controller
     {
         $shippingFee = 0;
 
-        switch ($request->input('payment')) {
-            case 'paypal':
-                return $this->payPal->process($shippingFee, $request);
-                break;
-            case 'stripe':
-
-                $details = [
-                    'description' => 'Stripe payment',
-                    'metadata' => $this->cartRepo->getCartItems()->all()
-                ];
+        switch ($request->input('payment')['id']) {
+            case 1:
 
                 $customer = $this->customerRepo->findCustomerById(auth()->id());
                 $customerRepo = new CustomerRepository($customer);
                 $customerRepo->charge($this->cartRepo->getTotal(2, $shippingFee), $details);
                 break;
+
+                break;
+
+//            case 'paypal':
+
+//                TODO pridat dalsie platobne metody
+//                return $this->payPal->process($shippingFee, $request);
+//                break;
+//            case 'stripe':
+//
+//                $details = [
+//                    'description' => 'Stripe payment',
+//                    'metadata' => $this->cartRepo->getCartItems()->all()
+//                ];
+
             default:
         }
     }

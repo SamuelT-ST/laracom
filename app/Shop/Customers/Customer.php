@@ -29,7 +29,8 @@ class Customer extends Authenticatable
         'status',
         'company',
         'ico',
-        'dic'
+        'dic',
+        'hash'
     ];
 
     /**
