@@ -11,12 +11,6 @@
 |
 */
 
-use App\Models\PaymentMethod;
-use App\Shop\Categories\Category;
-use App\Shop\Products\Product;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-
 /**
  * Admin routes
  */
@@ -25,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:' . config('admin-auth.defaults.guard'), 'admin'], 'as' => 'admin.' ], function () {
 
     Route::namespace('Admin')->group(function () {
+
+            Route::post('/admin/products/import/preview',                 'Products\ImportController@preview')->name('products.import.preview');
+            Route::post('/admin/persons/import',                          'Products\ImportController@import')->name('products.import');
 
             Route::get('search-product-query/{from?}/{query?}',      'SearchController@searchProductQuery')->name('search-product-query');
             Route::get('search-customer-query/{from?}/{query?}',      'SearchController@searchCustomerQuery')->name('search-customer-query');

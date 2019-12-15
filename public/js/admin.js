@@ -113400,6 +113400,24 @@ __webpack_require__.r(__webpack_exports__);
 
 Vue.component('products-listing', {
   mixins: [_app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  props: ['previewImportUrl', 'importUrl'],
+  data: function data() {
+    return {
+      importedFile: null,
+      file: null,
+      loadedImportInstances: [],
+      currentStep: 1,
+      mappedHeader: [],
+      formData: new FormData(),
+      errorMessage: '',
+      importable: ''
+    };
+  },
+  computed: {
+    lastStep: function lastStep() {
+      return this.currentStep === 3;
+    }
+  },
   methods: {
     toggleState: function toggleState(id) {
       var _this = this;
@@ -113411,6 +113429,77 @@ Vue.component('products-listing', {
           text: 'Status produktu úspešne aktualizovaný'
         });
       });
+    },
+    //    IMPORT
+    handleImportFileUpload: function handleImportFileUpload(e) {
+      this.file = this.$refs.file.files[0];
+      this.importedFile = e.target.files[0];
+    },
+    nextStep: function nextStep() {
+      var _this2 = this;
+
+      var url = this.previewImportUrl;
+      this.formData.append('fileImport', this.file);
+      axios.post(url, this.formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        _this2.loadedImportInstances = response.data.data;
+        _this2.importable = response.data.importable;
+        _this2.mappedHeader = _this2.loadedImportInstances[0].map(function (row) {
+          return {
+            original: row,
+            selected: _this2.importable.includes(row) ? row : ''
+          };
+        });
+        _this2.currentStep = 2;
+      }, function (error) {
+        _this2.$notify({
+          type: 'error',
+          title: 'Error!',
+          text: error.response.data
+        });
+      });
+    },
+    importData: function importData() {
+      var _this3 = this;
+
+      if (!this.validateImport()) {
+        return;
+      }
+
+      var url = this.importUrl;
+      this.currentStep = 3;
+      this.formData.append('mappedHeader', JSON.stringify(this.mappedHeader));
+      axios.post(url, this.formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        _this3.loadData();
+
+        _this3.$modal.hide('import-instance');
+
+        _this3.currentStep = 1;
+      }, function (error) {
+        if (error.response.data === "Wrong syntax in your import") _this3.$notify({
+          type: 'error',
+          title: 'Error!',
+          text: 'Wrong syntax in your import.'
+        });else if (error.response.data === "Unsupported file type") _this3.$notify({
+          type: 'error',
+          title: 'Error!',
+          text: 'Unsupported file type.'
+        });else _this3.$notify({
+          type: 'error',
+          title: 'Error!',
+          text: 'An error has occured.'
+        });
+      });
+    },
+    validateImport: function validateImport() {
+      return true;
     }
   }
 });

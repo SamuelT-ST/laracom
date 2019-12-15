@@ -2,18 +2,21 @@
 
 namespace App\Shop\Products;
 
+use App\Models\Traits\Importable;
 use App\Services\CategoriesWithDiscount;
 use App\Shop\Brands\Brand;
+use App\Shop\Features\Feature;
 use App\Shop\FeatureValues\FeatureValue;
 use App\Shop\ProductAttributes\ProductAttribute;
-use App\Shop\ProductImages\ProductImage;
 use Brackets\Media\HasMedia\HasMediaCollections;
 use Brackets\Media\HasMedia\HasMediaCollectionsTrait;
 use Brackets\Media\HasMedia\HasMediaThumbsTrait;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use function PHPSTORM_META\type;
 use Rinvex\Categories\Traits\Categorizable;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Spatie\MediaLibrary\Media;
@@ -24,8 +27,52 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     use Categorizable;
     use HasMediaCollectionsTrait;
     use HasMediaThumbsTrait;
+    use Importable;
 
     const LOADED_IN_SEARCH = 50;
+
+    protected $importable = [
+        "id",
+        "sku",
+        "name",
+        "slug",
+        "description",
+        "cover",
+        "quantity",
+        "price",
+        "status",
+        "weight",
+        "mass_unit",
+        "sale_price",
+        "wholesale_price",
+        "has_size",
+        "attributes_names" => [
+            'related' => 'attributes',
+            'type' => 'name',
+            'class' => ProductAttribute::class,
+//            TODO nema title!
+            'column' => 'title'
+        ],
+        "attributes_ids" => [
+            'related' => 'attributes',
+            'type' => 'id'
+        ],
+        "feature_values_names" => [
+            'related' => 'featureValues',
+//            TODO pozor, tu moze byt aj value_string aj value_integer
+            'type' => 'name',
+            'class' => FeatureValue::class,
+            'column' => 'title'
+        ],
+        "feature_values_ids" => [
+            'related' => 'featureValues',
+            'type' => 'id'
+        ],
+        "cover" => [
+            'type' => 'image',
+            'collection' => 'cover'
+        ],
+    ];
 
     public const MASS_UNIT = [
         'OUNCES' => 'oz',
@@ -230,5 +277,31 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
 
     public function getMiniProductThumb() {
         return $this->getFirstMediaUrl('cover', 'product_detail_thumb') ? $this->getFirstMediaUrl('cover', 'product_detail_thumb') : asset('images/camera.png');
+    }
+
+    public function getImportable()
+    {
+        return collect($this->importable)->map(function ($item, $key) {
+            return is_array($item) ? $key : $item;
+        })->values()->concat(Feature::all()->pluck('title')->map(function ($feature){
+            return 'Feature: '. Str::slug($feature);
+        }));
+    }
+
+    public function getImportableWithOptions($key = null)
+    {
+
+        $importable = collect($this->importable)->concat(Feature::all()->mapWithKeys(function($feature){
+            return [Str::slug($feature->title) => [
+                'type' => 'feature',
+                'id' => $feature->id
+            ]];
+        }));
+
+        if (is_null($key)) {
+            return $this->importable;
+        } else {
+            return isset($importable[$key]) ? $importable[$key] : null;
+        }
     }
 }

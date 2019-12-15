@@ -7,14 +7,16 @@
     <products-listing
             :data="{{ $data->toJson() }}"
             :url="'{{ url('admin/products') }}'"
+            :import-url="'{{ route('admin.products.import') }}'"
+            :preview-import-url="'{{ route('admin.products.import.preview') }}'"
             inline-template>
-
         <div class="row">
             <div class="col">
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> {{ trans('admin.products.actions.index') }}
                         <a class="btn btn-primary btn-spinner btn-sm pull-right m-b-0" href="{{ route('admin.products.create') }}" role="button"><i class="fa fa-plus"></i>&nbsp; {{ trans('admin.products.actions.create') }}</a>
+                        <a class="btn btn-primary" @click.prevent="$modal.show('import-instance')">{{trans('admin.products.import')}}</a>
                     </div>
                     <div class="card-body" v-cloak>
                         <form @submit.prevent="">
@@ -98,6 +100,7 @@
                     </div>
                 </div>
             </div>
+            @include('admin.products.import.import')
         </div>
     </products-listing>
 
