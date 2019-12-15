@@ -27,7 +27,6 @@ class ImportInstancesPreviewRequest extends FormRequest
         return [
             'fileImport' => 'required|file',
             'mappedHeader' => 'nullable',
-            'listIds' => 'nullable'
         ];
     }
 }

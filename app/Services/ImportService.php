@@ -13,14 +13,13 @@ class ImportService
     public function getCollectionFromImportedFile($file, string $className) : ImportService
     {
 
-        if (!in_array($file->getClientOriginalExtension(), ['xlsx', 'xls'])) {
+        if (!in_array($file->getClientOriginalExtension(), ['xlsx', 'xls', 'csv'])) {
             abort(409, __("Unsupported file type"));
         }
 
         try {
             $this->collectionFromImportedFile = app(ImportInstances::class, ['model' => $className])->toCollection($file)->first();
         } catch (Exception $e) {
-            dd($e->getMessage());
             abort(409, __("Unsupported file type"));
         }
 

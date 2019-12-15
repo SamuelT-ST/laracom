@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Admin\Import;
 
-use App\Rules\IsListPresentRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -27,14 +26,7 @@ class ImportInstancesRequest extends FormRequest
     {
         return [
             'fileImport' => 'required|file',
-            'mappedHeader' => app(IsListPresentRule::class, ['request' => $this]),
-            'listIds' => 'nullable'
+            'mappedHeader' => 'nullable',
         ];
-    }
-
-    public function getListIds()
-    {
-        $lists = $this->get('listIds');
-        return collect(json_decode($lists))->toArray();
     }
 }

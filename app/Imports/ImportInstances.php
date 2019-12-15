@@ -63,7 +63,7 @@ class ImportInstances implements ToCollection, ToModel, WithStartRow
     {
         $rows = collect($this->mappedHeader)->mapWithKeys(function ($item, $index) use ($row) {
             if (strpos( $item, 'Feature' ) === 0){
-                $item = substr($item, 8);
+                $item = substr($item, 9);
             }
             return $item ? [$item => $row[$index]] : [$item => null];
         });
@@ -71,10 +71,6 @@ class ImportInstances implements ToCollection, ToModel, WithStartRow
         try {
             DB::transaction(function () use (&$model, $rows, $row) {
                 $model = $this->model->create($rows->toArray());
-
-                if ($this->appendLists) {
-                    $model->lists()->sync($this->lists);
-                }
 
                 $rows->filter(function ($item, $index) use ($row, $model) {
                     return !is_null($model->getImportableWithOptions($index));
@@ -124,13 +120,15 @@ class ImportInstances implements ToCollection, ToModel, WithStartRow
 
         $existingValue = FeatureValue::query()
             ->where('feature_id', $feature->id)
-            ->where($valueType, $item);
+            ->where($valueType, $item)
+            ->first();
 
         if (!$existingValue){
-            $existingValue = FeatureValue::query()->create(['feature_id'=>$feature->id, $valueType => $item]);
+            $existingValue = FeatureValue::query()->insertGetId(['feature_id'=>$feature->id, $valueType => $item]);
+            $model->featureValues()->attach($existingValue);
+        } else {
+            $model->featureValues()->attach($existingValue->id);
         }
-
-        $model->featureValues()->attach($existingValue->id);
     }
 
     /**

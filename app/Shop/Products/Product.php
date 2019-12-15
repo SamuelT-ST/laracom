@@ -5,6 +5,7 @@ namespace App\Shop\Products;
 use App\Models\Traits\Importable;
 use App\Services\CategoriesWithDiscount;
 use App\Shop\Brands\Brand;
+use App\Shop\Categories\Category;
 use App\Shop\Features\Feature;
 use App\Shop\FeatureValues\FeatureValue;
 use App\Shop\ProductAttributes\ProductAttribute;
@@ -57,16 +58,16 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
             'related' => 'attributes',
             'type' => 'id'
         ],
-        "feature_values_names" => [
-            'related' => 'featureValues',
-//            TODO pozor, tu moze byt aj value_string aj value_integer
-            'type' => 'name',
-            'class' => FeatureValue::class,
-            'column' => 'title'
+        "categories_ids" => [
+            'related' => 'categories',
+            'type' => 'id',
+            'class' => Category::class
         ],
-        "feature_values_ids" => [
-            'related' => 'featureValues',
-            'type' => 'id'
+        "categories_names" => [
+            'related' => 'categories',
+            'type' => 'name',
+            'class' => Category::class,
+            'column' => 'name'
         ],
         "cover" => [
             'type' => 'image',
@@ -159,6 +160,12 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
 
     public function getProductThumbAttribute() {
         return $this->getFirstMediaUrl('cover') ? $this->getFirstMediaUrl('cover') : asset('images/camera.png');
+    }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = $value;
+        $this->attributes['slug'] = str_slug($value);
     }
 
     /**
@@ -291,15 +298,15 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     public function getImportableWithOptions($key = null)
     {
 
-        $importable = collect($this->importable)->concat(Feature::all()->mapWithKeys(function($feature){
-            return [Str::slug($feature->title) => [
+        $importable = collect($this->importable)->union(Feature::all()->mapWithKeys(function($feature){
+            return [$feature->slug => [
                 'type' => 'feature',
                 'id' => $feature->id
             ]];
         }));
 
         if (is_null($key)) {
-            return $this->importable;
+            return $importable;
         } else {
             return isset($importable[$key]) ? $importable[$key] : null;
         }
