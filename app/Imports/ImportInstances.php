@@ -22,8 +22,6 @@ class ImportInstances implements ToCollection, ToModel, WithStartRow
     use Importable;
 
     private $model;
-    private $appendLists = false;
-    private $lists = [];
     private $mappedHeader;
 
     public function __construct(string $model)
@@ -42,14 +40,6 @@ class ImportInstances implements ToCollection, ToModel, WithStartRow
     public function appendMappedHeader(array $mappedHeader = []) : self
     {
         $this->mappedHeader = $mappedHeader;
-
-        return $this;
-    }
-
-    public function appendLists($ids) : self
-    {
-        $this->appendLists = true;
-        $this->lists = $ids;
 
         return $this;
     }
