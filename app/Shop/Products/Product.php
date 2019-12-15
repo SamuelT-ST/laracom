@@ -214,14 +214,6 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class);
-    }
-
-    /**
      * @param string $term
      * @return Collection
      */
@@ -290,8 +282,8 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     {
         return collect($this->importable)->map(function ($item, $key) {
             return is_array($item) ? $key : $item;
-        })->values()->concat(Feature::all()->pluck('title')->map(function ($feature){
-            return 'Feature: '. Str::slug($feature);
+        })->values()->concat(Feature::all()->pluck('slug')->map(function ($feature){
+            return 'Feature: '. $feature;
         }));
     }
 
