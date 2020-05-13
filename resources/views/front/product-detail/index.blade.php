@@ -179,8 +179,8 @@
                                         @foreach($product->featureValues as $featureValue)
                                         <li>
                                             <div class="single-spec"><!-- single specification -->
-                                                <span class="heading">{{ $featureValue->getValueAttribute() }}</span>
-                                                <span class="details">{{ $featureValue->feature()->first()->title }}</span>
+                                                <span class="heading">{{ $featureValue->feature()->first()->title }}</span>
+                                                <span class="details">{{ $featureValue->getValueAttribute() }}</span>
                                             </div>
                                         </li>
                                         @endforeach

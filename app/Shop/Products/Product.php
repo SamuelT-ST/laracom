@@ -2,18 +2,22 @@
 
 namespace App\Shop\Products;
 
+use App\Models\Traits\Importable;
 use App\Services\CategoriesWithDiscount;
 use App\Shop\Brands\Brand;
+use App\Shop\Categories\Category;
+use App\Shop\Features\Feature;
 use App\Shop\FeatureValues\FeatureValue;
 use App\Shop\ProductAttributes\ProductAttribute;
-use App\Shop\ProductImages\ProductImage;
 use Brackets\Media\HasMedia\HasMediaCollections;
 use Brackets\Media\HasMedia\HasMediaCollectionsTrait;
 use Brackets\Media\HasMedia\HasMediaThumbsTrait;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use function PHPSTORM_META\type;
 use Rinvex\Categories\Traits\Categorizable;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Spatie\MediaLibrary\Media;
@@ -24,8 +28,52 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
     use Categorizable;
     use HasMediaCollectionsTrait;
     use HasMediaThumbsTrait;
+    use Importable;
 
     const LOADED_IN_SEARCH = 50;
+
+    protected $importable = [
+        "id",
+        "sku",
+        "name",
+        "slug",
+        "description",
+        "cover",
+        "quantity",
+        "price",
+        "status",
+        "weight",
+        "mass_unit",
+        "sale_price",
+        "wholesale_price",
+        "has_size",
+        "attributes_names" => [
+            'related' => 'attributes',
+            'type' => 'name',
+            'class' => ProductAttribute::class,
+//            TODO nema title!
+            'column' => 'title'
+        ],
+        "attributes_ids" => [
+            'related' => 'attributes',
+            'type' => 'id'
+        ],
+        "categories_ids" => [
+            'related' => 'categories',
+            'type' => 'id',
+            'class' => Category::class
+        ],
+        "categories_names" => [
+            'related' => 'categories',
+            'type' => 'name',
+            'class' => Category::class,
+            'column' => 'name'
+        ],
+        "cover" => [
+            'type' => 'image',
+            'collection' => 'cover'
+        ],
+    ];
 
     public const MASS_UNIT = [
         'OUNCES' => 'oz',
@@ -114,6 +162,12 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
         return $this->getFirstMediaUrl('cover') ? $this->getFirstMediaUrl('cover') : asset('images/camera.png');
     }
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = $value;
+        $this->attributes['slug'] = str_slug($value);
+    }
+
     /**
      * Get the identifier of the Buyable item.
      *
@@ -157,14 +211,6 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
 
     public function getPriceBeforeDiscount(){
         return $this->price;
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class);
     }
 
     /**
@@ -230,5 +276,31 @@ class Product extends Model implements Buyable, HasMediaCollections, HasMediaCon
 
     public function getMiniProductThumb() {
         return $this->getFirstMediaUrl('cover', 'product_detail_thumb') ? $this->getFirstMediaUrl('cover', 'product_detail_thumb') : asset('images/camera.png');
+    }
+
+    public function getImportable()
+    {
+        return collect($this->importable)->map(function ($item, $key) {
+            return is_array($item) ? $key : $item;
+        })->values()->concat(Feature::all()->pluck('slug')->map(function ($feature){
+            return 'Feature: '. $feature;
+        }));
+    }
+
+    public function getImportableWithOptions($key = null)
+    {
+
+        $importable = collect($this->importable)->union(Feature::all()->mapWithKeys(function($feature){
+            return [$feature->slug => [
+                'type' => 'feature',
+                'id' => $feature->id
+            ]];
+        }));
+
+        if (is_null($key)) {
+            return $importable;
+        } else {
+            return isset($importable[$key]) ? $importable[$key] : null;
+        }
     }
 }
